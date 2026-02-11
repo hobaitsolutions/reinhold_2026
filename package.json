@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "commander": "^13.1.0",
+    "jq": "^1.7.2"
+  },
+  "devDependencies": {
+    "@shopware-ag/admin-extension-sdk": "^3.0.15",
+    "winston": "^2.4.7"
+  }
+}

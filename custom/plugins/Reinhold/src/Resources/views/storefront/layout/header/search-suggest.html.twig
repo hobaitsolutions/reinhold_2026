@@ -1,0 +1,7 @@
+{% sw_extends '@Storefront/storefront/layout/header/search-suggest.html.twig' %}
+{% block layout_search_suggest_result_name %}
+    <div class="col search-suggest-product-name">
+        <strong>{{ product.productNumber }}</strong> -
+        {{ product.translated.name }}
+    </div>
+{% endblock %}

@@ -1,0 +1,60 @@
+
+.cms-element-category-listing
+{
+    div[class*="col"]
+    {
+        h2
+        {
+
+            background: $grey;
+            padding: 0 2rem 2rem;
+
+            &, &:hover, a, a:hover
+            {
+                text-decoration: none !important;
+            }
+        }
+
+        .category-icon
+        {
+            font-size: 10rem;
+            display: block;
+            margin-bottom: -1rem;
+        }
+
+        .cms-element-category-listing-item-title--top, .cms-element-category-listing-item-title--bottom
+        {
+            text-align: center;
+        }
+
+    }
+}
+
+.navigation-flyout-categories
+{
+    .navigation-flyout-link
+    {
+        position: relative;
+        text-overflow: ellipsis;
+
+    }
+
+    .category-icon
+    {
+        font-size: 3rem;
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        margin-top: -1rem;
+    }
+
+    span
+    {
+        display: inline-block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding-left: 3.5rem;
+        max-width: 100%;
+        overflow: hidden;
+    }
+}

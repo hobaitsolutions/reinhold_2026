@@ -1,0 +1,112 @@
+.container-main
+{
+    .account-aside-item
+    {
+        &.is-active
+        {
+            .aside-menu-item
+            {
+                background: #ECECEC;
+            }
+        }
+    }
+
+    .contact-container
+    {
+        display: block;
+
+        .aside-menu-item
+        {
+            background: #f9f9f9 !important;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        img
+        {
+            max-width: 100%;
+        }
+    }
+}
+
+.contact-container
+{
+    display: none;
+}
+
+.account-overview-card
+{
+    p
+    {
+        margin-bottom: 0;
+    }
+
+    .card-actions
+    {
+        margin-top: 1rem;
+    }
+}
+
+.is-ctl-accountprofile
+{
+    .back-btn
+    {
+        display: none !important;
+    }
+}
+
+.order-detail-content
+{
+    .row
+    {
+        margin: .25rem 0;
+    }
+
+    .row:not(:last-child)
+    {
+        border-bottom: 1px solid #ccc;
+    }
+}
+
+.container, .account-aside
+{
+    .logout-container, .logout-btn
+    {
+        display: none;
+    }
+}
+
+.account-aside-header
+{
+    text-align: center;
+}
+
+.account-content-inner
+{
+    margin-top: 0 !important;
+}
+
+.account-content-main
+{
+    background: $white;
+    padding: 2rem;
+}
+
+.account-aside
+{
+    .aside-menu-item
+    {
+        padding: 1rem;
+        margin-bottom: .25rem;
+        .title{
+            display: block;
+            color: $brand;
+            font-weight: bold;
+        }
+        .subtitle{
+            color: #ccc;
+            font-size: .8rem;
+            display: block;
+        }
+    }
+}

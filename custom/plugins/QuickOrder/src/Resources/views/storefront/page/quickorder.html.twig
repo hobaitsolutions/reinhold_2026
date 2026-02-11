@@ -1,0 +1,17 @@
+{% sw_extends '@Reinhold/storefront/base.html.twig' %}
+
+
+
+{% block base_content %}
+    <div class="quickorder">
+        <h2>Schnellbestellungen</h2>
+        <p>
+            <strong><a href="{{ path('frontend.quickorder.deliveries') }}">gelieferte Produkte</a></strong> |
+            <a href="{{ path('frontend.quickorder.conditions') }}">aktuelle Konditionen</a>
+        </p>
+        <p>Hier finden Sie eine Übersicht der über den Onlineshop bestellten Artikel und Produkte aus ihren Bestellungen
+            der
+            letzten 2 Jahre.</p>
+        {% sw_include '@QuickOrder/storefront/page/productList.html.twig' with products %}
+    </div>
+{% endblock %}

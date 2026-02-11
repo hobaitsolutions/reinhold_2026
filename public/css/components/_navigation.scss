@@ -1,0 +1,21 @@
+.main-navigation-link-text{
+   span, a{
+       color: $white;
+   }
+}
+.navigation-flyout-link, .navigation-flyout-col{
+    border-left: none !important;
+}
+
+.navigation-flyout-col::before{
+    display: none !important;
+}
+
+.navigation-flyout-categories{
+    margin-top: 2rem;
+}
+
+.nav-main {
+    background: $brand;
+    padding: .5rem 0;
+}

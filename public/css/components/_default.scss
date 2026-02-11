@@ -1,0 +1,144 @@
+.btn-small
+{
+    padding: 0.333rem .5rem !important;
+    line-height: 1;
+    margin: 0 .25rem;
+}
+
+.hazard-container:empty
+{
+    display: none !important;
+}
+
+.text-white, .weisser-text
+{
+
+    color: white;
+
+    h1, h2, h3, h4, h5, h6
+    {
+        color: inherit;
+    }
+
+    a
+    {
+        font-weight: 800;
+        color: #fff;
+        background: rgba(255, 255, 255, .3);
+        display: inline-block;
+        padding: .0rem .5rem;
+    }
+
+    ul
+    {
+        li
+        {
+            margin-bottom: .5rem;
+        }
+    }
+
+    .cms-element-product-slider
+    {
+        .product-name
+        {
+            color: #242424 !important;
+        }
+
+        a
+        {
+            color: $brand;
+
+
+            &:hover
+            {
+                color: $brand !important;
+                text-decoration: underline;
+            }
+        }
+    }
+
+}
+
+.custom-alert.alert-danger
+{
+    margin: 1rem 0;
+}
+
+body
+{
+    background: #155199 url(https://shop.reinhold-sohn-hygiene.de/media/9a/2b/22/1722351143/hintergrund_blau_voll02.jpg);
+    background-size: 100%;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+.card, .category-navigation, .product-detail-content, .product-detail-tabs, .account-register, .account-right, .checkout-container, .quickorder, .account-aside, .quickorder-table
+{
+    background: #fff;
+}
+
+.product-detail-content, .account-register, .checkout-container, .account-right, .account-left, .quickorder, .quickorder-table
+{
+    padding: 2rem !important;
+}
+
+.account-aside
+{
+    padding: 1rem !important;
+}
+
+.product-detail-tabs
+{
+    padding: 2rem 1rem !important;
+}
+
+.quickorder
+{
+    padding-bottom: 6rem !important;
+
+    .back-btn
+    {
+        display: none;
+    }
+}
+
+.cms-block-image-text, .product-detail-tabs
+{
+    margin-bottom: 1rem;
+}
+
+.is-ctl-navigation
+{
+    .pagination
+    {
+        .page-item, .page-item.active
+        {
+            .page-link
+            {
+                color: #fff;
+            }
+        }
+
+        .page-item.active
+        {
+            border-color: #fff;
+        }
+    }
+}
+
+.header-minimal-contact
+{
+    &, a
+    {
+        color: #fff;
+    }
+}
+
+.flex{
+    display: flex;
+}
+
+.contact-form{
+    background: $white;
+    padding: 2rem;
+}

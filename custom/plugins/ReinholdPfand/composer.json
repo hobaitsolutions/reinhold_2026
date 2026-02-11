@@ -1,0 +1,26 @@
+{
+    "name": "reinhold/pfand",
+    "description": "Plugin for managing deposit (Pfand) for products",
+    "type": "shopware-platform-plugin",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "ReinholdPfand\\": "src/"
+        }
+    },
+    "extra": {
+        "shopware-plugin-class": "ReinholdPfand\\ReinholdPfand",
+        "label": {
+            "de-DE": "Reinhold Pfand",
+            "en-GB": "Reinhold Deposit"
+        }
+    },
+    "require": {
+        "shopware/core": "^6.4"
+    },
+    "config": {
+        "allow-plugins": {
+            "symfony/runtime": true
+        }
+    }
+}

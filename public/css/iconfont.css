@@ -1,0 +1,129 @@
+@font-face {
+  font-family: 'icomoon-';
+  src:  url('fonts/icomoon-.eot?cp0vcl');
+  src:  url('fonts/icomoon-.eot?cp0vcl#iefix') format('embedded-opentype'),
+  url('fonts/icomoon-.ttf?cp0vcl') format('truetype'),
+  url('fonts/icomoon-.woff?cp0vcl') format('woff'),
+  url('fonts/icomoon-.svg?cp0vcl#icomoon-') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon-' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-takeaway:before {
+  content: "\e91c";
+}
+.icon-bottle:before {
+  content: "\e900";
+}
+.icon-bottle-2:before {
+  content: "\e901";
+}
+.icon-bubbles:before {
+  content: "\e902";
+}
+.icon-bucket:before {
+  content: "\e903";
+}
+.icon-bucket-broom:before {
+  content: "\e904";
+}
+.icon-clothes-clean:before {
+  content: "\e905";
+}
+.icon-clothes-dirty:before {
+  content: "\e906";
+}
+.icon-cultlery:before {
+  content: "\e907";
+}
+.icon-desinfection:before {
+  content: "\e908";
+}
+.icon-detergent:before {
+  content: "\e909";
+}
+.icon-floor-scrubber:before {
+  content: "\e90a";
+}
+.icon-gloves:before {
+  content: "\e90b";
+}
+.icon-hand-cleaning:before {
+  content: "\e90c";
+}
+.icon-house:before {
+  content: "\e90d";
+}
+.icon-industry:before {
+  content: "\e90e";
+}
+.icon-iron:before {
+  content: "\e90f";
+}
+.icon-medicine:before {
+  content: "\e910";
+}
+.icon-medicine-alternative:before {
+  content: "\e911";
+}
+.icon-napkins:before {
+  content: "\e912";
+}
+.icon-no-germs:before {
+  content: "\e913";
+}
+.icon-paper-rolls:before {
+  content: "\e914";
+}
+.icon-pool:before {
+  content: "\e915";
+}
+.icon-sauna:before {
+  content: "\e916";
+}
+.icon-sauna-alternative:before {
+  content: "\e917";
+}
+.icon-scent:before {
+  content: "\e918";
+}
+.icon-seasons:before {
+  content: "\e919";
+}
+.icon-sponge:before {
+  content: "\e91a";
+}
+.icon-spray:before {
+  content: "\e91b";
+}
+.icon-toilet-paper:before {
+  content: "\e923";
+}
+.icon-toilet-paper-alternative:before {
+  content: "\e924";
+}
+.icon-vacuum:before {
+  content: "\e925";
+}
+.icon-washing-machine:before {
+  content: "\e926";
+}
+.icon-window:before {
+  content: "\e927";
+}

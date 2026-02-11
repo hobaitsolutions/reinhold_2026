@@ -1,0 +1,76 @@
+{% sw_extends '@Storefront/storefront/page/product-detail/buy-widget-price.html.twig' %}
+
+{% block page_product_detail_was_price_badge %}
+{% endblock %}
+
+{% block page_product_detail_price_unit_label %}
+{% endblock %}
+{% block page_product_detail_price_unit_content %}
+    {#    <span class="price-unit-content"> #}
+    {#        {{ page.product.purchaseUnit | purchaseunits(page.product.unit.name) }} #}
+    {# {{ page.product.purchaseUnit }} &times; {{ page.product.unit.name }} #}
+    {#    </span> #}
+{% endblock %}
+
+ {% block page_product_detail_price_unit_reference_content %}
+     {# @deprecated tag:v6.4.0 #}
+     {% block page_product_detail_price_unit_refrence_content %}
+         <span class="price-unit-reference-content">
+             {% set unit =  price.referencePrice.unitName %}
+             {% if (unit == '1 l') %}
+                 {% set unit =  '1 Liter' %}
+             {% endif %}
+             {% if (unit == 'l') %}
+                 {% set unit =  'Liter' %}
+             {% endif %}
+            ({{ price.referencePrice.price|currency }}{{ "general.star"|trans|sw_sanitize }} / {% if referncePrice.referenceUnit != 1 %}{{ referncePrice.referenceUnit }}{% endif %} {{ unit }})
+        </span>
+     {% endblock %}
+ {% endblock %}
+{% block page_product_detail_price_content %}
+
+    {{ parent() }}
+    {% set packUnit = page.product.packUnit %}
+    {% if packUnit is empty %}
+        {% set packUnit = page.product.unit.translated.name %}
+    {% endif %}
+    {% if packUnit is not empty %}
+        <span class="packunit">
+            &nbsp;|&nbsp; {% if page.product.customFields.custom_product_pack_unit_quantity is not empty %}{{ page.product.customFields.custom_product_pack_unit_quantity }} {% else %} 1 {% endif %}{{ packUnit }}
+        </span>
+    {% endif %}
+    {% if page.product.calculatedPrices|length >= 1 %}
+        {% set stdprice = page.product.price|first.net %}
+        {% set savings = (( 1-(page.product.calculatedPrices.elements|first.unitprice/stdprice))*100)|round %}
+
+        <span class="std-price">(Standardpreis: {{ (stdprice|currency) }})</span>
+        {% if savings > 1 %}
+            <div class="your-savings">
+                <strong>Sie sparen: {{ savings }}%</strong>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block page_product_detail_price_unit %}
+    {{ parent() }}
+    {% if price.referencePrice is null %}
+        {% block page_product_detail_price_unit_reference_content_empty %}
+            {#            <p class="price-unit-reference-content"> #}
+            {#               {% set packUnit = page.product.packUnit %} #}
+            {#                {% if packUnit is empty %} #}
+            {#                    {% set packUnit = page.product.unit.translated.name %} #}
+            {#                {% endif %} #}
+            {#                ({{ price.unitPrice|currency }}{{ "general.star"|trans|sw_sanitize }} / {{ price.quantity }} {{ packUnit }}) #}
+            {#            </p> #}
+            {% set unit =  page.product.referencePrice.unitName %}
+            {% if (unit == '1 l') %}
+                {% set unit =  '1 Liter' %}
+            {% endif %}
+            {% if (unit == 'l') %}
+                {% set unit =  'Liter' %}
+            {% endif %}
+            ({{ page.product.referencePrice.price|currency }}{{ "general.star"|trans|sw_sanitize }} / {% if page.product.referncePrice.referenceUnit != 1 %}{{ page.product.referncePrice.referenceUnit }}{% endif %} {{ unit }})
+        {% endblock %}
+    {% endif %}
+{% endblock %}

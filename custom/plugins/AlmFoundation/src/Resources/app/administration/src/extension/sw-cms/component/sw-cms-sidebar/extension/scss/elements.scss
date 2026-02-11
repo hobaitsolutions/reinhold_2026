@@ -1,0 +1,174 @@
+/*
+ * Anpassung Kategorie Auswahl
+*/
+
+.sw-cms-el-config-category-listing-categories.alm {
+
+    &:after {
+        content: 'Maximal eine Kategorie auswählen!';
+        color: #de294c;
+        font-size: 12px;
+    }
+
+    &.filled:after {
+        content: '';
+    }
+
+    .sw-select-selection-list {
+
+        .sw-select-selection-list__item-holder {
+
+            .sw-label {
+                background: #de294c;
+            }
+
+            &:first-of-type {
+
+                .sw-label {
+                    background: #f9fafb;
+                }
+            }
+        }
+    }
+}
+
+/*
+ * Anpassung Media Select
+ */
+
+.alm--media-element {
+  margin-bottom: 30px;
+  background: #f9f9f9;
+  border: 2px solid #ddd;
+  border-radius: 3px;
+  padding: 30px;
+  vertical-align: top;
+
+  &.is--half-img-cls {
+    max-width: calc(50% - 17px);
+    width: 100%;
+    display: inline-block;
+    position: relative;
+
+    &.has--margin-right-30 {
+      margin-right: 30px;
+    }
+
+    .sw-media-upload .sw-media-upload__dropzone {
+      display: block;
+
+      .sw-media-upload__preview {
+        margin: 0 auto 20px;
+      }
+
+      .sw-media-upload__actions {
+
+        .sw-media-upload__button {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .sw-cms-mapping-field__label {
+    font-size: 16px;
+    color: #189eff;
+  }
+}
+
+/*
+ * Anpassung Input Label
+ */
+
+.sw-field {
+  position: relative;
+
+  &.is--alm-input-label {
+
+    .sw-field__label {
+      position: absolute;
+      left: 10px;
+      top: -7px;
+      background: #fff;
+      padding: 0 30px 0 10px;
+      z-index: 1;
+    }
+  }
+}
+
+.sw-field--switch {
+
+  &.alm--minimal-martin-top {
+    margin-top: 0;
+  }
+}
+
+/*
+ * Radio Grid
+ */
+
+.sw-container {
+
+  &.is--radio-grid-wrapper {
+    grid-template-columns: 1fr 2fr;
+  }
+}
+
+.sw-field.sw-field--radio.is--radio-grid {
+
+  .sw-field__radio-group {
+    max-width: 170px;
+
+    .sw-field__radio-option {
+      display: inline-block;
+      width: 33.33%;
+      text-align: center;
+
+      label {
+        font-size: 24px;
+      }
+
+      &.sw-field__radio-option-checked {
+
+        label {
+          color: #2b9eff;
+        }
+      }
+
+      .sw-field__radio-input {
+        display: none;
+      }
+    }
+  }
+
+  &.has--text-label {
+
+    .sw-field__radio-group {
+      width: 100%;
+      max-width: unset;
+
+      .sw-field__radio-option {
+        margin-bottom: 0;
+      }
+
+      .sw-field__radio-option label {
+        font-size: 15px;
+      }
+    }
+  }
+}
+
+/*
+ * Margin & Padding Grid
+ */
+
+.is--margin-grid-wrapper {
+  max-width: 450px;
+  margin: auto;
+  display: block;
+
+  .sw-field {
+    max-width: 100px;
+    margin: auto;
+  }
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/trunk/src/Core/Framework/App/Manifest/Schema/manifest-2.0.xsd">
+    <meta>
+        <name>NetzkollektivJquery</name>
+        <label>jQuery Support for Shopware >= 6.5</label>
+        <label lang="de-DE">jQuery Support fuer Shopware >= 6.5</label>
+        <description>As of Shopware 6.5, jQuery has been removed. This plugin reinserts jQuery via the path described by Shopware so that existing scripts can continue to be used.</description>
+        <description lang="de-DE">Ab Shopware 6.5 wurde jQuery entfernt. Dieses Plugin fügt jQuery über den von Shopware beschriebenen Pfad wieder ein, so dass vorhandene Skripte weiterhin verwendet werden können.</description>
+        <author>NETZKOLLEKTIV GmbH</author>
+        <copyright>(c) by NETZKOLLEKTIV GmbH</copyright>
+        <version>1.0.0</version>
+        <icon>Resources/config/plugin.png</icon>
+        <license>MIT</license>
+    </meta>
+</manifest>

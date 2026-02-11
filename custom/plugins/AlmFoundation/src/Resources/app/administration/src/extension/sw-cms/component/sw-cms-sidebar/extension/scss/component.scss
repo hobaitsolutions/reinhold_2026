@@ -1,0 +1,54 @@
+ /*
+  * Plugin Vorschau
+  */
+
+.is--plugin-title {
+  position: relative;
+  top: -10px;
+  left: -20px;
+  background: #2b9eff;
+  display: inline-block;
+  padding: 5px 20px;
+  font-weight: 600;
+  font-size: 10px;
+  color: #fff;
+}
+
+.is--plugin-title-wrapper {
+  font-weight: 600;
+  margin-bottom: 30px;
+  margin-top: 20px;
+
+  span {
+    display: block;
+  }
+}
+
+.overview-wrapper {
+  display: flex;
+  max-width: 400px;
+
+  .overview-active {
+    width: 50%;
+  }
+
+  .overview-inactive {
+    width: 50%;
+  }
+
+  .is--overview-module {
+    font-weight: 600;
+  }
+
+  .is--overview-module-item {
+    font-size: 12px;
+    line-height: 25px;
+  }
+}
+
+.has--dark-font {
+
+  * {
+    color: #555;
+  }
+}

@@ -1,0 +1,10 @@
+<sw-container columns="1fr">
+    <sw-number-field
+        v-model="pfandPrice"
+        label="Pfandbetrag"
+        placeholder="Pfandbetrag eingeben"
+        :min="0"
+        :step="0.01"
+        :disabled="disabled">
+    </sw-number-field>
+</sw-container> 

@@ -1,0 +1,245 @@
+.hazards
+{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    h3
+    {
+        color: #f00;
+        width: 100%;
+        display: inline-block;
+
+    }
+
+    img, svg
+    {
+        max-height: 100px;
+        margin-left: 1rem;
+        max-width: 16%;
+    }
+}
+
+.hazard-desc
+{
+    display: flex;
+    margin-bottom: .333rem;
+
+    .hazard
+    {
+        display: block;
+        width: 20%;
+        min-width: 150px;
+
+        &::after
+        {
+            content: ":";
+            display: inline-block;
+        }
+    }
+
+    .description
+    {
+        display: block;
+        width: 80%;
+    }
+}
+
+.additional-hazard-info
+{
+    display: block;
+    margin-top: 1rem;
+}
+
+div.hazard-text
+{
+    width: 100%;
+    margin-top: 1rem;
+    font-weight: 600;
+}
+
+.your-savings
+{
+    color: var(--green);
+    padding: .5rem 0 1rem;
+}
+
+.std-price
+{
+    color: var(--gray);
+}
+
+.short-desc
+{
+    margin-bottom: 2rem;
+}
+
+.card-tabs
+{
+    .nav-link:not(.active)
+    {
+        border-color: transparent !important;
+    }
+}
+
+video
+{
+    max-width: 100%;
+}
+
+h2.datasheets
+{
+    margin-top: 2rem;
+}
+
+.pictograms
+{
+    display: flex;
+    margin-bottom: 1rem;
+
+    img
+    {
+        max-width: 100px;
+
+        &:not(:last-child)
+        {
+            margin-right: .5rem;
+        }
+
+    }
+}
+
+.product-detail-short-description-text
+{
+    border: solid #ccc;
+    border-width: 1px 0 1px 0;
+    padding: 1rem 0;
+}
+
+
+.product-detail-tabs
+{
+    padding-top: 0 !important;
+}
+
+.product-detail-content
+{
+    margin-bottom: 1rem !important;
+}
+
+.product-detail-tabs-content
+{
+    border: 1px solid #ccc;
+    margin-top: 0;
+    padding: 2rem;
+}
+
+.product-detail-tab-navigation-link
+{
+    position: relative;
+    top: 2px;
+    display: inline-block;
+    padding: .5rem 1rem !important;
+
+    &.active
+    {
+        border: 1px solid #ccc !important;
+        border-bottom-color: white !important;
+        border-bottom-width: 4px !important;
+    }
+}
+
+.bc-wrapper
+{
+    position: relative;
+    padding: .5rem;
+    margin-top: 1rem;
+
+    &, a, .breadcrumb-title
+    {
+        color: #fff;
+
+        svg
+        {
+            color: #fff
+        }
+    }
+
+    .breadcrumb
+    {
+        background: transparent;
+    }
+}
+
+.back-btn
+{
+    line-height: 2;
+    position: absolute;
+    right: 1rem;
+    top: .333rem;
+    opacity: .8;
+    box-shadow: 0 0 3px rgba(255, 255, 255, .8);
+}
+
+.product-detail
+{
+    padding-top: 0;
+}
+
+nav[aria-label="breadcrumb"]
+{
+    position: relative;
+}
+
+.cms-sections.product-detail > .cms-section-sidebar
+{
+    padding: 40px 0;
+}
+
+.product-detail-price
+{
+    display: inline-block;
+}
+
+.product-detail-buy-inner .product-detail-buy
+{
+    padding: 1rem;
+    background: #f5f5f5;
+}
+
+.hazard-container
+{
+    padding: 1rem;
+    border: 1px solid #ccc;
+
+    &:not(:has(*))
+    {
+        //faked css4 :empty because it will contain whitespaces
+        display: none;
+    }
+}
+
+.buy-container
+{
+    background: #f5f5f5;
+    padding: 1rem;
+
+    .input-group-text
+    {
+        border: none !important;
+        padding: 0 1rem 0 0;
+    }
+}
+
+.cms-element-buy-box
+{
+    .hazard-desc
+    {
+        display: inline-block;
+
+        &:not(:last-child):after
+        {
+            content: ", ";
+        }
+    }
+}

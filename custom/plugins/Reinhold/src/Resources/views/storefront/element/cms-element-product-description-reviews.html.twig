@@ -1,0 +1,107 @@
+{% sw_extends '@Storefront/storefront/element/cms-element-product-description-reviews.html.twig' %}
+{% set product = page.product %}
+    {% set manufacturerTabId = "manufacturer-tab-" ~ product.id %}
+    {% set manufacturerTabHref = "#manufacturer-tab-" ~ product.id ~ "-pane" %}
+    {% set manufacturerTabContent = "manufacturer-tab-" ~ product.id ~ "-pane" %}
+    {% set productSecurityTabId = "productSecurity-tab-" ~ product.id %}
+    {% set productSecurityTabHref = "#productSecurity-tab-" ~ product.id ~ "-pane" %}
+    {% set productSecurityTabContent = "productSecurity-tab-" ~ product.id ~ "-pane" %}
+
+ {% block element_product_description_reviews_tabs_navigation_description %}
+     {{ parent() }}
+     <li class="nav-item">
+         <a class="nav-link product-detail-tab-navigation-link manufacturer-tab"
+            id="{{ manufacturerTabId }}"
+            data-bs-toggle="tab"
+            data-off-canvas-tabs="true"
+            href="{{ manufacturerTabHref }}"
+            role="tab"
+            aria-controls="{{ manufacturerTabContent }}"
+            aria-selected="true">
+             {{ "detail.manufacturer"|trans|sw_sanitize }}
+             <span class="product-detail-tab-navigation-icon">
+                {% sw_icon 'arrow-medium-right' style {'pack':'solid'} %}
+            </span>
+         </a>
+     </li>
+     <li class="nav-item">
+         <a class="nav-link product-detail-tab-navigation-link gpso-tab"
+            id="{{ productSecurityTabId }}"
+            data-bs-toggle="tab"
+            data-off-canvas-tabs="true"
+            href="{{ productSecurityTabHref }}"
+            role="tab"
+            aria-controls="{{ productSecurityTabContent }}"
+            aria-selected="true">
+             {{ "detail.productSecurity"|trans|sw_sanitize }}
+             <span class="product-detail-tab-navigation-icon">
+                {% sw_icon 'arrow-medium-right' style {'pack':'solid'} %}
+            </span>
+         </a>
+     </li>
+ {% endblock %}
+
+{% block element_product_description_reviews_tabs_content_description %}
+    {{ parent() }}
+    <div class="tab-pane fade show"
+         id="{{ manufacturerTabContent }}"
+         role="tabpanel"
+         aria-labelledby="{{ manufacturerTabId }}">
+
+        <div class="product-manufacturer-description tab-pane-container">
+            <h2 class="product-manufacturer-description-title">
+                {{ 'detail.manufacturer'|trans|sw_sanitize }}
+            </h2>
+            <div class="product-manufacturer-description-text"
+                 itemprop="description">
+                {{ product.customFields.custom_product_manufacturer|printManufacturerData }}
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade show"
+         id="{{ productSecurityTabContent }}"
+         role="tabpanel"
+         aria-labelledby="{{ productSecurityTabId }}">
+
+        <div class="product-productSecurity-description tab-pane-container">
+            <h2 class="product-productSecurity-description-title">
+                {{ 'detail.productSecurity'|trans|sw_sanitize }}
+            </h2>
+            <div class="product-productSecurity-description-text"
+                 itemprop="description">
+                {% block page_product_detail_hazard_notes %}
+                    <div class="picto">
+                        {{ include(template_from_string(page.product.customFields.custom_product_hazards|hazards(false))) }}
+                    </div>
+                    <div class="danger-h mt-4 mb-4">
+                        {% if page.product.customFields.custom_product_HazardStatements is not empty %}
+                            <div>{{ page.product.customFields.custom_product_HazardStatements|hazardDescription(true) }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="danger-p mt-4 mb-4">
+                        {% if page.product.customFields.custom_product_hazards_p is not empty %}
+                            <div>{{ page.product.customFields.custom_product_hazards_p|hazardDescription(true) }}</div>
+                        {% endif %}
+                    </div>
+                    {% if page.product.customFields.custom_product_AdrNumbers is not empty or
+                        (page.product.customFields.custom_product_AdrSpecs is not empty) or
+                        (page.product.customFields.custom_product_AdrText is not empty) %}
+                        <div class="danger-adr mt-4 mb-4">
+                            <h3>Gefahrguthinweise</h3>
+                            {% if page.product.customFields.custom_product_AdrNumbers is not empty %}
+                                <div>{{ page.product.customFields.custom_product_AdrNumbers }}</div>
+                            {% endif %}
+                            {% if page.product.customFields.custom_product_AdrSpecs is not empty %}
+                                <div>{{ page.product.customFields.custom_product_AdrSpecs }}</div>
+                            {% endif %}
+                            {% if page.product.customFields.custom_product_AdrText is not empty %}
+                                <div>{{ page.product.customFields.custom_product_AdrText }}</div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

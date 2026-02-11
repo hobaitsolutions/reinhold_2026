@@ -1,0 +1,25 @@
+{
+  "base": "/bundles/jkwebshopwarecategorylistingplugin/administration/",
+  "entryPoints": {
+    "jkweb-shopware-category-listing-plugin": {
+      "css": [
+        "/bundles/jkwebshopwarecategorylistingplugin/administration/css/jkweb-shopware-category-listing-plugin.css"
+      ],
+      "dynamic": [],
+      "js": [
+        "/bundles/jkwebshopwarecategorylistingplugin/administration/js/jkweb-shopware-category-listing-plugin.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.0.4",
+    7,
+    0,
+    4
+  ],
+  "viteServer": null
+}

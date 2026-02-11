@@ -1,0 +1,25 @@
+{% sw_extends '@Reinhold/storefront/base.html.twig' %}
+{% block base_content %}
+    <div class="quickorder">
+        <h2>Schnellbestellungen</h2>
+        <p>
+            <strong><a href="{{ path('frontend.quickorder.deliveries') }}">gelieferte Produkte</a></strong> |
+            <a href="{{ path('frontend.quickorder.conditions') }}">aktuelle Konditionen</a>
+        </p>
+        <p class="mt-4">
+            <label>
+                Nur Produkte anzeigen, die an folgende Adresse geliefert wurden:
+                {% if (adresslist is not empty) %}
+                    {% set i = 0 %}
+                    <select name="filterAdress" class="filterAdress">
+                        <option value=".">Adresse wählen</option>
+                        {% for adress, order in adresslist %}
+                            <option name="{{ ++i }}" value="{{ order|join('|') }}">{{ adress }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+            </label>
+        </p>
+        {% sw_include '@QuickOrder/storefront/page/productList.html.twig' with {'products' : products, 'undeliverable' : undeliverable} %}
+    </div>
+{% endblock %}

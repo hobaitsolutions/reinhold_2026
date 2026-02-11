@@ -1,0 +1,71 @@
+{% sw_extends '@Storefront/storefront/page/account/index.html.twig' %}
+
+{% block page_account_main_content %}
+    {% block page_account_overview %}
+        <div class="account-overview">
+            {% block page_account_overview_welcome %}
+                <div class="account-welcome">
+                    <h1>{{ "account.overviewTitle"|trans|sw_sanitize }}</h1>
+                    {% block page_account_overview_welcome_intro %}{% endblock %}
+                    <p>
+                        {{ context.customer.company }}<br>
+                        Ihre Kundennummer: {{ context.customer.customerNumber }}
+                    </p>
+
+                    {% if page.customer.requestedGroup %}
+                        {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with {
+                            type: 'info',
+                            content: 'account.overviewCustomerGroupRequest'|trans({
+                                '%group%': page.customer.requestedGroup.translated.name
+                            })
+                        } %}
+                    {% endif %}
+                </div>
+            {% endblock %}
+
+            {% block page_account_overview_main %}
+                {{ parent() }}
+            {% endblock %}
+
+            {% block page_account_overview_addresses_include %}
+                {{ parent() }}
+            {% endblock %}
+
+            {% block page_account_overview_newest_order %}
+                {{ parent() }}
+            {% endblock %}
+
+        </div>
+        {% block page_account_overview_datasheets %}
+            <div class="account-overview-container">
+                <div class="card-body">
+                    <h2 class="card-title">
+                        Datenblätter herunterladen
+                    </h2>
+
+                    <div class="content">
+                        <em>Das Erstellen der Datenblattarchive kann mitunter recht lange dauern, wir bitten um
+                            Geduld.</em>
+                    </div>
+
+                    <div class="card-actions">
+                        <br>
+                        <a class="btn btn-sm btn-primary"
+                           href="/customAPI/customer-datasheets.php?id={{ page.customer.id }}">Für
+                            bisherige Bestellungen</a>&nbsp;
+                        <a class="btn btn-sm btn-primary"
+                           href="/customAPI/customer-condition-datasheets.php?id={{ page.customer.id }}">Für
+                            individuelle
+                            Verkaufskonditionen</a>
+                    </div>
+                </div>
+            </div>
+            <br><br>
+        {% endblock %}
+        <div class="account-overview-container">
+            {% block page_account_overview_newsletter %}
+                {{ parent() }}
+            {% endblock %}
+        </div>
+    {% endblock %}
+{% endblock %}

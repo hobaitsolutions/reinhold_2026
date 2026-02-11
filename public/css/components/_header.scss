@@ -1,0 +1,70 @@
+.nav-main
+{
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.header-actions-col
+{
+    position: relative;
+    top: 7px;
+    @media screen and (min-width: 768px)
+    {
+        svg
+        {
+            color: #fff;
+            fill: #fff;
+        }
+    }
+}
+
+.header-logo-main, .header-logo-picture
+{
+    max-width: 500px;
+}
+
+.navigation-flyout-categories.is-level-1
+{
+    display: none !important;
+}
+
+.is-act-home, body[class*=is-ctl-account]
+{
+    .bc-wrapper
+    {
+        left: -1rem;
+    }
+}
+
+.chose-columns
+{
+    label
+    {
+        margin-right: .5rem;
+    }
+}
+
+.text-small
+{
+    font-size: .6rem;
+}
+
+.account-menu
+{
+    .subtitle
+    {
+        display: none !important;
+    }
+}
+
+.cms-breadcrumb.container
+{
+    position: relative;
+
+    .customer-info
+    {
+        color: $white;
+        margin-bottom: 2rem;
+    }
+}

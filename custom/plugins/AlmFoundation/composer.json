@@ -1,0 +1,46 @@
+{
+  "name": "alm/foundation",
+  "description": "almCode Foundation Plugin",
+  "type": "shopware-platform-plugin",
+  "license": "proprietary",
+  "version": "1.7.2",
+  "authors": [
+    {
+      "name": "almCode | Shopware Agentur Bayern",
+      "email": "info@almcode.de",
+      "homepage": "https://almcode.de",
+      "role": "manufacturer"
+    }
+  ],
+  "require": {
+    "shopware/core": "~6.6.0",
+    "shopware/storefront": "*"
+  },
+  "support": {
+    "email": "info@almcode.de"
+  },
+  "autoload": {
+    "psr-4": {
+      "Alm\\Foundation\\": "src/"
+    }
+  },
+  "extra": {
+    "shopware-plugin-class": "Alm\\Foundation\\AlmFoundation",
+    "label": {
+      "de-DE": "almCode Foundation",
+      "en-GB": "almCode Foundation"
+    },
+    "description": {
+      "de-DE": "Dieses Plugin beinhaltet verschiedene Konfigurationskomponenten und das almCode Erlebniswelten Grid.",
+      "en-GB": "This plugin contains various configuration components and the almCode Emotion world grid."
+    },
+    "manufacturerLink": {
+      "de-DE": "https://almcode.de",
+      "en-GB": "https://almcode.de"
+    },
+    "supportLink": {
+      "de-DE": "https://docs.shopware.com/de",
+      "en-GB": "https://docs.shopware.com/en"
+    }
+  }
+}

@@ -1,0 +1,449 @@
+{
+    "sw-cms": {
+        "elements": {
+            "almFoundation": {
+                "global": {
+                    "activated": "Geactiveerde modules",
+                    "deactivated": "Gedeactiveerde modules",
+                    "tabs": {
+                        "settings": "Instellingen",
+                        "layout": "Layout",
+                        "topline": "Topline",
+                        "action": "Action",
+                        "background": "Achtergrond",
+                        "backgroundhover": "Achtergrond:Hover",
+                        "headline": "Headline",
+                        "subline": "Ondertitel",
+                        "head": "Head",
+                        "content": "Inhoud",
+                        "circle": "Cirkel / Actie",
+                        "button": "Button",
+                        "buttonhover": "Button:Hover",
+                        "toggle": "Toggle",
+                        "togglehover": "Toggle:Hover",
+                        "categories": "Categorieën",
+                        "box": "Enkele tegel",
+                        "front": "Voor",
+                        "back": "Terug",
+                        "usp1": "USP 1",
+                        "usp2": "USP 2",
+                        "usp3": "USP 3",
+                        "usp4": "USP 4"
+                    },
+                    "usp": {
+                        "activate1": "USP 1 activeren",
+                        "activate2": "USP 2 activeren",
+                        "activate3": "USP 3 activeren",
+                        "activate4": "USP 4 activeren",
+                        "image": "Image icon"
+                    },
+                    "fa": {
+                        "title": "FontAwesome icoon klasse",
+                        "help": "Om Font Awesome-pictogrammen te gebruiken, moet de Font Awesome-extensie zijn geïnstalleerd en geactiveerd.",
+                        "placeholder": "fab fa-angellist",
+                        "color": "Icon kleur",
+                        "size": "Icon maat",
+                        "helptext": "Laat het leeg, om geen fa icoon te gebruiken."
+                    },
+                    "layout": {
+                        "height": {
+                            "xs": {
+                                "label": "Minimumhoogte van de banner",
+                                "placeholder": "bv. 550px"
+                            },
+                            "md": {
+                                "label": "Hoogte van de banner vanaf tabletgrootte",
+                                "placeholder": "bv. 650px"
+                            },
+                            "xl": {
+                                "label": "Hoogte van de banner vanaf bureaubladgrootte",
+                                "placeholder": "bv. 750px"
+                            }
+                        },
+                        "mode": {
+                            "label": "Selecteer een display type",
+                            "placeholder": "--",
+                            "slider": "Slider",
+                            "boxes": "Tegels",
+                            "box": "Enkele tegel",
+                            "square": "Vierkant",
+                            "circle": "Cirkel"
+                        },
+                        "columns": {
+                            "label": "Aantal kolommen",
+                            "placeholder": "--",
+                            "2": "2",
+                            "3": "3",
+                            "4": "4",
+                            "6": "6"
+                        }
+                    },
+                    "categories": {
+                        "select-subcategories": "Toon alleen de subcategorieën",
+                        "select-multiple": "Categorieën",
+                        "select-multiple-placeholder": "Kies ten minste één categorie",
+                        "box": {
+                            "title": "Titel",
+                            "subtitle": "Ondertitel"
+                        }
+                    },
+                    "background": {
+                        "bg-head": "Achtergrondkleur head",
+                        "bg-content": "Achtergrondkleur content",
+                        "bg-action": "Achtergrondkleur action",
+                        "select-bg": "Activeer achtergrondafbeelding",
+                        "select-co": "Activeer achtergrondkleur",
+                        "mediaselect": "Selecteer achtergrondafbeelding",
+                        "colorpicker": "Selecteer achtergrondkleur",
+                        "maxwidth": {
+                            "label": "Bepaal maximale breedte",
+                            "placeholder": "bv. 100%"
+                        },
+                        "overlayer": {
+                            "select": "Activeer overlayer",
+                            "label": "Selecteer overlayerkleur"
+                        },
+                        "zoom": {
+                            "select": "Zoom-effect activeren",
+                            "label": "Effect",
+                            "placeholder": "--",
+                            "zoomin": "Inzoomen",
+                            "zoomout": "Uitzoomen"
+                        },
+                        "media-position": "Aandachtsgebied"
+                    },
+                    "toggle": {
+                        "align": "Tekst uitlijning",
+                        "text-color": "Kleur lettertype",
+                        "text": {
+                            "h": {
+                                "label": "H-waarde",
+                                "placeholder": "--",
+                                "h1": "h1",
+                                "h2": "h2",
+                                "h3": "h3",
+                                "h4": "h4",
+                                "h5": "h5",
+                                "h6": "h6",
+                                "p": "p",
+                                "span": "span"
+                            },
+                            "text": {
+                                "label": "Tekst",
+                                "placeholder": "Hier is een tekst..."
+                            },
+                            "size": {
+                                "label": "Lettergrootte",
+                                "placeholder": "bv. 16px"
+                            }
+                        },
+                        "fa": {
+                            "select": "Activeer FontAwesome Pictogrammen. Laat gewoon het onderstaande veld leeg om te voorkomen dat het FA-pictogram op de desbetreffende pagina wordt weergegeven.",
+                            "left": {
+                                "label": "Icoon Links",
+                                "placeholder": "bv. <i class=\"fab fa-angellist\"></i>"
+                            },
+                            "right": {
+                                "label": "Icoon Rechts",
+                                "placeholder": "bv. <i class=\"fab fa-angellist\"></i>"
+                            }
+                        },
+                        "margin": {
+                            "select": "Activeer buitenafstand",
+                            "top": {
+                                "label": "Top",
+                                "placeholder": "bv. 10px"
+                            },
+                            "right": {
+                                "label": "Rechts",
+                                "placeholder": "bv. 10px"
+                            },
+                            "bottom": {
+                                "label": "Onder",
+                                "placeholder": "bv. 10px"
+                            },
+                            "left": {
+                                "label": "Links",
+                                "placeholder": "bv. 10px"
+                            }
+                        },
+                        "padding": {
+                            "select": "Activeer innerlijke afstand",
+                            "top": {
+                                "description": "Define top afstand",
+                                "label": "Top",
+                                "placeholder": "bv. 10px"
+                            },
+                            "right": {
+                                "label": "Rechts",
+                                "placeholder": "bv. 10px"
+                            },
+                            "bottom": {
+                                "description": "Define Onder afstand",
+                                "label": "Onder",
+                                "placeholder": "bv. 10px"
+                            },
+                            "left": {
+                                "label": "Links",
+                                "placeholder": "bv. 10px"
+                            }
+                        }
+                    },
+                    "togglehover": {
+                        "background": "Achtergrondkleur wijzigen",
+                        "fa": {
+                            "select": "Activeer icoon verandering bij hover",
+                            "left": {
+                                "label": "Icoon Links",
+                                "placeholder": "bv. <i class=\"fab fa-angellist\"></i>"
+                            },
+                            "right": {
+                                "label": "Icoon Rechts",
+                                "placeholder": "bv. <i class=\"fab fa-angellist\"></i>"
+                            }
+                        },
+                        "fontcolor": "Verander letterkleur"
+                    },
+                    "headline": {
+                        "select-headline": "Titel activeren",
+                        "select-uppercase": "Tekst met een hoofdletter",
+                        "title": "Titel",
+                        "position": "Positie van de doos",
+                        "align": "Tekst uitlijning",
+                        "text-color": "Letterkleur",
+                        "background-color": "Achtergrond kleur",
+                        "background-border-radius": "Randradius achtergrond",
+                        "background-border-radius-placeholder": "bv. 5px",
+                        "text": {
+                            "h": {
+                                "label": "H-Waarde",
+                                "placeholder": "--",
+                                "h1": "h1",
+                                "h2": "h2",
+                                "h3": "h3",
+                                "h4": "h4",
+                                "h5": "h5",
+                                "h6": "h6",
+                                "p": "p",
+                                "span": "span"
+                            },
+                            "text": {
+                                "label": "Tekst",
+                                "placeholder": "Hier is een Tekst..."
+                            },
+                            "size": {
+                                "label": "Lettergrootte",
+                                "placeholder": "bv. 16px"
+                            }
+                        }
+                    },
+                    "content": {
+                        "select-content": "Tekst activeren",
+                        "position": "Positie van de doos",
+                        "align": "Tekst uitlijning",
+                        "text-color": "Tekstkleur",
+                        "background-color": "Achtergrond kleur",
+                        "background-border-radius": "Randradius achtergrond",
+                        "background-border-radius-placeholder": "bv. 5px",
+                        "text": {
+                            "h": {
+                                "label": "H-Waarde",
+                                "placeholder": "--",
+                                "h1": "h1",
+                                "h2": "h2",
+                                "h3": "h3",
+                                "h4": "h4",
+                                "h5": "h5",
+                                "h6": "h6",
+                                "p": "p",
+                                "span": "span"
+                            },
+                            "text": {
+                                "label": "Tekst",
+                                "placeholder": "Hier is een Tekst..."
+                            },
+                            "size": {
+                                "label": "Lettergrootte",
+                                "placeholder": "bv. 16px"
+                            }
+                        },
+                        "background": {
+                            "select": "Activeer achtergrondkleur"
+                        }
+                    },
+                    "circle": {
+                        "position": "Positie van de cirkel",
+                        "align": "Tekst uitlijning",
+                        "background": "Achtergrond kleur",
+                        "text": "Letter kleur",
+                        "color": {
+                            "text-1": "Kleur tekst regel 1",
+                            "text-2": "Kleur tekst regel 2"
+                        },
+                        "text1": {
+                            "select": "Activeer tekstregel 1",
+                            "label": "Tekstregel 1",
+                            "placeholder": "Van"
+                        },
+                        "text2": {
+                            "select": "Activeer tekstregel 2",
+                            "label": "Tekstregel 2",
+                            "placeholder": "19,90 €"
+                        },
+                        "margin": {
+                            "select": "Activeer buitenafstand",
+                            "top": {
+                                "label": "Top",
+                                "placeholder": "bv. 10px"
+                            },
+                            "right": {
+                                "label": "Rechts",
+                                "placeholder": "bv. 10px"
+                            },
+                            "bottom": {
+                                "label": "Onder",
+                                "placeholder": "bv. 10px"
+                            },
+                            "left": {
+                                "label": "Links",
+                                "placeholder": "bv. 10px"
+                            }
+                        }
+                    },
+                    "button": {
+                        "select-button": "Knop activeren",
+                        "sborder": {
+                            "select": "Activeer frame"
+                        },
+                        "border-color": "Kleur frame",
+                        "border-size": {
+                            "label": "Breedte",
+                            "placeholder": "bv. 1px"
+                        },
+                        "position": "Knop positie",
+                        "align": "Tekst uitlijning",
+                        "background": "Achtergrond kleur",
+                        "text-color": "Kleur lettertype",
+                        "inline": {
+                            "select": "Knop onder tekst"
+                        },
+                        "button": {
+                            "text": {
+                                "label": "Knop Tekst",
+                                "placeholder": "Meer informatie"
+                            },
+                            "link": {
+                                "label": "Link Url",
+                                "placeholder": "https://....",
+                                "target": {
+                                    "label": "Open link",
+                                    "label2": "Open in een nieuw tabblad",
+                                    "placeholder": "--",
+                                    "blank": "in een nieuw tabblad",
+                                    "self": "in hetzelfde tabblad"
+                                }
+                            },
+                            "category": {
+                                "label": "Categorie Link",
+                                "placeholder": "Kies een categorie..."
+                            },
+                            "option": {
+                                "label": "Link Layout",
+                                "placeholder": "Kies een lay-out...",
+                                "button": "Toon als knop",
+                                "cover": "Toon als volledig gebied"
+                            }
+                        }
+                    },
+                    "buttonhover": {
+                        "background": "Achtergrond kleur",
+                        "background-hover": "Achtergrondkleur bij hover",
+                        "text-color": "Kleur lettertype",
+                        "text-color-hover": "letterkleur bij hover",
+                        "border-color": "Kleur frame"
+                    },
+                    "distances": {
+                        "margin-select": "Activeer buitenafstand",
+                        "padding-select": "Activeer innerlijke afstand",
+                        "top": {
+                            "label": "Top",
+                            "placeholder": "bv. 10px"
+                        },
+                        "right": {
+                            "label": "Rechts",
+                            "placeholder": "bv. 10px"
+                        },
+                        "bottom": {
+                            "label": "Onder",
+                            "placeholder": "bv. 10px"
+                        },
+                        "left": {
+                            "label": "Links",
+                            "placeholder": "bv. 10px"
+                        }
+                    }
+                }
+            }
+        },
+        "blocks": {
+            "almFoundation": {
+                "block": {
+                    "alm-parallax-12": {
+                        "label": "almCode Parallax Banner"
+                    },
+                    "alm-promotion-12": {
+                        "label": "almCode Promotion Banner"
+                    },
+                    "alm-categoryteaser-12": {
+                        "label": "almCode Categorie Voorbeeld"
+                    },
+                    "alm-togglebox-12": {
+                        "label": "almCode Toggle Box"
+                    },
+                    "alm-uspleiste-12": {
+                        "label": "almCode USP bar"
+                    },
+                    "alm-shopwareslider-12": {
+                        "label": "almCode Shopware slider"
+                    },
+                    "alm-avishoverbanner-12": {
+                        "label": "almCode Avis Hover Banner"
+                    },
+                    "alm-grid-12": {
+                        "label": "Grid 12 - volledig oppervlak"
+                    },
+                    "alm-grid-9-3": {
+                        "label": "Grid 9 - 3 Ratio"
+                    },
+                    "alm-grid-8-4": {
+                        "label": "Grid 8 - 4 Ratio"
+                    },
+                    "alm-grid-6-6": {
+                        "label": "Grid 6 - 6 Ratio"
+                    },
+                    "alm-grid-4-8": {
+                        "label": "Grid 4 - 8 Ratio"
+                    },
+                    "alm-grid-4-4-4": {
+                        "label": "Grid 4 - 4 - 4 Ratio"
+                    },
+                    "alm-grid-3-9": {
+                        "label": "Grid 3 - 9 Ratio"
+                    },
+                    "alm-grid-3-6-3": {
+                        "label": "Grid 3 - 6 - 3 Ratio"
+                    },
+                    "alm-grid-3-3-3-3": {
+                        "label": "Grid 3 - 3 - 3 - 3 Ratio"
+                    },
+                    "alm-grid-2-8-2": {
+                        "label": "Grid 2 - 8 - 2 Ratio"
+                    },
+                    "alm-grid-1-1-1-1-1": {
+                        "label": "Grid 1 - 1 - 1 - 1 - 1 Ratio"
+                    }
+                }
+            }
+        }
+    }
+}

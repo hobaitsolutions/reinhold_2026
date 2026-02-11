@@ -1,0 +1,43 @@
+{% sw_extends '@Storefront/storefront/component/buy-widget/buy-widget.html.twig' %}
+{% block buy_widget %}
+    {% set customFields = page.product.customFields %}
+    {% if customFields.custom_product_picto is not empty %}
+        <div class="pictograms">
+            {{ include(template_from_string(customFields.custom_product_picto|pictograms)) }}
+        </div>
+    {% endif %}
+
+    {% if customFields.custom_product_short_desc is not empty %}
+        <div class="product-detail-short-description d-none d-md-block">
+            <div class="product-detail-short-description-text">
+                <p class="m-0">
+                    {{ include(template_from_string( customFields.custom_product_short_desc|replaceWithLinks)) }}<br>
+                </p>
+                <div class="info">
+                    {{ customFields.custom_product_information|striptags|raw }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="buy-container">
+        {{ parent() }}
+    </div>
+    <p></p>
+    <div class="hazard-container">
+        {{ include(template_from_string(page.product.customFields.custom_product_hazards|hazards)) }}
+        {% if page.product.customFields.custom_product_HazardStatements is not empty %}
+            <div>{{ page.product.customFields.custom_product_HazardStatements|hazardDescription }}</div>
+        {% endif %}
+        {% if page.product.customFields.custom_product_HazardStatements is not empty
+            or page.product.customFields.custom_product_hazards_p is not empty
+            or page.product.customFields.custom_product_AdrNumbers is not empty
+            or page.product.customFields.custom_product_AdrSpecs is not empty
+            or page.product.customFields.custom_product_AdrText is not empty %}
+            {% set productSecurityTabId = "productSecurity-tab-" ~ product.id %}
+            {% set productSecurityTabHref = "#productSecurity-tab-" ~ product.id ~ "-pane" %}
+            {% set productSecurityTabContent = "productSecurity-tab-" ~ product.id ~ "-pane" %}
+
+            <a class="additional-hazard-info" href="#" onclick="document.querySelector('.gpso-tab').click();return false;">Weitere Gefahrenhinweise unter "Produktsicherheit"</a>
+        {% endif %}
+    </div>
+{% endblock %}

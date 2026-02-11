@@ -1,0 +1,10 @@
+<h1>{{ 'account.pleasantOrderHistory' |trans }}</h1>
+{# customer id #}
+{# {{ include(template_from_string( page.orders.criteria.filters | historicOrders)) }} #}
+ {{ include(template_from_string( {'filters': page.orders.criteria.filters, 'offset' :  app.request.query.get("page") } | historicDeliveries)) }}
+{% if app.request.query.get("page") > 0 %}
+    <a class="btn btn-primary" style="margin: -4rem 0 4rem;" href="?page={{ app.request.query.get("page") - 1 }}">Neuere
+        Bestellungen</a>
+{% endif %}
+<a class="btn btn-primary" style="margin: -4rem 0 4rem;" href="?page={{ app.request.query.get("page") + 1 }}">Ältere
+    Bestellungen</a>

@@ -1,0 +1,5 @@
+.sw-cms-block-alm-grid-3-3-3-3 {
+  display: grid;
+  grid-template-columns: calc(25% - 40px) calc(25% - 40px) calc(25% - 40px) calc(25% - 40px);
+  grid-gap: 40px;
+}

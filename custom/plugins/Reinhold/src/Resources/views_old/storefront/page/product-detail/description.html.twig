@@ -1,0 +1,38 @@
+{% sw_extends '@Storefront/storefront/utilities/offcanvas.html.twig' %}
+
+{% block utilities_offcanvas_content %}
+    {% block page_product_detail_description_container %}
+        <div class="product-detail-description tab-pane-container">
+            {% block page_product_detail_description_title %}
+            {% endblock %}
+
+            {% block page_product_detail_description_content %}
+                {% block page_product_detail_description_content_text %}
+                    <div class="product-detail-description-text"
+                         itemprop="description">
+                        {{ include(template_from_string( page.product.translated.description|highlightFirst|raw|replaceWithLinks)) }}
+                    </div>
+                {% endblock %}
+
+                {% block page_product_detail_description_content_properties %}
+                    {% if page.product.sortedProperties|length > 0 %}
+                        {% sw_include '@Storefront/storefront/page/product-detail/properties.html.twig' %}
+                    {% endif %}
+                {% endblock %}
+            {% endblock %}
+
+
+            {% block page_product_detail_datasheets %}
+                <div class="datasheets">
+                    {{ include(template_from_string(page.product|datasheets)) }}
+                </div>
+            {% endblock %}
+            {% if page.product.translated.name|slice(0,1) == '*' %}
+                <div class="alert alert-warning p-2">
+                    {{ 'DS-Gebuehren'|trans }}
+                    {{ include(template_from_string( page.product.productNumber|getDSArticleMatch)) }}
+                </div>
+            {% endif %}
+        </div>
+    {% endblock %}
+{% endblock %}

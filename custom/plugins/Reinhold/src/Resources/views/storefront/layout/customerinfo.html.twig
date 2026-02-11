@@ -1,0 +1,13 @@
+{% block customerinfo %}
+    <div class="customer-info">
+        angemeldet als: {{ context.customer.firstName }}  {{ context.customer.lastName }} |
+        Kd.-Nr.: {{ context.customer.customerNumber }} {% if context.customer.company is not empty %} | {{ context.customer.company }} {% endif %}
+
+        <span class="links">
+            <a class="btn btn-small btn-primary" href="/account/">Übersicht</a>
+            <a class="btn btn-small btn-primary" href="/quickorder">Schnellbestellung</a>
+            <a class="btn btn-small btn-primary" href="/account/order">Bestellungen</a>
+            <a class="btn btn-small btn-primary" href="/account/logout">Abmelden</a>
+        </span>
+    </div>
+{% endblock %}

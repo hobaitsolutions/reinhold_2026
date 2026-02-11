@@ -1,0 +1,28 @@
+{
+  "name": "hoba/pleasant-sync",
+  "description": "Synchronize articles and other data with pleasant office",
+  "version": "1.0.0",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Hoba IT Solutions"
+    }
+  ],
+  "extra": {
+    "shopware-plugin-class": "PleasantSync\\PleasantSync",
+    "label": {
+      "de-DE": "Pleasant Office Synchronisation",
+      "en-GB": "Pleasant office synchronisation"
+    },
+    "description": {
+      "de-DE": "Pleasant Office Synchronisation",
+      "en-GB": "Pleasant office synchronisation"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "PleasantSync\\": "src/"
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{% block element_category_listing %}
+    <div class="cms-element-category-listing">
+        {% block element_category_listing_inner %}
+            {% if element.data.categories|length %}
+                {% if element.data.categories is iterable %}
+                    <div class="{{ element.data.rowElementClassName }}">
+                        {% for category in element.data.categories %}
+                            {% block element_category_listing_item %}
+                                <div class="{{ element.data.colElementClassName }}">
+                                    <div class="cms-element-category-listing-item">
+                                        {% block element_child_listing_tree_item_inner %}
+                                            {% set headingPosition = element.data.headingPosition|default('top') %}
+                                            <div class="cms-element-category-listing-category-item">
+                                                {% block element_category_listing_item_inner %}
+                                                    {% block element_category_listing_item_heading %}
+                                                        {% if(headingPosition == 'top' or headingPosition == 'overlay') %}
+                                                            <h2 class="cms-element-category-listing-item-title cms-element-category-listing-item-title--{{ headingPosition }}">
+                                                                {% block element_category_listing_item_heading_inner %}
+                                                                    <a href="{{ seoUrl('frontend.navigation.page', { navigationId: category.id }) }}"
+                                                                       class="stretched-link"
+                                                                       title="{{ category.translated.name }}">
+                                                                        {{ category.translated.name }}
+                                                                        {% if category.customFields.category_icon %}
+                                                                            <em class="category-icon icon-{{ category.customFields.category_icon}}"></em>
+                                                                        {% endif %}
+                                                                    </a>
+                                                                {% endblock %}
+                                                            </h2>
+                                                        {% endif %}
+                                                    {% endblock %}
+
+                                                    {% block element_category_listing_item_heading_bottom %}
+                                                        {% if(headingPosition == 'bottom') %}
+                                                            <h2 class="cms-element-category-listing-item-title cms-element-category-listing-item-title--bottom">
+                                                                {% block element_category_listing_item_heading_bottom_inner %}
+                                                                    <a href="{{ seoUrl('frontend.navigation.page', { navigationId: category.id }) }}"
+                                                                       class="stretched-link"
+                                                                       title="{{ category.translated.name }}">
+                                                                        {% if category.customFields.category_icon %}
+                                                                            <em class="category-icon icon-{{ category.customFields.category_icon}}"></em>
+                                                                        {% endif %}
+                                                                        {{ category.translated.name }}
+                                                                    </a>
+                                                                {% endblock %}
+                                                            </h2>
+                                                        {% endif %}
+                                                    {% endblock %}
+                                                {% endblock %}
+                                            </div>
+
+
+                                        {% endblock %}
+                                    </div>
+                                </div>
+                            {% endblock %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endblock %}
+    </div>
+{% endblock %}

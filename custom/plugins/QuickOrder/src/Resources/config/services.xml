@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="QuickOrder\Storefront\Controller\QuickOrderController" public="true">
+            <argument id="Shopware\Storefront\Page\Account\Overview\AccountOverviewPageLoader" type="service"/>
+            <argument id="Shopware\Storefront\Page\Navigation\NavigationPageLoader" type="service"/>
+            <argument id="order.repository" type="service"/>
+            <argument id="sales_channel.product.repository" type="service"/>
+            <argument id="product.repository" type="service"/>
+            <argument id="rule.repository" type="service"/>
+            <argument id="rule_condition.repository" type="service"/>
+            <argument id="product_price.repository" type="service"/>
+            <argument type="service" id="Doctrine\DBAL\Connection" />
+
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        <service id="QuickOrder\Service\HistoricOrderService" />
+    </services>
+</container>

@@ -1,0 +1,40 @@
+{
+    "name": "moorl/moorl-cms-twig",
+    "description": "CMS Element - HTML/Twig",
+    "version": "1.6.0",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "moori"
+        }
+    ],
+    "require": {
+        "shopware/core": "6.6.*"
+    },
+    "type": "shopware-platform-plugin",
+    "autoload": {
+        "psr-4": {
+            "MoorlCmsTwig\\": "src/"
+        }
+    },
+    "extra": {
+        "shopware-plugin-class": "MoorlCmsTwig\\MoorlCmsTwig",
+        "copyright": "(c) by moori",
+        "label": {
+            "de-DE": "CMS Element - HTML/Twig",
+            "en-GB": "CMS Element - HTML/Twig"
+        },
+        "description": {
+            "de-DE": "CMS Element - HTML/Twig",
+            "en-GB": "CMS Element - HTML/Twig"
+        },
+        "manufacturerLink": {
+            "de-DE": "https://docs.moori.net/",
+            "en-GB": "https://docs.moori.net/"
+        },
+        "supportLink": {
+            "de-DE": "https://docs.moori.net/",
+            "en-GB": "https://docs.moori.net/"
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{% block page_product_detail_short_description_container %}
+
+    {% if customFields.custom_product_picto is not empty %}
+        <div class="pictograms">
+            {{ include(template_from_string(customFields.custom_product_picto|pictograms)) }}
+        </div>
+    {% endif %}
+
+    {% if customFields.custom_product_short_desc is not empty %}
+        <div class="product-detail-short-description d-none d-md-block">
+            <div class="product-detail-short-description-text">
+                <p class="m-0">
+                    {{ include(template_from_string( customFields.custom_product_short_desc|replaceWithLinks)) }}<br>
+                </p>
+                <div class="info">
+                    {{ customFields.custom_product_information|striptags|raw }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

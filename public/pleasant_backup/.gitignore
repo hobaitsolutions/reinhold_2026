@@ -1,0 +1,6 @@
+*.log
+*.bak
+vendor
+db/vendor
+db/lib/logs
+.idea

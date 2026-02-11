@@ -1,0 +1,2 @@
+.sw-cms-block-alm-grid-8-4{display:grid;grid-template-columns:calc(66.66% - 20px) calc(33.33% - 20px);grid-gap:40px}
+div[class^=sw-cms-preview-almcode-element]{position:relative}div[class^=sw-cms-preview-almcode-element] img{position:absolute;top:0;left:0;width:100%;height:100%}div[class^=sw-cms-preview-almcode-element] .slot{position:relative;color:#fff}div[class^=sw-cms-preview-almcode-element] .slot *{color:#fff}.sw-tabs .sw-tabs__arrow{top:unset;margin-top:-22px}

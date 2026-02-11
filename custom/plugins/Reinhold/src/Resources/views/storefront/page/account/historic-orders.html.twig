@@ -1,0 +1,16 @@
+{% sw_extends '@Storefront/storefront/page/account/_page.html.twig' %}
+{% block page_account_main_content %}
+    {% block historic_pleasant_orders %}
+        <h1>{{ 'account.pleasantOrderHistory' |trans }}</h1>
+        {# customer id #}
+        {# {{ include(template_from_string( page.orders.criteria.filters | historicOrders)) }} #}
+        {{ include(template_from_string( {'customer':customer, 'offset' :  app.request.query.get("page") } | historicDeliveries)) }}
+        {% if app.request.query.get("page") > 0 %}
+            <a class="btn btn-primary" style="margin: -4rem 0 4rem;"
+               href="?page={{ app.request.query.get("page") - 1 }}">Neuere
+                Bestellungen</a>
+        {% endif %}
+        <a class="btn btn-primary" style="margin: -4rem 0 4rem;" href="?page={{ app.request.query.get("page") + 1 }}">Ältere
+            Bestellungen</a>
+    {% endblock %}
+{% endblock %}

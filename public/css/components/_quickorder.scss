@@ -1,0 +1,258 @@
+.is-ctl-quickorder
+{
+    .bc-wrapper
+    {
+        padding: 0 0 1rem !important;
+        left: -1rem;
+
+        .back-btn
+        {
+            top: -.333rem;
+        }
+    }
+}
+
+
+.quickorder
+{
+    .icon
+    {
+        color: $white;
+    }
+
+    img, svg
+    {
+        max-height: 50px;
+        width: auto;
+        text-align: center;
+        display: inline-block;
+    }
+
+    .title
+    {
+        font-weight: 600;
+    }
+
+    .quantity
+    {
+        display: inline-block;
+        width: 50px;
+    }
+
+    .product-row
+    {
+        padding: 1rem 0;
+        border-bottom: 1px solid #ccc;
+    }
+}
+
+.quickorder-table
+{
+    margin: 2rem 0 50px;
+
+    #orderhistory_wrapper
+    {
+        margin-top: 2rem;
+
+        .dataTables_length
+        {
+            position: absolute;
+        }
+
+        .dt-buttons.btn-group
+        {
+            margin: 2rem 0;
+
+            &::before
+            {
+                margin-right: 2rem;
+                content: 'Export: ';
+                position: relative;
+                top: 8px;
+            }
+
+            .btn
+            {
+                background: $brand;
+                border: none !important;
+                color: $white;
+                outline: none !important;
+                margin-right: 2px;
+            }
+        }
+    }
+}
+
+
+.dt-paging, .dt-search, .dt-length, .dt-buttons
+{
+    display: inline-block;
+    max-width: 50%;
+    float: right;
+    margin: 1rem 0 !important;
+}
+
+.dt-paging
+{
+    float: left;
+}
+
+.page-item.active
+{
+    border: 1px solid;
+}
+
+
+.dt-paging-button
+{
+    margin: 0 .25rem;
+    a{
+        color: $white !important;
+    }
+    &.disabled{
+        opacity: .5;
+    }
+}
+
+.table-wrap, #quickordertable_wrapper
+{
+    border: none;
+
+    tr, td, th, table
+    {
+        border: none;
+    }
+
+    th, td
+    {
+        border: solid #ccc;
+        border-width: 1px 1px 0 0 !important;
+    }
+
+    tfoot th
+    {
+        border-bottom: 1px solid #ccc !important;
+    }
+
+    tr
+    {
+        td, th
+        {
+            border-bottom: 1px solid #ccc;
+
+            &:first-child
+            {
+                border-left: 1px solid #ccc !important;
+            }
+
+            &:last-child
+            {
+                border-right: 1px solid #ccc !important;
+            }
+        }
+    }
+
+
+    #orderhistory_wrapper
+    {
+        padding-bottom: 3rem;
+        margin-bottom: 1rem;
+        //    transform: rotateX(180deg);
+    }
+}
+
+.table-wrap
+{
+    //display: none;
+    //transform: rotateX(180deg);
+
+    #orderhistory_wrapper
+    {
+        padding-bottom: 3rem;
+        margin-bottom: 1rem;
+        //transform: rotateX(180deg);
+        .product-name
+        {
+            margin-bottom: 0 !important;
+        }
+    }
+
+
+}
+
+.dt-container
+{
+    input, select, textarea
+    {
+        border-color: #ccc;
+    }
+
+    .form-control
+    {
+        margin: 0 .5rem 0;
+    }
+}
+
+
+/* HTML: <div class="loader"></div> */
+.table-loading
+{
+    width: 90px;
+    height: 200px;
+    box-shadow: 0 3px 0 #fff;
+    position: relative;
+    clip-path: inset(-40px 0 -5px);
+    border-bottom: 4px solid #ccc;
+    margin: 0 auto;
+}
+
+.table-loading:before
+{
+    content: "";
+    position: absolute;
+    inset: auto calc(50% - 17px) 0;
+    height: 50px;
+    --g: no-repeat linear-gradient(#ccc 0 0);
+    background: var(--g), var(--g), var(--g), var(--g);
+    background-size: 16px 14px;
+    animation: l7-1 2s infinite linear,
+    l7-2 2s infinite linear;
+}
+
+@keyframes l7-1
+{
+    0%,
+    100%
+    {
+        background-position: 0 -50px, 100% -50px
+    }
+    17.5%
+    {
+        background-position: 0 100%, 100% -50px, 0 -50px, 100% -50px
+    }
+    35%
+    {
+        background-position: 0 100%, 100% 100%, 0 -50px, 100% -50px
+    }
+    52.5%
+    {
+        background-position: 0 100%, 100% 100%, 0 calc(100% - 16px), 100% -50px
+    }
+    70%,
+    98%
+    {
+        background-position: 0 100%, 100% 100%, 0 calc(100% - 16px), 100% calc(100% - 16px)
+    }
+}
+
+@keyframes l7-2
+{
+    0%, 70%
+    {
+        transform: translate(0)
+    }
+    100%
+    {
+        transform: translate(200%)
+    }
+}

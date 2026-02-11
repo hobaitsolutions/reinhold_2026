@@ -1,0 +1,29 @@
+.cart-item-label
+{
+    font-size: 1.0rem !important;
+    font-weight: normal !important;
+}
+
+.custom-control.custom-checkbox
+{
+    padding-left: 0;
+
+    label
+    {
+        pointer-events: none !important;
+
+        &:before, &:after
+        {
+            display: none !important;
+            pointer-events: none;
+        }
+
+        a
+        {
+            pointer-events: auto;
+        }
+    }
+}
+.header-cart-total, .header-cart-btn{
+    color: $white !important;
+}

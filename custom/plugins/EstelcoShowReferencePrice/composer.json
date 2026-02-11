@@ -1,0 +1,37 @@
+{
+    "name": "estelco-show-reference-price/estelco-show-reference-price",
+    "description": "estelco-show-reference-price/estelco-show-reference-price",
+    "type": "shopware-platform-plugin",
+    "version": "0.1.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "André Estel",
+            "role": "Manufacturer"
+        }
+    ],
+    "require": {
+        "shopware/core": "~6.4"
+    },
+    "extra": {
+        "shopware-plugin-class": "Estelco\\ShowReferencePrice\\EstelcoShowReferencePrice",
+        "label": {
+            "de-DE": "ReferencePrice",
+            "en-GB": "ReferencePrice"
+        },
+        "description": {
+            "de-DE": "Zeigt den Grundpreis auch bei Verkaufseinheit gleich Grundeinheit an",
+            "en-GB": "Shows the reference price even if purchase unit equals reference unit"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Estelco\\ShowReferencePrice\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Estelco\\ShowReferencePrice\\Tests\\": "tests/"
+        }
+    }
+}

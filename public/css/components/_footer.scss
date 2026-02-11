@@ -1,0 +1,36 @@
+.footer-bottom
+{
+    background: #444;
+}
+
+.footer-main
+{
+    //background: url('//reinhold.hobaitsolutions.de/media/46/f3/d2/1634312067/kopfbild2.jpg');
+    //background-size: cover;
+    //position: relative;
+    //padding-top: 150px;
+    //&:before {
+    //    content: '';
+    //    background-image: linear-gradient(to top,  rgba(249,249,249,0), rgba(249,249,249,255));
+    //    position: absolute;
+    //    height: 100px;
+    //    right: 0;
+    //    left: 0;
+    //    top: 0;
+    //}
+    background: $brand;
+    color: $white;
+
+    a, h1, h2, h3, h4, h5, h6, p, .footer-column-headline
+    {
+        color: $white;
+        &:hover{
+            color: $white;
+            text-decoration: underline;
+        }
+    }
+}
+
+.eu-col{
+    margin-top: 2rem;
+}

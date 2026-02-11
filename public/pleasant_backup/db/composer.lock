@@ -1,0 +1,142 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "9b9c3b6ca86eeec522185fe221a3628b",
+    "packages": [
+        {
+            "name": "erusev/parsedown",
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/erusev/parsedown.git",
+                "reference": "6678d59be48c4be64eaca6ce70bea48a09488cc2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/erusev/parsedown/zipball/6678d59be48c4be64eaca6ce70bea48a09488cc2",
+                "reference": "6678d59be48c4be64eaca6ce70bea48a09488cc2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Parsedown": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Emanuil Rusev",
+                    "email": "hello@erusev.com",
+                    "homepage": "http://erusev.com"
+                }
+            ],
+            "description": "Parser for Markdown.",
+            "homepage": "http://parsedown.org",
+            "keywords": [
+                "markdown",
+                "parser"
+            ],
+            "time": "2018-02-28T11:41:37+00:00"
+        },
+        {
+            "name": "henck/rtf-to-html",
+            "version": "1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/henck/rtf-html-php.git",
+                "reference": "331fe7f4967689cc1dab8f06fe7f91b6f1e895f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/henck/rtf-html-php/zipball/331fe7f4967689cc1dab8f06fe7f91b6f1e895f9",
+                "reference": "331fe7f4967689cc1dab8f06fe7f91b6f1e895f9",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "RtfHtmlPhp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander van Oostenrijk",
+                    "email": "alex.vanoostenrijk@gmail.com"
+                }
+            ],
+            "description": "RTF to HTML converter in PHP",
+            "keywords": [
+                "converter",
+                "rtf"
+            ],
+            "time": "2019-10-02T10:16:43+00:00"
+        },
+        {
+            "name": "swaggest/json-diff",
+            "version": "v3.8.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swaggest/json-diff.git",
+                "reference": "d2184358c5ef5ecaa1f6b4c2bce175fac2d25670"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swaggest/json-diff/zipball/d2184358c5ef5ecaa1f6b4c2bce175fac2d25670",
+                "reference": "d2184358c5ef5ecaa1f6b4c2bce175fac2d25670",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.23"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Swaggest\\JsonDiff\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Viacheslav Poturaev",
+                    "email": "vearutop@gmail.com"
+                }
+            ],
+            "description": "JSON diff/rearrange/patch/pointer library for PHP",
+            "time": "2020-09-25T17:47:07+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

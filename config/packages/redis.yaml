@@ -1,0 +1,24 @@
+#parameters:
+#  app.redis.cache.host: "%env(REDIS_CACHE_HOST)%"
+#  app.redis.cache.port: "%env(int:REDIS_CACHE_PORT)%"
+#  app.redis.cache.password: "%env(REDIS_CACHE_PASSWORD)%"
+#  app.redis.cache.database: "%env(int:REDIS_CACHE_DATABASE)%"
+#
+#services:
+#  Redis:
+#    class: Redis
+#    calls:
+#      - method: connect
+#        arguments:
+#          - "%env(REDIS_SESSION_HOST)%"
+#          - "%env(int:REDIS_SESSION_PORT)%"
+#      - method: auth
+#        arguments:
+#          - "%env(REDIS_SESSION_PASSWORD)%"
+#      - method: select
+#        arguments:
+#          - "%env(int:REDIS_SESSION_DATABASE)%"
+#
+#  Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler:
+#    arguments:
+#      - "@Redis"

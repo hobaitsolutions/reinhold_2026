@@ -1,0 +1,166 @@
+{% sw_extends '@Reinhold/storefront/base.html.twig' %}
+{#Verkaufstagebuch#}
+{% block base_content %}
+    <div class="quickorder-table">
+        <h2>{{ "custom.goodsellingdaybook"|trans }}</h2>
+
+        <div class="chose-columns">
+            <label>
+                <input name="data-toggle" type="checkbox" value="0" checked/>
+                {{ "account.orderNumber"|trans }}
+            </label>
+            <label>
+                <input name="data-toggle" type="checkbox" value="1" checked/>
+                {{ "account.orderItemColumnDate"|trans }}
+            </label>
+            <label>
+                <input name="data-toggle" type="checkbox" value="2" checked/>
+                {{ "detail.unit"|trans }}
+            </label>
+            <label>
+                <input name="data-toggle" type="checkbox" value="3" checked/>
+                {{ "detail.unitName"|trans }}
+            </label>
+            <label>
+                <input name="data-toggle" type="checkbox" value="4" checked/>
+                {{ "detail.ordernumberLabel"|trans }}
+            </label>
+            <label>
+                <input name="data-toggle" type="checkbox" value="5" checked/>
+                {{ "custom.product"|trans }}
+            </label>
+            <label>
+                <input name="data-toggle" type="checkbox" value="6" checked/>
+                {{ "account.orderItemColumnPrice"|trans }}
+            </label>
+            <label>
+                <input name="data-toggle" type="checkbox" value="7"/>
+                {{ "account.discount"|trans }}
+            </label>
+            <label>
+                <input name="data-toggle" type="checkbox" value="8" checked/>
+                {{ "account.danger"|trans }}
+            </label>
+            <label>
+                <input name="data-toggle" type="checkbox" value="9"/>
+                {{ "custom.hSentences"|trans }}
+            </label>
+            <label>
+                <input name="data-toggle" type="checkbox" value="10"/>
+                {{ "custom.pSentences"|trans }}
+            </label>
+            <label>
+                <input name="data-toggle" type="checkbox" value="11"/>
+                {{ "custom.adrNumbers"|trans }}
+            </label>
+            <label>
+                <input name="data-toggle" type="checkbox" value="12"/>
+                {{ "custom.adrSpecs"|trans }}
+            </label>
+            <label>
+                <input name="data-toggle" type="checkbox" value="13"/>
+                {{ "custom.adrText"|trans }}
+            </label>
+
+        </div>
+        <div class="table-loading"></div>
+        <div class="table-wrap" style="overflow-x: scroll; display: none">
+            <table class="table table-striped table-bordered dt-responsive nowrap" id="orderhistory">
+                <thead>
+                <tr>
+                    <th data-priority="1" scope="col">{{ "account.orderNumber"|trans }}</th>
+                    <th data-priority="2" scope="col">{{ "account.orderItemColumnDate"|trans }}</th>
+                    <th scope="col">{{ "detail.unit"|trans }}</th>
+                    <th scope="col">{{ "detail.unitName"|trans }}</th>
+                    <th data-priority="4" scope="col">{{ "detail.ordernumberLabel"|trans }}</th>
+                    <th style="max-width: 20%" data-priority="3" scope="col">{{ "custom.product"|trans }}</th>
+                    <th scope="col">{{ "account.orderItemColumnPrice"|trans }}</th>
+                    <th scope="col">{{ "account.discount"|trans }}</th>
+                    <th scope="col">{{ "account.danger"|trans }}</th>
+                    <th scope="col">{{ "custom.hSentences"|trans }}</th>
+                    <th scope="col">{{ "custom.pSentences"|trans }}</th>
+                    <th scope="col">{{ "custom.adrNumbers"|trans }}</th>
+                    <th scope="col">{{ "custom.adrSpecs"|trans }}</th>
+                    <th scope="col">{{ "custom.adrText"|trans }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in allorders %}
+                    {% for item in order.items %}
+                        {% set currentProduct = products[item.id] %}
+                        <tr>
+                            <td>{{ order.orderNumber }}</td>
+                            <td data-order="{{ order.date|format_datetime( pattern='yyyy-MM-dd') }}">{{ order.date|format_datetime(pattern='dd.MM.yyyy') }}</td>
+                            <td>{{ item.count }}
+                            </td>
+                            <td>
+                                {% if item.unit is not empty %}
+                                    {{ item.unit }}
+                                {% else %}
+                                    Stück
+                                {% endif %}
+                            </td>
+                            <td>{{ currentProduct.productNumber }}</td>
+                            <td class="product-name">
+                                {% if currentProduct.active %}
+                                    <a href="{{ seoUrl('frontend.detail.page', {'productId': currentProduct.id}) }}"
+                                       title="{{ currentProduct.name }}">{{ currentProduct.name }}</a>
+                                {% else %}
+                                    <span title="{{ item.name }}">{{  item.name }}</span> ¹
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="text-right d-block">
+                                {% if item.price is not empty %}
+                                    {% set price =  item.price %}
+                                {% else %}
+                                    {% set price = currentProduct.price|first.net %}
+                                {% endif %}
+                                    {% if order.orderNumber ends with "GS"  %}
+                                        {% set price = price * -1 %}
+                                    {% endif %}
+                                    {{price|number_format(2,',') }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if item['discount1'] is not empty %}
+                                    {{ item['discount1'] }}
+                                {% else %}
+                                    0 %
+                                {% endif %}
+                            </td>
+                            <td>{{ currentProduct.hazards }}</td>
+                            <td>{{ currentProduct.customFields.custom_product_HazardStatements|hazardDescription }}</td>
+                            <td>{{ currentProduct.customFields.custom_product_hazards_p }}</td>
+                            <td>{{ currentProduct.customFields.custom_product_AdrNumbers }}</td>
+                            <td>{{ currentProduct.customFields.custom_product_AdrSpecs }}</td>
+                            <td>{{ currentProduct.customFields.custom_product_AdrText }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>{{ "account.orderNumber"|trans }}</th>
+                    <th>{{ "account.orderItemColumnDate"|trans }}</th>
+                    <th>{{ "detail.unit"|trans }}</th>
+                    <th>{{ "detail.unitName"|trans }}</th>
+                    <th>{{ "detail.ordernumberLabel"|trans }}</th>
+                    <th style="max-width: 20%">{{ "custom.product"|trans }}</th>
+                    <th>{{ "account.orderItemColumnPrice"|trans }}</th>
+                    <th>{{ "account.discount"|trans }}</th>
+                    <th>{{ "account.danger"|trans }}</th>
+                    <th scope="col">{{ "custom.hSentences"|trans }}</th>
+                    <th scope="col">{{ "custom.pSentences"|trans }}</th>
+                    <th scope="col">{{ "custom.adrNumbers"|trans }}</th>
+                    <th scope="col">{{ "custom.adrSpecs"|trans }}</th>
+                    <th scope="col">{{ "custom.adrText"|trans }}</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="notice"><p>¹ {{ "custom.cantbeorderedonline"|trans }}</p></div>
+    </div>
+{% endblock %}
+
+0151 54612046

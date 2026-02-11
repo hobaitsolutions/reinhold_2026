@@ -1,0 +1,452 @@
+{
+    "sw-cms": {
+        "elements": {
+            "almFoundation": {
+                "global": {
+                    "activated": "Aktivierte Module",
+                    "deactivated": "Deaktivierte Module",
+                    "tabs": {
+                        "settings": "Einstellungen",
+                        "layout": "Layout",
+                        "topline": "Topline",
+                        "action": "Action",
+                        "background": "Hintergrund",
+                        "backgroundhover": "Hintergrund:Hover",
+                        "headline": "Überschrift",
+                        "subline": "Untertitel",
+                        "head": "Head",
+                        "content": "Inhalte",
+                        "circle": "Kreis / Action",
+                        "button": "Button",
+                        "buttonhover": "Button:Hover",
+                        "toggle": "Toggle",
+                        "togglehover": "Toggle:Hover",
+                        "categories": "Kategorien",
+                        "box": "Einzelne Kachel",
+                        "front": "Vorderseite",
+                        "back": "Rückseite",
+                        "usp1": "USP 1",
+                        "usp2": "USP 2",
+                        "usp3": "USP 3",
+                        "usp4": "USP 4"
+                    },
+                    "usp": {
+                        "activate1": "USP 1 aktivieren",
+                        "activate2": "USP 2 aktivieren",
+                        "activate3": "USP 3 aktivieren",
+                        "activate4": "USP 4 aktivieren",
+                        "image": "Bild Icon"
+                    },
+                    "fa": {
+                        "title": "FontAwesome Icon Klasse",
+                        "help": "Für die Verwendung von Font Awesome Icons muss die Font Awesome Erweiterung installiert und aktiviert sein.",
+                        "placeholder": "fab fa-angellist",
+                        "color": "Icon Farbe",
+                        "size": "Icon Größe",
+                        "helptext": "Leer lassen, um kein FA Icon ausgeben zu lassen."
+                    },
+                    "layout": {
+                        "height": {
+                            "xs": {
+                                "label": "Minimale Höhe des Elements",
+                                "placeholder": "z. B. 550px"
+                            },
+                            "md": {
+                                "label": "Höhe des Elements ab Tablet-Größe",
+                                "placeholder": "z. B. 650px"
+                            },
+                            "xl": {
+                                "label": "Höhe des Elements ab Desktop-Größe",
+                                "placeholder": "z. B. 750px"
+                            }
+                        },
+                        "mode": {
+                            "label": "Bitte eine Darstellungsart auswählen",
+                            "placeholder": "--",
+                            "slider": "Slider",
+                            "boxes": "Kacheln",
+                            "box": "Einzelne Kachel",
+                            "square": "Viereck",
+                            "circle": "Kreis"
+                        },
+                        "columns": {
+                            "label": "Anzahl der Spalten",
+                            "placeholder": "--",
+                            "2": "2",
+                            "3": "3",
+                            "4": "4",
+                            "6": "6"
+                        }
+                    },
+                    "categories": {
+                        "select-subcategories": "Nur die Unterkategorien anzeigen",
+                        "select-multiple": "Kategorien",
+                        "select-multiple-placeholder": "min. eine Kategorie auswählen",
+                        "box": {
+                            "title": "Titel",
+                            "subtitle": "Untertitel"
+                        }
+                    },
+                    "background": {
+                        "bg-head": "Hintergrundfarbe Head",
+                        "bg-content": "Hintergrundfarbe Inhalte",
+                        "bg-action": "Hintergrundfarbe Action",
+                        "select-bg": "Hintergrundbild aktivieren",
+                        "select-co": "Hintergrundfarbe aktivieren",
+                        "mediaselect": "Hintergrundbild auswählen",
+                        "colorpicker": "Hintergrundfarbe auswählen",
+                        "maxwidth": {
+                            "label": "Maximale Breite definieren",
+                            "placeholder": "z. B. 100%"
+                        },
+                        "overlayer": {
+                            "select": "Overlayer aktivieren",
+                            "label": "Overlayer-Farbe auswählen"
+                        },
+                        "zoom": {
+                            "select": "Zoom Effekt aktivieren",
+                            "label": "Effekt",
+                            "placeholder": "--",
+                            "zoomin": "Reinzoomen",
+                            "zoomout": "Rauszoomen"
+                        },
+                        "media-position": "Fokusbereich"
+                    },
+                    "toggle": {
+                        "align": "Textausrichtung",
+                        "text-color": "Schriftfarbe",
+                        "text": {
+                            "h": {
+                                "label": "H-Wert",
+                                "placeholder": "--",
+                                "h1": "h1",
+                                "h2": "h2",
+                                "h3": "h3",
+                                "h4": "h4",
+                                "h5": "h5",
+                                "h6": "h6",
+                                "p": "p",
+                                "span": "span"
+                            },
+                            "text": {
+                                "label": "Text",
+                                "placeholder": "Hier steht ein Text..."
+                            },
+                            "size": {
+                                "label": "Schriftgröße",
+                                "placeholder": "z. B. 16px"
+                            }
+                        },
+                        "fa": {
+                            "select": "FontAwesome Icons aktivieren. Einfach das nachstehende Feld leer lassen um auf der entsprechende Seite kein FA Icon ausgeben zu lassen.",
+                            "left": {
+                                "label": "Icon Links",
+                                "placeholder": "z. B. <i class=\"fab fa-angellist\"></i>"
+                            },
+                            "right": {
+                                "label": "Icon Rechts",
+                                "placeholder": "z. B. <i class=\"fab fa-angellist\"></i>"
+                            }
+                        },
+                        "margin": {
+                            "select": "Äußeren Abstand aktivieren",
+                            "top": {
+                                "label": "Oben",
+                                "placeholder": "z. B. 10px"
+                            },
+                            "right": {
+                                "label": "Rechts",
+                                "placeholder": "z. B. 10px"
+                            },
+                            "bottom": {
+                                "label": "Unten",
+                                "placeholder": "z. B. 10px"
+                            },
+                            "left": {
+                                "label": "Links",
+                                "placeholder": "z. B. 10px"
+                            }
+                        },
+                        "padding": {
+                            "select": "Innerer Abstand aktivieren",
+                            "top": {
+                                "description": "Oberen Abstand definieren",
+                                "label": "Oben",
+                                "placeholder": "z. B. 10px"
+                            },
+                            "right": {
+                                "label": "Rechts",
+                                "placeholder": "z. B. 10px"
+                            },
+                            "bottom": {
+                                "description": "Unteren Abstand definieren",
+                                "label": "Unten",
+                                "placeholder": "z. B. 10px"
+                            },
+                            "left": {
+                                "label": "Links",
+                                "placeholder": "z. B. 10px"
+                            }
+                        }
+                    },
+                    "togglehover": {
+                        "background": "Hintergrundfarbe wechseln",
+                        "fa": {
+                            "select": "Icon Wechsel bei Hover aktivieren",
+                            "left": {
+                                "label": "Icon Links",
+                                "placeholder": "z. B. <i class=\"fab fa-angellist\"></i>"
+                            },
+                            "right": {
+                                "label": "Icon Rechts",
+                                "placeholder": "z. B. <i class=\"fab fa-angellist\"></i>"
+                            }
+                        },
+                        "fontcolor": "Schriftfarbe wechseln"
+                    },
+                    "headline": {
+                        "select-headline": "Titel aktivieren",
+                        "select-uppercase": "Groß geschriebener Text",
+                        "title": "Titel",
+                        "position": "Position der Box",
+                        "align": "Textausrichtung",
+                        "text-color": "Textfarbe",
+                        "background-color": "Hintergrundfarbe",
+                        "background-border-radius": "Hintergrund Rand Radius",
+                        "background-border-radius-placeholder": "z. B. 5px",
+                        "text": {
+                            "h": {
+                                "label": "H-Wert",
+                                "placeholder": "--",
+                                "h1": "h1",
+                                "h2": "h2",
+                                "h3": "h3",
+                                "h4": "h4",
+                                "h5": "h5",
+                                "h6": "h6",
+                                "p": "p",
+                                "span": "span"
+                            },
+                            "text": {
+                                "label": "Text",
+                                "placeholder": "Hier steht ein Text..."
+                            },
+                            "size": {
+                                "label": "Schriftgröße",
+                                "placeholder": "z. B. 16px"
+                            }
+                        }
+                    },
+                    "content": {
+                        "select-content": "Text aktivieren",
+                        "position": "Position der Box",
+                        "align": "Textausrichtung",
+                        "text-color": "Textfarbe",
+                        "background-color": "Hintergrundfarbe",
+                        "background-border-radius": "Hintergrund Rand Radius",
+                        "background-border-radius-placeholder": "z. B. 5px",
+                        "text": {
+                            "h": {
+                                "label": "H-Wert",
+                                "placeholder": "--",
+                                "h1": "h1",
+                                "h2": "h2",
+                                "h3": "h3",
+                                "h4": "h4",
+                                "h5": "h5",
+                                "h6": "h6",
+                                "p": "p",
+                                "span": "span"
+                            },
+                            "text": {
+                                "label": "Text",
+                                "placeholder": "Hier steht ein Text..."
+                            },
+                            "size": {
+                                "label": "Schriftgröße",
+                                "placeholder": "z. B. 16px"
+                            }
+                        },
+                        "background": {
+                            "select": "Hintergrundfarbe aktivieren."
+                        }
+                    },
+                    "circle": {
+                        "position": "Position des Kreises",
+                        "align": "Textausrichtung",
+                        "background": "Hintergrundfarbe",
+                        "text": "Schriftfarbe",
+                        "color": {
+                            "text-1": "Farbe Textzeile 1",
+                            "text-2": "Farbe Textzeile 2"
+                        },
+                        "text1": {
+                            "select": "Textzeile 1 aktivieren",
+                            "label": "Textzeile 1",
+                            "placeholder": "Ab"
+                        },
+                        "text2": {
+                            "select": "Textzeile 2 aktivieren",
+                            "label": "Textzeile 2",
+                            "placeholder": "19,90 €"
+                        },
+                        "margin": {
+                            "select": "Äußeren Abstand aktivieren",
+                            "top": {
+                                "label": "Oben",
+                                "placeholder": "z. B. 10px"
+                            },
+                            "right": {
+                                "label": "Rechts",
+                                "placeholder": "z. B. 10px"
+                            },
+                            "bottom": {
+                                "label": "Unten",
+                                "placeholder": "z. B. 10px"
+                            },
+                            "left": {
+                                "label": "Links",
+                                "placeholder": "z. B. 10px"
+                            }
+                        }
+                    },
+                    "button": {
+                        "select-button": "Button aktivieren",
+                        "sborder": {
+                            "select": "Rahmen aktivieren"
+                        },
+                        "border-color": "Rahmenfarbe",
+                        "border-size": {
+                            "label": "Stärke",
+                            "placeholder": "z. B. 1px"
+                        },
+                        "position": "Position des Buttons",
+                        "align": "Textausrichtung",
+                        "background": "Hintergrundfarbe",
+                        "text-color": "Schriftfarbe",
+                        "inline": {
+                            "select": "Button unter Text"
+                        },
+                        "button": {
+                            "text": {
+                                "label": "Button Text",
+                                "placeholder": "Mehr Informationen"
+                            },
+                            "link": {
+                                "label": "Link Url",
+                                "placeholder": "https://....",
+                                "target": {
+                                    "label": "Link öffnen",
+                                    "label2": "In einem neuen Tab öffnen",
+                                    "placeholder": "--",
+                                    "blank": "in einem neuem Fenster",
+                                    "self": "auf der gleichen Seite"
+                                }
+                            },
+                            "category": {
+                                "label": "Kategorie Link",
+                                "placeholder": "Wähle eine Kategorie..."
+                            },
+                            "option": {
+                                "label": "Link Layout",
+                                "placeholder": "Bitte wähle ein Layout...",
+                                "button": "Als Button anzeigen",
+                                "cover": "Als volle Fläche anzeigen"
+                            }
+                        }
+                    },
+                    "buttonhover": {
+                        "background": "Hintergrundfarbe",
+                        "background-hover": "Hintergrundfarbe bei Hover",
+                        "text-color": "Schriftfarbe",
+                        "text-color-hover": "Schriftfarbe bei Hover",
+                        "border-color": "Rahmenfarbe"
+                    },
+                    "distances": {
+                        "margin-select": "Äußeren Abstand aktivieren",
+                        "padding-select": "Inneren Abstand aktivieren",
+                        "top": {
+                            "label": "Oben",
+                            "placeholder": "z. B. 10px"
+                        },
+                        "right": {
+                            "label": "Rechts",
+                            "placeholder": "z. B. 10px"
+                        },
+                        "bottom": {
+                            "label": "Unten",
+                            "placeholder": "z. B. 10px"
+                        },
+                        "left": {
+                            "label": "Links",
+                            "placeholder": "z. B. 10px"
+                        }
+                    }
+                }
+            }
+        },
+        "blocks": {
+            "almFoundation": {
+                "block": {
+                    "alm-parallax-12": {
+                        "label": "almCode Parallax Banner"
+                    },
+                    "alm-promotion-12": {
+                        "label": "almCode Promotion Banner"
+                    },
+                    "alm-categoryteaser-12": {
+                        "label": "almCode Kategorie Vorschau"
+                    },
+                    "alm-togglebox-12": {
+                        "label": "almCode Toggle Box"
+                    },
+                    "alm-uspleiste-12": {
+                        "label": "almCode USP Leiste"
+                    },
+                    "alm-shopwareslider-12": {
+                        "label": "almCode Shopware Slider"
+                    },
+                    "alm-avishoverbanner-12": {
+                        "label": "almCode Avis Hover Banner"
+                    },
+                    "alm-glowbox-12": {
+                        "label": "almCode Shopware Glow Box"
+                    },
+                    "alm-grid-12": {
+                        "label": "Grid 12 - vollflächig"
+                    },
+                    "alm-grid-9-3": {
+                        "label": "Grid 9 - 3 Verhältnis"
+                    },
+                    "alm-grid-8-4": {
+                        "label": "Grid 8 - 4 Verhältnis"
+                    },
+                    "alm-grid-6-6": {
+                        "label": "Grid 6 - 6 Verhältnis"
+                    },
+                    "alm-grid-4-8": {
+                        "label": "Grid 4 - 8 Verhältnis"
+                    },
+                    "alm-grid-4-4-4": {
+                        "label": "Grid 4 - 4 - 4 Verhältnis"
+                    },
+                    "alm-grid-3-9": {
+                        "label": "Grid 3 - 9 Verhältnis"
+                    },
+                    "alm-grid-3-6-3": {
+                        "label": "Grid 3 - 6 - 3 Verhältnis"
+                    },
+                    "alm-grid-3-3-3-3": {
+                        "label": "Grid 3 - 3 - 3 - 3 Verhältnis"
+                    },
+                    "alm-grid-2-8-2": {
+                        "label": "Grid 2 - 8 - 2 Verhältnis"
+                    },
+                    "alm-grid-1-1-1-1-1": {
+                        "label": "Grid 1 - 1 - 1 - 1 - 1 Verhältnis"
+                    }
+                }
+            }
+        }
+    }
+}

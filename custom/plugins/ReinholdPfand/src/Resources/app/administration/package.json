@@ -1,0 +1,16 @@
+{
+    "name": "reinhold-pfand",
+    "version": "1.0.0",
+    "description": "Reinhold Pfand Plugin",
+    "main": "src/main.js",
+    "devDependencies": {
+        "@shopware-ag/admin-extension-sdk": "^3.0.15",
+        "winston": "^2.4.7"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}

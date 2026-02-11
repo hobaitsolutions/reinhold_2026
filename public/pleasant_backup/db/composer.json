@@ -1,0 +1,7 @@
+{
+    "require": {
+        "swaggest/json-diff": "^3.8",
+        "henck/rtf-to-html": "^1.1",
+        "erusev/parsedown": "^1.7"
+    }
+}

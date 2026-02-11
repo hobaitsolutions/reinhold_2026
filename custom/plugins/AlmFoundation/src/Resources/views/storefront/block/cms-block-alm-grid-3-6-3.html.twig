@@ -1,0 +1,30 @@
+{% block element_alm_grid_3_6_3 %}
+    {% set element1 = block.slots.getSlot('content1') %}
+    {% set element2 = block.slots.getSlot('content2') %}
+    {% set element3 = block.slots.getSlot('content3') %}
+    {% set columns = 3 %}
+
+    <div class="col-md-3" data-cms-element-id="{{ element1.id }}">
+        {% block element_alm_grid_3_6_3__1 %}
+            {% sw_include "@Storefront/storefront/element/cms-element-" ~ element1.type ~ ".html.twig" ignore missing with {
+                'element': element1
+            } %}
+        {% endblock %}
+    </div>
+
+    <div class="col-md-6" data-cms-element-id="{{ element2.id }}">
+        {% block element_alm_grid_3_6_3__2 %}
+            {% sw_include "@Storefront/storefront/element/cms-element-" ~ element2.type ~ ".html.twig" ignore missing with {
+                'element': element2
+            } %}
+        {% endblock %}
+    </div>
+
+    <div class="col-md-3" data-cms-element-id="{{ element3.id }}">
+        {% block element_alm_grid_3_6_3__3 %}
+            {% sw_include "@Storefront/storefront/element/cms-element-" ~ element3.type ~ ".html.twig" ignore missing with {
+                'element': element3
+            } %}
+        {% endblock %}
+    </div>
+{% endblock %}

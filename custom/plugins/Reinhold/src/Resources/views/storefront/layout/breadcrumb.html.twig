@@ -1,0 +1,8 @@
+{% sw_extends '@Storefront/storefront/layout/breadcrumb.html.twig' %}
+
+    {% block layout_breadcrumb_inner %}
+        {% if context.customer.lastName is not empty %}
+            {% sw_include '@Reinhold/storefront/layout/customerinfo.html.twig' %}
+        {% endif %}
+        {{ parent() }}
+    {% endblock %}

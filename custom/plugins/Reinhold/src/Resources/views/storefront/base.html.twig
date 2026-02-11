@@ -1,0 +1,88 @@
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+{% block base_header %}
+
+    <header class="header-main{% if theme_config('dmf-header-layout') == 2 %} header-main-advanced{% endif %}{% if theme_config('dmf-header-fullwidth') %} is-fullwidth{% endif %}" {% if theme_config('dmf-header-layout') == 2 or theme_config('dmf-header-layout') == 3 %} data-flyout-menu="true" {% endif %}
+            style="background: url('/media/46/f3/d2/1634312067/kopfbild2.jpg');background-size: cover">
+        {% block base_header_inner %}
+            {{ parent() }}
+            {% if theme_config('dmf-header-layout') == 2 %}
+                {% sw_include '@Storefront/storefront/layout/header/search.html.twig' %}
+            {% endif %}
+        {% endblock %}
+
+        {% block base_header_flyout %}
+            {% if theme_config('dmf-header-layout') == 2 or theme_config('dmf-header-layout') == 3 %}
+                {% set navigationChildrenCount = 0 %}
+                {% for treeItem in page.header.navigation.tree %}
+                    {% if treeItem.category.childCount > 0 %}
+                        {% set navigationChildrenCount = navigationChildrenCount + 1 %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if navigationChildrenCount > 0 %}
+                    <div class="navigation-flyouts">
+                        {% for treeItem in page.header.navigation.tree %}
+                            {% if treeItem.children|length > 0 %}
+                                <div class="navigation-flyout" data-flyout-menu-id="{{ treeItem.category.id }}">
+                                    <div class="container">
+                                        {% sw_include '@Storefront/storefront/layout/navigation/flyout.html.twig' with {navigationTree: treeItem, level: level+1} only %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endblock %}
+        <script
+                src="https://code.jquery.com/jquery-3.7.1.min.js"
+                integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+                crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="/css/all.css"/>
+        <script src="/js/datatables.js"></script>
+        <script src="/js/lightbox.js"></script>
+{#        <script src="/js/custom.js"></script>#}
+    </header>
+
+{% endblock %}
+
+{% block base_navigation %}
+    {% if theme_config('dmf-header-layout') == 1 or theme_config('dmf-header-layout') == 3 %}
+        <div class="nav-main{% if theme_config('dmf-header-fullwidth') %} is-fullwidth{% endif %}">
+            {% block base_navigation_inner %}
+                {% sw_include '@Storefront/storefront/layout/navigation/navigation.html.twig' %}
+            {% endblock %}
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block base_breadcrumb %}
+    <div class="container">
+        <div class="bc-wrapper">
+
+            {% sw_include '@Storefront/storefront/layout/breadcrumb.html.twig' with {
+                context: context,
+                category: page.product.seoCategory
+            } only %}
+            <a href="#" class="btn btn-primary back-btn" onclick="history.back()">Zurück</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block base_footer %}
+    {% block base_newsletter %}
+{#        {% if theme_config('dmf-newsletter-enable') and controllerAction == 'home' %}#}
+{#            <div class="main-newsletter">#}
+{#                {% block base_newsletter_inner %}#}
+{#                    <div class="container">#}
+{#                        {% sw_include '@Storefront/storefront/layout/newsletter/newsletter.html.twig' %}#}
+{#                    </div>#}
+{#                {% endblock %}#}
+{#            </div>#}
+{#        {% endif %}#}
+    {% endblock %}
+
+    {{ parent() }}
+{% endblock %}

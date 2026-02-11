@@ -1,0 +1,13 @@
+{% block sw_product_detail_content_tabs_general %}
+    {{ parent() }}
+    
+    <sw-card class="sw-product-detail-pfand"
+             title="Pfand"
+             :isLoading="isLoading"
+             position-identifier="sw-product-detail-pfand">
+        <pfand-field
+            v-model="product.pfandPrice"
+            :disabled="!acl.can('product.editor')">
+        </pfand-field>
+    </sw-card>
+{% endblock %} 

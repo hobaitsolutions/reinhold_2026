@@ -1,0 +1,6 @@
+framework:
+#"
+  session:
+#    handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler
+    cookie_lifetime: 7776000
+    gc_maxlifetime: 7776000

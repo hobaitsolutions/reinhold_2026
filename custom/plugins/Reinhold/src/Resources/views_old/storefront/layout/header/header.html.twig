@@ -1,0 +1,56 @@
+{% sw_extends '@Storefront/storefront/layout/header/header.html.twig' %}
+
+{% block layout_header_navigation_toggle_tablet_button %}
+    <button class="btn nav-main-toggle-btn header-actions-btn"
+            type="button"
+            data-offcanvas-menu="true"
+            aria-label="{{ "general.menuLink"|trans|striptags }}">
+        {% block layout_header_navigation_toggle_tablet_button_icon %}
+            {% sw_icon 'stack' style {'size': 'sm'} %}
+        {% endblock %}
+    </button>
+{% endblock %}
+
+{% block layout_header_logo %}
+    {% if theme_config('dmf-nav-mobile') == 'left' %}
+        <div class="col-auto d-lg-none pr-0">
+            <div class="menu-button">
+                {% block layout_header_navigation_toggle_button_left %}
+                    <button class="btn nav-main-toggle-btn header-actions-btn"
+                            type="button"
+                            data-offcanvas-menu="true"
+                            aria-label="{{ "general.menuLink"|trans|striptags }}">
+                        {% block layout_header_navigation_toggle_button_left_icon %}
+                            {% sw_icon 'stack' style {'size': 'sm'} %}
+                        {% endblock %}
+                    </button>
+                {% endblock %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="col-6">
+        {% sw_include '@Storefront/storefront/layout/header/logo.html.twig' %}
+    </div>
+{% endblock %}
+
+
+{% block layout_header_actions %}
+
+{% endblock %}
+
+{% block layout_header_search %}
+    <div class="col-6 order-2 col-sm order-sm-1 header-search-col">
+        <div class="row">
+            <div class="col">
+                {% if theme_config('dmf-header-layout') == 2 %}
+                    {% sw_include '@Storefront/storefront/layout/navigation/navigation.html.twig' %}
+                {% else %}
+                    {% sw_include '@Storefront/storefront/layout/header/search.html.twig' %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

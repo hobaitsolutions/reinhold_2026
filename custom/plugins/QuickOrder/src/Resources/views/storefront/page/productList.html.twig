@@ -1,0 +1,180 @@
+{% block quickorder_product_listing %}
+    <div class="table-loading"></div>
+    <table class="table table-striped table-bordered mt-4 mb-4" id="quickordertable">
+        <thead>
+        <tr>
+            <th>
+                Bild
+            </th>
+            <th>
+                Artikelnummer
+            </th>
+            <th>
+                Artikel
+            </th>
+            <th>
+                Preis
+            </th>
+            <th>
+                Einheit
+            </th>
+            <th>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            {% set isAvailable = (not product.isCloseout or (product.availableStock >= product.minPurchase)) and product.active %}
+            {% if isAvailable %}
+                {% block buy_container %}
+                    <tr>
+                        <td class="col-1 text-left">
+                            {% if product.cover %}
+                                {% sw_thumbnails 'minimal-image-thumbnails' with {
+                                    media: product.cover.media,
+                                    sizes: {
+                                        'default': '360px'
+                                    },
+                                    attributes: {
+                                        'class': 'img-fluid quickview-minimal-img',
+                                        'alt': ( product.cover.translated.alt ?: ''),
+                                        'title': (product.cover.translated.title ?: '')
+                                    }
+                                } %}
+                            {% else %}
+                                {% sw_icon 'placeholder' style {
+                                    'size': 'fluid'
+                                } %}
+                            {% endif %}
+                        </td>
+                        <td class="col-1 product-number">
+                            <a href="{{ seoUrl('frontend.detail.page', {'productId': product.id}) }}">{{ product.productNumber }}</a>
+                        </td>
+                        <td class="col-6 title">
+                            <a href="{{ seoUrl('frontend.detail.page', {'productId': product.id}) }}">{{ product.name }}</a>
+                        </td>
+                        <td class="col-1">
+                            {% set calc = product.calculatedPrices|first.unitprice %}
+                            {% set price = product.price|first.net %}
+                            {% if ((calc > 0) and (calc < price)) %}
+                            <strong>{{ calc|currency }}</strong>
+                            <div>
+                                <del>{{ price|currency }}</del>
+                            </div>
+                        {% else %}
+                            <strong>{{ price|currency }}</strong>
+                            {% endif %}<br>
+                        </td>
+                        <td>
+                            {% if product.customFields.custom_product_pack_unit_quantity is not empty %}{{ product.customFields.custom_product_pack_unit_quantity }} {% else %} 1 {% endif %} {{ product.packUnit }}
+                        </td>
+                        <td class="col-2 text-center">
+                            <form action="{{ path('frontend.checkout.line-item.add') }}"
+                                  method="post"
+                                  class="buy-widget"
+                                  data-add-to-cart="true">
+                                <input type="hidden"
+                                       name="redirectTo"
+                                       value="frontend.cart.offcanvas">
+                                <input type="hidden"
+                                       name="redirectParameters"
+                                       data-redirect-parameters="true"
+                                       value='{"productId": "{{ product.id }}"}'>
+                                <input type="hidden"
+                                       name="lineItems[{{ product.id }}][id]"
+                                       value="{{ product.id }}">
+                                <input type="hidden"
+                                       name="lineItems[{{ product.id }}][referencedId]"
+                                       value="{{ product.id }}">
+                                <input type="hidden"
+                                       name="lineItems[{{ product.id }}][type]"
+                                       value="product">
+                                <input type="hidden"
+                                       name="lineItems[{{ product.id }}][stackable]"
+                                       value="1">
+                                <input type="hidden"
+                                       name="lineItems[{{ product.id }}][removable]"
+                                       value="1">
+                                <input type="hidden"
+                                       name="product-name"
+                                       value="{{ product.translated.name }}">
+                                <input type="number"
+                                       name="lineItems[{{ product.id }}][quantity]"
+                                       value="{{ product.minPurchase }}" class="quantity">
+                                <button class="btn btn-buy"
+                                        title="{{ "listing.boxAddProduct"|trans|striptags }}">
+                                    {% sw_icon 'bag' %}
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endblock %}
+            {% else %}
+                <tr>
+                    <td class="col-1 text-left">
+                        {% if product.cover %}
+                            {% sw_thumbnails 'minimal-image-thumbnails' with {
+                                media: product.cover.media,
+                                sizes: {
+                                    'default': '360px'
+                                },
+                                attributes: {
+                                    'class': 'img-fluid quickview-minimal-img',
+                                    'alt': ( product.cover.translated.alt ?: ''),
+                                    'title': (product.cover.translated.title ?: '')
+                                }
+                            } %}
+                        {% else %}
+                            {% sw_icon 'placeholder' style {
+                                'size': 'fluid'
+                            } %}
+                        {% endif %}
+                    </td>
+                    <td class="col-1 product-number">
+                        {{ product.productNumber }}
+                    </td>
+                    <td class="col-6 title">
+                        {{ product.name }}
+                        {{ include(template_from_string(product.description|getReplacement)) }}
+                    </td>
+                    <td class="col-1">
+
+                    </td>
+                    <td class="col-1">
+                        {% if product.customFields.custom_product_pack_unit_quantity is not empty %}{{ product.customFields.custom_product_pack_unit_quantity }} {% else %} 1 {% endif %} {{ product.packUnit }}
+                    </td>
+                    <td class="col-2 text-center">
+                        aktuell nicht lieferbar
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        {% for product in undeliverable %}
+            <tr>
+                <td class="col-1 text-left">
+                    {% sw_icon 'placeholder' style {
+                        'size': 'fluid'
+                    } %}
+                </td>
+                <td class="col-1 product-number">
+                    {{ product.product_number }}
+                </td>
+                <td class="col-6 title">
+                    {{ product.title }}
+                    {{ include(template_from_string(product.description|getReplacement)) }}
+                </td>
+                <td class="col-1">
+                    <strong>{{ (product.price)|currency }}</strong>
+                </td>
+                <td class="col-1">
+
+                </td>
+                <td class="col-2 text-center">
+                    nicht mehr bestellbar
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

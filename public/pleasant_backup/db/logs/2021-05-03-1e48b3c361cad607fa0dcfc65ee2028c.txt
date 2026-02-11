@@ -1,0 +1,8 @@
+Time : 12:41:11
+SQLSTATE[IMSSP]: An invalid keyword 'charset' was specified in the DSN string.
+
+Time : 12:40:05
+SQLSTATE[IMSSP]: An invalid encoding was specified for SQLSRV_ATTR_ENCODING.
+
+Time : 12:39:50
+SQLSTATE[IMSSP]: An invalid keyword 'charset' was specified in the DSN string.

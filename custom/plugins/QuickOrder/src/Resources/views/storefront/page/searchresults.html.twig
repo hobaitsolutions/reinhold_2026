@@ -1,0 +1,102 @@
+{% sw_extends '@Reinhold/storefront/base.html.twig' %}
+{% set listingColumns = 'col-sm-6 col-lg-4 col-xl-3' %}
+
+{# Custom Search #}
+{% block base_content %}
+    <style>
+        .bc-wrapper{
+            display: none !important;
+        }
+    </style>
+
+    <div class="filter-container mb-3 flex text-white" style="justify-content: space-between">
+        <div class="serachresults">
+            {{ products.count }} Resultate gefunden.
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="toggle-available">
+            <label class="form-check-label" for="toggle-available" id="toggle-available-label">Alle Produkte</label>
+        </div>
+    </div>
+    <div class="row cms-listing-row js-listing-wrapper"
+         data-aria-live-text="{{ ariaLiveText }}"{% if searchResult.total > 0 %} role="list"{% endif %}>
+        {% for product in products %}
+            <div class="cms-listing-col {{ listingColumns }} mb-4" role="listitem">
+                {% block element_product_listing_box %}
+                    {% sw_include '@Storefront/storefront/component/product/card/box.html.twig' with {
+                        layout: 'standard',
+                        displayMode: ''
+                    } %}
+                {% endblock %}
+            </div>
+        {% endfor %}
+    </div>
+    <table class="text-white">
+        <thead>
+        <tr>
+            <th>pnr</th>
+            <th>id</th>
+            <th>name</th>
+            <th>weight</th>
+        </tr>
+        </thead>
+        {% for row in queryResults %}
+            <tr>
+                {% for col in row %}
+                    <td style="border:1px #ccc solid; padding: .333rem">{{ col }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let showOnlyAvailable = false;
+            let totalProductCount = 0;
+            let availableProductCount = 0;
+            const toggleAvailableCheckbox = document.getElementById('toggle-available');
+            const toggleAvailableLabel = document.getElementById('toggle-available-label');
+            const searchResultsCount = document.querySelector('.serachresults');
+
+
+            // Function to filter products based on availability
+            function filterProducts() {
+                const productCards = document.querySelectorAll('.product-box');
+
+                totalProductCount = productCards.length;
+                availableProductCount = 0;
+                let visibleProductCount = 0;
+
+                productCards.forEach(card => {
+                    if (card.getAttribute('data-available') === 'true') {
+                        availableProductCount++;
+                    }
+
+                    if (showOnlyAvailable && card.getAttribute('data-available') !== 'true') {
+                        card.closest('.cms-listing-col').style.display = 'none';
+                    } else {
+                        card.closest('.cms-listing-col').style.display = '';
+                        visibleProductCount++;
+                    }
+                });
+
+                // Update label text with counts
+                toggleAvailableLabel.textContent = showOnlyAvailable
+                    ? `Nur verfügbare Produkte anzeigen (${availableProductCount})`
+                    : `Nur verfügbare Produkte anzeigen (${availableProductCount} / ${totalProductCount})`;
+
+                // Update search results count
+                searchResultsCount.textContent = `${visibleProductCount} Resultate gefunden.`;
+            }
+
+            // Add event listener for toggle checkbox
+            toggleAvailableCheckbox.addEventListener('change', function () {
+                showOnlyAvailable = this.checked;
+                filterProducts();
+            });
+
+            // Initialize product counts and label
+            filterProducts();
+        });
+    </script>
+
+{% endblock %}

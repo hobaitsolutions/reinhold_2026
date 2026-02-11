@@ -1,0 +1,18 @@
+{
+  "name": "swag/theme-skeleton",
+  "description": "Theme skeleton plugin",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Reinhold\\": "src/"
+    }
+  },
+  "extra": {
+    "shopware-plugin-class": "Reinhold\\Reinhold",
+    "label": {
+      "de-DE": "Theme Reinhold plugin",
+      "en-GB": "Theme Reinhold plugin"
+    }
+  }
+}

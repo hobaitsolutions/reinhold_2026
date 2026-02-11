@@ -1,0 +1,356 @@
+{
+    "sw-cms": {
+        "elements": {
+            "almFoundation": {
+                "global": {
+                    "activated": "Activated Module",
+                    "deactivated": "Deactivated Module",
+                    "tabs": {
+                        "settings": "Settings",
+                        "layout": "Layout",
+                        "topline": "Topline",
+                        "action": "Action",
+                        "background": "Background",
+                        "backgroundhover": "Background:Hover",
+                        "headline": "Headline",
+                        "subline": "Subtitle",
+                        "head": "Head",
+                        "content": "Content",
+                        "circle": "Circle / Action",
+                        "button": "Button",
+                        "buttonhover": "Button:Hover",
+                        "toggle": "Toggle",
+                        "togglehover": "Toggle:Hover",
+                        "categories": "Categories",
+                        "box": "Simple box",
+                        "front": "Front",
+                        "back": "Back",
+                        "usp1": "USP 1",
+                        "usp2": "USP 2",
+                        "usp3": "USP 3",
+                        "usp4": "USP 4"
+                    },
+                    "usp": {
+                        "activate1": "Activate USP 1",
+                        "activate2": "Activate USP 2",
+                        "activate3": "Activate USP 3",
+                        "activate4": "Activate USP 4",
+                        "image": "Image icon"
+                    },
+                    "fa": {
+                        "title": "FontAwesome icon class",
+                        "help": "To use Font Awesome icons, the Font Awesome extension must be installed and enabled.",
+                        "placeholder": "fab fa-angellist",
+                        "color": "Icon color",
+                        "size": "Icon size",
+                        "helptext": "Let it empty, to not use fa icon."
+                    },
+                    "layout": {
+                        "height": {
+                            "xs": {
+                                "label": "Minimal height of banner",
+                                "placeholder": "f. e. 550px"
+                            },
+                            "md": {
+                                "label": "Height of banner at tablet size",
+                                "placeholder": "f. e. 650px"
+                            },
+                            "xl": {
+                                "label": "Height of banner at desktop size",
+                                "placeholder": "f. e. 750px"
+                            }
+                        },
+                        "mode": {
+                            "label": "Please select one layoutmode",
+                            "placeholder": "--",
+                            "slider": "Slider",
+                            "boxes": "Boxes",
+                            "box": "Simple box",
+                            "square": "Square",
+                            "circle": "Circle"
+                        },
+                        "columns": {
+                            "label": "Number of columns",
+                            "placeholder": "--",
+                            "2": "2",
+                            "3": "3",
+                            "4": "4",
+                            "6": "6"
+                        }
+                    },
+                    "categories": {
+                        "select-subcategories": "Display subcategories only",
+                        "select-multiple": "Categories",
+                        "select-multiple-placeholder": "select at least one category",
+                        "box": {
+                            "title": "Title",
+                            "subtitle": "Subtitle"
+                        }
+                    },
+                    "background": {
+                        "bg-head": "Backgroundcolor head",
+                        "bg-content": "Backgroundcolor content",
+                        "bg-action": "Backgroundcolor action",
+                        "select-bg": "Backgroundimage activate",
+                        "select-co": "Backgroundcolor activate",
+                        "mediaselect": "Backgroundimage select",
+                        "colorpicker": "Backgroundcolor select",
+                        "maxwidth": {
+                            "label": "Define max width",
+                            "placeholder": "f. e. 100%"
+                        },
+                        "overlayer": {
+                            "select": "Overlayer activate",
+                            "label": "Overlayer-Color select"
+                        },
+                        "zoom": {
+                            "select": "zoom effect activate",
+                            "label": "effect",
+                            "placeholder": "--",
+                            "zoomin": "zoom in",
+                            "zoomout": "zoom out"
+                        },
+                        "media-position": "Focus area"
+                    },
+                    "headline": {
+                        "select-headline": "Activate title",
+                        "select-uppercase": "Uppercase text",
+                        "title": "Title",
+                        "position": "Position of box",
+                        "align": "Text alignment",
+                        "text-color": "Fontcolor",
+                        "background-color": "Backgroundcolor",
+                        "background-border-radius": "Background border radius",
+                        "background-border-radius-placeholder": "f. e. 5px",
+                        "text": {
+                            "h": {
+                                "label": "H-Value",
+                                "placeholder": "--",
+                                "h1": "h1",
+                                "h2": "h2",
+                                "h3": "h3",
+                                "h4": "h4",
+                                "h5": "h5",
+                                "h6": "h6",
+                                "p": "p",
+                                "span": "span"
+                            },
+                            "text": {
+                                "label": "Text",
+                                "placeholder": "Here is your text..."
+                            },
+                            "size": {
+                                "label": "Font size",
+                                "placeholder": "f. e. 16px"
+                            }
+                        }
+                    },
+                    "content": {
+                        "select-content": "Activate text",
+                        "position": "Position of box",
+                        "align": "Text alignment",
+                        "text-color": "Fontcolor",
+                        "background-color": "Backgroundcolor",
+                        "background-border-radius": "Background border radius",
+                        "background-border-radius-placeholder": "f. e. 5px",
+                        "text": {
+                            "h": {
+                                "label": "H-Value",
+                                "placeholder": "--",
+                                "h1": "h1",
+                                "h2": "h2",
+                                "h3": "h3",
+                                "h4": "h4",
+                                "h5": "h5",
+                                "h6": "h6",
+                                "p": "p",
+                                "span": "span"
+                            },
+                            "text": {
+                                "label": "Text",
+                                "placeholder": "Here is your text..."
+                            },
+                            "size": {
+                                "label": "Font size",
+                                "placeholder": "f. e. 16px"
+                            }
+                        }
+                    },
+                    "circle": {
+                        "position": "Position of circle",
+                        "align": "Text alignment",
+                        "background": "Backgroundcolor",
+                        "text": "Font color",
+                        "color": {
+                            "text-1": "Color Text row 1",
+                            "text-2": "Color Text row 2"
+                        },
+                        "text1": {
+                            "select": "Text row 1 activate",
+                            "label": "Text row 1",
+                            "placeholder": "from"
+                        },
+                        "text2": {
+                            "select": "Text row 2 activate",
+                            "label": "Text row 2",
+                            "placeholder": "19,90 €"
+                        },
+                        "margin": {
+                            "select": "Outer distance activate",
+                            "top": {
+                                "description": "Define top distance",
+                                "label": "Top",
+                                "placeholder": "f. e. 10px"
+                            },
+                            "right": {
+                                "label": "Right",
+                                "placeholder": "f. e. 10px"
+                            },
+                            "bottom": {
+                                "description": "Define bottom distance",
+                                "label": "Bottom",
+                                "placeholder": "f. e. 10px"
+                            },
+                            "left": {
+                                "label": "Left",
+                                "placeholder": "f. e. 10px"
+                            }
+                        }
+                    },
+                    "button": {
+                        "select-button": "Activate button",
+                        "sborder": {
+                            "select": "Activate border"
+                        },
+                        "border-color": "border color",
+                        "border-size": {
+                            "label": "stroke",
+                            "placeholder": "f.e. 1px"
+                        },
+                        "position": "Position of button",
+                        "align": "Text alignment",
+                        "background": "Backgroundcolor",
+                        "text-color": "Font color",
+                        "inline": {
+                            "select": "Set button under text."
+                        },
+                        "button": {
+                            "text": {
+                                "label": "Button Text",
+                                "placeholder": "More information"
+                            },
+                            "link": {
+                                "label": "Link Url",
+                                "placeholder": "https://....",
+                                "target": {
+                                    "label": "Open link",
+                                    "label2": "Open link in a new tab",
+                                    "placeholder": "--",
+                                    "blank": "in a new tab",
+                                    "self": "in the same tab"
+                                }
+                            },
+                            "category": {
+                                "label": "Link of a category",
+                                "placeholder": "Select a category..."
+                            },
+                            "option": {
+                                "label": "Link display",
+                                "placeholder": "Please select a representation...",
+                                "button": "Display as a button",
+                                "cover": "Represent as a full plane"
+                            }
+                        }
+                    },
+                    "buttonhover": {
+                        "background": "Backgroundcolor",
+                        "background-hover": "Backgroundcolor at hover",
+                        "text-color": "Font color",
+                        "text-color-hover": "Font color at hover",
+                        "border-color": "border color"
+                    },
+                    "distances": {
+                        "margin-select": "Outer distance activate",
+                        "padding-select": "Inner distance activate",
+                        "top": {
+                            "label": "Top",
+                            "placeholder": "f. e. 10px"
+                        },
+                        "right": {
+                            "label": "Right",
+                            "placeholder": "f. e. 10px"
+                        },
+                        "bottom": {
+                            "label": "Bottom",
+                            "placeholder": "f. e. 10px"
+                        },
+                        "left": {
+                            "label": "Left",
+                            "placeholder": "f. e. 10px"
+                        }
+                    }
+                }
+            }
+        },
+        "blocks": {
+            "almFoundation": {
+                "block": {
+                    "alm-parallax-12": {
+                        "label": "almCode Parallax Banner"
+                    },
+                    "alm-promotion-12": {
+                        "label": "almCode Promotion Banner"
+                    },
+                    "alm-categoryteaser-12": {
+                        "label": "almCode Category Teaser"
+                    },
+                    "alm-togglebox-12": {
+                        "label": "almCode Toggle Box"
+                    },
+                    "alm-uspleiste-12": {
+                        "label": "almCode USP bar"
+                    },
+                    "alm-shopwareslider-12": {
+                        "label": "almCode Shopware slider"
+                    },
+                    "alm-avishoverbanner-12": {
+                        "label": "almCode Avis hover banner"
+                    },
+                    "alm-grid-12": {
+                        "label": "Grid 12 - all over"
+                    },
+                    "alm-grid-9-3": {
+                        "label": "Grid 9 - 3 relationship"
+                    },
+                    "alm-grid-8-4": {
+                        "label": "Grid 8 - 4 relationship"
+                    },
+                    "alm-grid-6-6": {
+                        "label": "Grid 6 - 6 relationship"
+                    },
+                    "alm-grid-4-8": {
+                        "label": "Grid 4 - 8 relationship"
+                    },
+                    "alm-grid-4-4-4": {
+                        "label": "Grid 4 - 4 - 4 relationship"
+                    },
+                    "alm-grid-3-9": {
+                        "label": "Grid 3 - 9 relationship"
+                    },
+                    "alm-grid-3-6-3": {
+                        "label": "Grid 3 - 6 - 3 relationship"
+                    },
+                    "alm-grid-3-3-3-3": {
+                        "label": "Grid 3 - 3 - 3 - 3 relationship"
+                    },
+                    "alm-grid-2-8-2": {
+                        "label": "Grid 2 - 8 - 2 relationship"
+                    },
+                    "alm-grid-1-1-1-1-1": {
+                        "label": "Grid 1 - 1 - 1 - 1 - 1 relationship"
+                    }
+                }
+            }
+        }
+    }
+}

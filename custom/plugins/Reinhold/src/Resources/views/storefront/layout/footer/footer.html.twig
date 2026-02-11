@@ -1,0 +1,13 @@
+{% sw_extends '@DmfManuTheme/storefront/layout/footer/footer.html.twig' %}
+{% block layout_footer_navigation_columns %}
+    {{ parent() }}
+    <div class="col-md-4 eu-col">
+        <img style="width:100px" src="/media/efre.png" alt="Gefördert durch die EU"/>
+    </div>
+{% endblock %}
+{% block layout_footer_copyright %}
+    <div class="footer-copyright">
+        &copy; {{ "now"|date("Y") }} Fachgroßhandel Hans Reinhold und Sohn
+    </div>
+    <script src="/js/custom.js"></script>
+{% endblock %}
