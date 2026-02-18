@@ -100,7 +100,8 @@
                                        value="{{ product.translated.name }}">
                                 <input type="number"
                                        name="lineItems[{{ product.id }}][quantity]"
-                                       value="{{ product.minPurchase }}" class="quantity">
+                                       value="{{ product.minPurchase }}" class="quantity quantity-input"
+                                >
                                 <button class="btn btn-buy"
                                         title="{{ "listing.boxAddProduct"|trans|striptags }}">
                                     {% sw_icon 'bag' %}
@@ -176,5 +177,12 @@
         {% endfor %}
         </tbody>
     </table>
+    <style>
+        .quantity-input{
+            height: 2.4rem;
+            border: 1px solid;
+            text-align: center;
+        }
+    </style>
 {% endblock %}
 

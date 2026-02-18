@@ -15,8 +15,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Core\Framework\Uuid\Uuid;
 
 
-const BASEDIR = '/var/www/vhosts/reinhold-sohn-hygiene.de/staging.reinhold-sohn-hygiene.de/public/';
-
 class Common extends AbstractExtension
 {
 	private EntityRepository $productRepo;
@@ -436,7 +434,8 @@ class Common extends AbstractExtension
 	{
 		if (!empty($image))
 		{
-			$dir = BASEDIR . '/artikelbilder/Mitarbeiter/' . $image . '/';
+			$publicDir = $_ENV['REINHOLD_PUBLIC_DIR'] ?? (realpath(__DIR__ . '/../../../../../../public') . DIRECTORY_SEPARATOR);
+			$dir = $publicDir . '/artikelbilder/Mitarbeiter/' . $image . '/';
 			if (file_exists($dir))
 			{
 
@@ -449,7 +448,7 @@ class Common extends AbstractExtension
 				$files = array_reverse($files);
 				if (!empty($files))
 				{
-					$imageFile = str_replace(BASEDIR, '', $files[0]);
+					$imageFile = str_replace($publicDir, '', $files[0]);
 
 					return '<img src="' . $imageFile . '" alt="' . $image . '" />';
 				}
@@ -725,7 +724,8 @@ class Common extends AbstractExtension
 			$hazardNumber = implode(' ', json_decode($hazardNumber));
 		}
 
-		$hazardsJson = json_decode(file_get_contents(BASEDIR . "/hazard_descriptions.json"), true);
+		$publicDir = $_ENV['REINHOLD_PUBLIC_DIR'] ?? (realpath(__DIR__ . '/../../../../../../public') . DIRECTORY_SEPARATOR);
+		$hazardsJson = json_decode(file_get_contents($publicDir . "/hazard_descriptions.json"), true);
 		$hazards     = [
 			"H200"                  => "Instabil, explosiv",
 			"H201"                  => "Explosiv, Gefahr der Massenexplosion.",

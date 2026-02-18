@@ -5,7 +5,7 @@ if (isset($_REQUEST['id']))
 {
 	$id = $_REQUEST['id'];
 
-	require_once('/var/www/vhosts/reinhold-sohn-hygiene.de/staging.reinhold-sohn-hygiene.de/public/pleasant/api/pleasantClient.php');
+	require_once(__DIR__ . '/../../pleasant/api/pleasantClient.php');
 
 	$client = new \hobaIT\pleasantClient();
 	if ($client->isValidUUID($id))

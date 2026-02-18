@@ -81,7 +81,7 @@ class QuickOrderController extends StorefrontController
 	 * @LoginRequired()
 	 * @Route("/quickorder/deliveries", name="frontend.quickorder.deliveries", methods={"GET"})
 	 */
-	#[Route(path: '/quickorder/deliveries', name: 'frontend.quickorder.deliveries', methods: ['GET'], defaults: ['_routeScope' => 'storefront'])]
+	#[Route(path: '/quickorder/deliveries', name: 'frontend.quickorder.deliveries', methods: ['GET'], defaults: ['_routeScope' => ['storefront'], '_loginRequired' => true])]
 	public function showQuickorderDeliveries(Request $request, SalesChannelContext $context, ?CustomerEntity $customer = null): Response
 	{
 		$page = $this->overviewPageLoader->load($request, $context, $customer);
@@ -102,7 +102,7 @@ class QuickOrderController extends StorefrontController
 	 * @LoginRequired()
 	 * @Route("/quickorder/conditions", name="frontend.quickorder.conditions", methods={"GET"})
 	 */
-	#[Route(path: '/quickorder/conditions', name: 'frontend.quickorder.conditions', methods: ['GET'], defaults: ['_routeScope' => 'storefront'])]
+	#[Route(path: '/quickorder/conditions', name: 'frontend.quickorder.conditions', methods: ['GET'], defaults: ['_routeScope' => ['storefront'], '_loginRequired' => true])]
 	public function showQuickorderConditions(Request $request, SalesChannelContext $context, ?CustomerEntity $customer = null): Response
 	{
 		$page = $this->overviewPageLoader->load($request, $context, $customer);
@@ -125,11 +125,25 @@ class QuickOrderController extends StorefrontController
 		$page  = $this->overviewPageLoader->load($request, $context, $customer);
 		$title = $page->getMetaInformation()->getMetaTitle();
 		$page->getMetaInformation()->setMetaTitle('Verkaufstagebuch - ' . $title);
-		$result = $this->getProductsByOrders($customer, $context);
 
+		$limit = (int) $request->query->get('limit', 50);
+		$p = (int) $request->query->get('p', 1);
+		$offset = ($p - 1) * $limit;
+
+		$sort = $request->query->get('sort', 'date');
+		$order = $request->query->get('order', 'desc');
+
+		$result = $this->getProductsByOrders($customer, $context, $limit, $offset, $sort, $order);
 
 		return $this->renderStorefront('@QuickOrder/storefront/page/quickorder_table.html.twig', [
-				'page' => $page, 'products' => $result['products'], 'allorders' => $result['orders']
+				'page' => $page,
+				'products' => $result['products'],
+				'allorders' => $result['orders'],
+				'limit' => $limit,
+				'p' => $p,
+				'total' => $result['total'],
+				'sort' => $sort,
+				'order' => $order
 			]
 		);
 	}
@@ -137,55 +151,66 @@ class QuickOrderController extends StorefrontController
 	/**
 	 * @Route("/customsearch", name="frontend.quickorder.table", methods={"GET"})
 	 */
-	#[Route(path: '/customsearch', name: 'frontend.quickorder.search', methods: ['GET'], defaults: ['_routeScope' => ['storefront']])]
-	public function customsearch(Request $request, SalesChannelContext $context): Response
-	{
-		$page  = $this->pageLoader->load($request, $context);
-		$title = $page->getMetaInformation()->getMetaTitle();
-		$page->getMetaInformation()->setMetaTitle('Suche - ' . $title);
+ #[Route(path: '/customsearch', name: 'frontend.quickorder.search', methods: ['GET'], defaults: ['_routeScope' => ['storefront']])]
+    public function customsearch(Request $request, SalesChannelContext $context): Response
+    {
+        $page  = $this->pageLoader->load($request, $context);
+        $title = $page->getMetaInformation()->getMetaTitle();
+        $page->getMetaInformation()->setMetaTitle('Suche - ' . $title);
 
-		$query        = $_GET['query'] ?? '';
-		$queryResults = $this->getProductsByQuery($query);
+        $query = $request->query->get('query', '');
+        $limit = 50;
+        $p = max(1, (int) $request->query->get('p', 1));
+        $offset = ($p - 1) * $limit;
 
-		// Extract IDs while preserving order
-		$orderedIds = [];
-		foreach ($queryResults as $item)
-		{
-			if (!in_array($item['id'], $orderedIds))
-			{
-				$orderedIds[] = $item['id'];
-			}
-		}
+        $search = $this->getProductsByQuery($query, $limit, $offset, $context);
+        $queryResults = $search['rows'];
+        $total = (int) $search['total'];
 
-		// Get full product data
-		$products = $this->getProductsByIds($orderedIds, $context);
+        // Extract IDs while preserving order
+        $orderedIds = [];
+        foreach ($queryResults as $item)
+        {
+            if (!in_array($item['id'], $orderedIds))
+            {
+                $orderedIds[] = $item['id'];
+            }
+        }
 
-		// Reorder products to match the original query results order
-		$orderedProducts = [];
-		foreach ($orderedIds as $id)
-		{
-			foreach ($products as $product)
-			{
-				if ($product->getId() === $id)
-				{
-					$orderedProducts[] = $product;
-					break;
-				}
-			}
-		}
+        // Get full product data
+        $products = $this->getProductsByIds($orderedIds, $context);
 
-		$result = $orderedProducts;
+        // Reorder products to match the original query results order
+        $productsMap = [];
+        foreach ($products as $product) {
+            $productsMap[$product->getId()] = $product;
+        }
 
-		if (isset($_GET['json']) && $_GET['json'] == 'true')
-		{
-			return $this->json(array('success' => true, 'data' => $result));
-		}
+        $orderedProducts = [];
+        foreach ($orderedIds as $id) {
+            if (isset($productsMap[$id])) {
+                $orderedProducts[] = $productsMap[$id];
+            }
+        }
 
-		return $this->renderStorefront('@QuickOrder/storefront/page/searchresults.html.twig', [
-				'page' => $page, 'products' => $result, 'queryResults' => $queryResults
-			]
-		);
-	}
+        $result = $orderedProducts;
+
+        if ($request->query->get('json') === 'true')
+        {
+            return $this->json(array('success' => true, 'data' => $result, 'total' => $total, 'limit' => $limit, 'p' => $p));
+        }
+
+        return $this->renderStorefront('@QuickOrder/storefront/page/searchresults.html.twig', [
+                'page' => $page,
+                'products' => $result,
+                'queryResults' => $queryResults,
+                'total' => $total,
+                'limit' => $limit,
+                'p' => $p,
+                'query' => $query
+            ]
+        );
+    }
 
 	protected static function interpolateQuery($query, $params)
 	{
@@ -199,29 +224,39 @@ class QuickOrderController extends StorefrontController
 	}
 
 
-	/**
-	 * @param string $query
-	 *
-	 * @return array
-	 * @throws \Doctrine\DBAL\Exception
-	 */
-	protected function getProductsByQuery(string $query): array
-	{
-		// Split the query by spaces to get individual words
-		$queryWords = explode(' ', $query);
+    /**
+     * @param string $query
+     * @param int $limit
+     * @param int $offset
+     * @param SalesChannelContext $context
+     *
+     * @return array
+     * @throws \Doctrine\DBAL\Exception
+     */
+    protected function getProductsByQuery(string $query, int $limit = 50, int $offset = 0, ?SalesChannelContext $context = null): array
+    {
+        // Split the query by spaces to get individual words
+        $queryWords = explode(' ', $query);
 
 		// Filter out words that are less than 4 characters
 		$queryWords = array_filter($queryWords, function ($word) {
 			return strlen($word) >= 4;
 		});
 
-		// If no valid words remain, return empty array
-		if (empty($queryWords))
-		{
-			return [];
-		}
+  // If no valid words remain, return an empty result set with zero total
+  if (empty($queryWords))
+  {
+      return ['rows' => [], 'total' => 0];
+  }
 
+		// Pre-fetch ranking values to avoid N+1 subqueries in the SQL
+		$rankingSql = 'SELECT field, ranking FROM product_search_config_field WHERE product_search_config_id = 0x32e66a6b761f4781a6103fc9456457bc';
+		$rankings = $this->connection->fetchAllKeyValue($rankingSql);
 
+		$rankingDescription = (int) ($rankings['description'] ?? 0);
+		$rankingName = (int) ($rankings['name'] ?? 0);
+		$rankingCustomFields = (int) ($rankings['categories.customFields'] ?? 0);
+		$rankingProductNumber = (int) ($rankings['productNumber'] ?? 0);
 
 		// Build the SQL query with weighted search
 		$sql = 'SELECT
@@ -230,72 +265,73 @@ class QuickOrderController extends StorefrontController
 				    pt.name AS name,
 				    (';
 
-		// Calculate relevance score based on weighted matches
+		// Optimize relevance calculation and filtering
 		$relevanceCalc = [];
 		$params        = [];
 
-		foreach ($queryWords as $index => $word)
-		{
-			// Weight 10 for description
-			$relevanceCalc[] = 'IF(pt.description LIKE CONCAT("%", ?, "%"), (SELECT ranking FROM product_search_config_field WHERE field = "description" AND product_search_config_id = 0x32e66a6b761f4781a6103fc9456457bc), 0)';
-			$params[]        = $word;
-
-			// Weight 20 for name
-			$relevanceCalc[] = 'IF(pt.name LIKE CONCAT("%", ?, "%"), (SELECT ranking FROM product_search_config_field WHERE field = "name" AND product_search_config_id = 0x32e66a6b761f4781a6103fc9456457bc), 0)';
-			$params[]        = $word;
-
-			// Weight 15 for custom_fields
-			$relevanceCalc[] = 'IF(pt.custom_fields LIKE CONCAT("%", ?, "%"), (SELECT ranking FROM product_search_config_field WHERE field = "categories.customFields" AND product_search_config_id = 0x32e66a6b761f4781a6103fc9456457bc), 0)';
-			$params[]        = $word;
-
-			// Weight 50 for product_number
-			$relevanceCalc[] = 'IF(p.product_number LIKE CONCAT("%", ?, "%"), (SELECT ranking FROM product_search_config_field WHERE field = "productNumber" AND product_search_config_id = 0x32e66a6b761f4781a6103fc9456457bc) , 0)';
-			$params[]        = $word;
+		foreach ($queryWords as $word) {
+			$relevanceCalc[] = '(CASE 
+				WHEN pt.name LIKE CONCAT("%", ?, "%") THEN ' . $rankingName . '
+				WHEN p.product_number LIKE CONCAT("%", ?, "%") THEN ' . $rankingProductNumber . '
+				WHEN pt.description LIKE CONCAT("%", ?, "%") THEN ' . $rankingDescription . '
+				WHEN pt.custom_fields LIKE CONCAT("%", ?, "%") THEN ' . $rankingCustomFields . '
+				ELSE 0 
+			END)';
+			$params[] = $word;
+			$params[] = $word;
+			$params[] = $word;
+			$params[] = $word;
 		}
 
-		// Sum all relevance scores
 		$sql .= implode(' + ', $relevanceCalc);
 		$sql .= ') AS relevance_score
 				FROM
 				    product p
 				INNER JOIN
 				    product_translation pt ON p.id = pt.product_id
-				LEFT JOIN
-				    product_media pm ON p.id = pm.product_id AND pm.position = 0
 				WHERE
 				    (';
 
 		$conditions = [];
 
-		// Create conditions for each word
-		foreach ($queryWords as $word)
-		{
-			$conditions[] = '(pt.description LIKE CONCAT("%", ? , "%")
-				        OR pt.name LIKE CONCAT("%", ? , "%")
-				        OR pt.custom_fields LIKE CONCAT("%", ? , "%")
-				        OR p.product_number LIKE CONCAT("%", ? , "%"))';
-			$params[]     = $word;
-			$params[]     = $word;
-			$params[]     = $word;
-			$params[]     = $word;
+		foreach ($queryWords as $word) {
+			$conditions[] = '(pt.name LIKE CONCAT("%", ?, "%")
+				        OR p.product_number LIKE CONCAT("%", ?, "%")
+				        OR pt.description LIKE CONCAT("%", ?, "%")
+				        OR pt.custom_fields LIKE CONCAT("%", ?, "%"))';
+			$params[] = $word;
+			$params[] = $word;
+			$params[] = $word;
+			$params[] = $word;
 		}
 
-		// Join conditions with AND to find products matching all of the words
 		$sql .= implode(' AND ', $conditions);
-		$sql .= ' AND pt.language_id = (SELECT id FROM language WHERE name = "Deutsch" LIMIT 1))
-				AND product_number NOT LIKE "#%"
-				HAVING relevance_score > 0
-				ORDER BY relevance_score DESC
-				LIMIT 100';
-//
-//		$interpolatedQuery = self::interpolateQuery($sql, $params);
-//		echo($interpolatedQuery);
 
+        $languageId = $context ? $context->getContext()->getLanguageId() : null;
+        if ($languageId) {
+            $sql .= ' AND pt.language_id = UNHEX(?)';
+            $params[] = $languageId;
+        } else {
+            $sql .= ' AND pt.language_id = (SELECT id FROM language WHERE name = "Deutsch" LIMIT 1)';
+        }
 
-		$sqlResult = $this->connection->executeQuery($sql, $params);
+        $sql .= ')
+                AND p.product_number NOT LIKE "#%"
+                AND p.active = 1
+                GROUP BY p.id
+                HAVING relevance_score > 0';
 
-		return $sqlResult->fetchAllAssociative();
-	}
+        // Build total count query
+        $countSql = 'SELECT COUNT(*) as cnt FROM (' . $sql . ') as subq';
+        $countResult = $this->connection->executeQuery($countSql, $params)->fetchAssociative();
+        $total = (int) ($countResult['cnt'] ?? 0);
+
+        // Apply ordering and pagination for rows
+        $pagedSql = $sql . ' ORDER BY relevance_score DESC LIMIT ' . (int) $limit . ' OFFSET ' . (int) $offset;
+        $sqlResult = $this->connection->executeQuery($pagedSql, $params);
+
+        return ['rows' => $sqlResult->fetchAllAssociative(), 'total' => $total];
+    }
 
 	/**
 	 * Get product ids of historic orders
@@ -311,8 +347,11 @@ class QuickOrderController extends StorefrontController
 //		$customernumber = '20095';
 		$time       = strtotime($until, time());
 		$date       = date('Y-m-d', $time);
-		$sqlQuery   = 'SELECT * FROM `hobait_order_history` as h WHERE (h.customer =' . $customernumber . ') AND (h.date > "' . $date . '")';
-		$sqlResult  = $this->connection->executeQuery($sqlQuery);
+		$sqlQuery   = 'SELECT products FROM `hobait_order_history` WHERE customer = :customer AND date > :date';
+		$sqlResult  = $this->connection->executeQuery($sqlQuery, [
+			'customer' => $customernumber,
+			'date' => $date
+		]);
 		$productIds = [];
 
 		foreach ($sqlResult->fetchAllAssociative() as $result)
@@ -343,19 +382,33 @@ class QuickOrderController extends StorefrontController
 	{
 		$productIds = [];
 
-		$orderCriteria = (new Criteria())->addFilter(new EqualsFilter('orderCustomer.customerId', $customer->getId()))->addAssociation('lineItems');
-		$orders        = $this->orderRepo->search($orderCriteria, Context::createDefaultContext())->getEntities();
+		$orderCriteria = (new Criteria())
+			->addFilter(new EqualsFilter('orderCustomer.customerId', $customer->getId()))
+			->addAssociation('lineItems');
+
+		$orders = $this->orderRepo->search($orderCriteria, Context::createDefaultContext())->getEntities();
 
 		foreach ($orders as $order)
 		{
+			if ($order->lineItems === null) {
+				continue;
+			}
+
 			foreach ($order->lineItems as $lineItem)
 			{
-				$productIds[$lineItem->getProductId()] = true;
+				$productId = $lineItem->getProductId();
+				if ($productId !== null) {
+					$productIds[$productId] = true;
+				}
 			}
 		}
-		$productIds = array_merge(array_keys($productIds), $this->getHistoricOrderProductIds($customer->getCustomerNumber()));
 
-		return $this->getProductsByIds($productIds, $context);
+		$historicProductIds = $this->getHistoricOrderProductIds($customer->getCustomerNumber());
+		foreach ($historicProductIds as $id) {
+			$productIds[$id] = true;
+		}
+
+		return $this->getProductsByIds(array_keys($productIds), $context);
 	}
 
 	/**
@@ -373,9 +426,6 @@ class QuickOrderController extends StorefrontController
 		}
 		$productsCriteria = (new Criteria($productIds))
 			->addAssociation('cover')
-			->addAssociation('media')
-			->addAssociation('mediaThumbnailSizes')
-			->addAssociation('thumbnails')
 			->addAssociation('prices')
 			->addFilter(new EqualsAnyFilter('active', [true, false]))
 			->addSorting(new FieldSorting('product.name', FieldSorting::ASCENDING));
@@ -400,10 +450,6 @@ class QuickOrderController extends StorefrontController
 			$productIds[] = '00000000000000000000000000000000'; //just throw an empty id, null means all products!
 		}
 		$productsCriteria = (new Criteria($productIds))
-			->addAssociation('cover')
-			->addAssociation('media')
-			->addAssociation('mediaThumbnailSizes')
-			->addAssociation('thumbnails')
 			->addAssociation('prices')
 			->addSorting(new FieldSorting('product.name', FieldSorting::ASCENDING));
 
@@ -438,38 +484,39 @@ class QuickOrderController extends StorefrontController
 	private function getProductIdsByCustomerRules(CustomerEntity $customer): array
 	{
 		$defaultContext = Context::createDefaultContext();
-		$ids            = [];
 
-		$individual = (new Criteria())->addFilter(
-			new AndFilter([
-				new EqualsFilter('type', 'customerCustomerNumber'),
-				new ContainsFilter('value', '"' . $customer->getCustomerNumber() . '"') //equals filter on value.numbers with array returns strange error
-			]));
+		// Optimize rule detection using JSON_CONTAINS to avoid Full-Table-Scans with LIKE
+		$sql = '
+			SELECT DISTINCT rule_id 
+			FROM rule_condition 
+			WHERE (type = "customerCustomerNumber" AND JSON_CONTAINS(value, JSON_QUOTE(:customerNumber), "$.numbers"))
+			   OR (type = "customerCustomerGroup" AND JSON_CONTAINS(value, JSON_QUOTE(:groupId), "$.customerGroupIds"))
+		';
 
-		$group = (new Criteria())->addFilter(
-			new AndFilter([
-				new EqualsFilter('type', 'customerCustomerGroup'),
-				new ContainsFilter('value', '"' . $customer->getGroupId() . '"') //equals filter on value.numbers with array returns strange error
-			]));
+		$ruleIds = $this->connection->fetchFirstColumn($sql, [
+			'customerNumber' => $customer->getCustomerNumber(),
+			'groupId' => $customer->getGroupId()
+		]);
 
-		$ids = array_merge($this->getRuleConditionsByCriteria($individual), $this->getRuleConditionsByCriteria($group));
-
-		$rules = $this->ruleRepo->search(new Criteria($ids), $defaultContext)->getEntities();
-		$ids   = [];
-		foreach ($rules as $rule)
-		{
-			$ids[] = $rule->id;
+		if (empty($ruleIds)) {
+			return [];
 		}
 
-		$criteria = (new Criteria())->addFilter(new EqualsAnyFilter('ruleId', $ids));
+		// Convert binary IDs to hex strings for the PriceRepository
+		$hexRuleIds = array_map(function($id) {
+			return bin2hex($id);
+		}, $ruleIds);
+
+		$criteria = (new Criteria())->addFilter(new EqualsAnyFilter('ruleId', $hexRuleIds));
 		$prices   = $this->priceRepo->search($criteria, $defaultContext)->getEntities();
-		$ids      = [];
+
+		$productIds = [];
 		foreach ($prices as $price)
 		{
-			$ids[] = $price->productId;
+			$productIds[] = $price->productId;
 		}
 
-		return $ids;
+		return array_unique($productIds);
 	}
 
 	/**
@@ -491,66 +538,129 @@ class QuickOrderController extends StorefrontController
 	 *
 	 * @param CustomerEntity $customer
 	 *
-	 * @return object
+	 * @return array
 	 */
-	private function getProductsByOrders(CustomerEntity $customer, $context): array
+	private function getProductsByOrders(CustomerEntity $customer, $context, int $limit = 100, int $offset = 0, string $sort = 'date', string $order = 'desc'): array
 	{
-
 		$productIds = $allOrders = $notInShop = [];
-
-//		$orderCriteria = (new Criteria())->addFilter(new EqualsFilter('orderCustomer.customerId', $customer->getId()))->addAssociation('lineItems');
-//		$orders        = $this->orderRepo->search($orderCriteria, Context::createDefaultContext())->getEntities();
-//
-//		foreach ($orders as $order)
-//		{
-//			$orderNumber                            = $order->getOrderNumber();
-//			$allOrders[$orderNumber]['orderNumber'] = $orderNumber;
-//			$allOrders[$orderNumber]['date']        = $order->getOrderDate();
-//			$allOrders[$orderNumber]['items']       = [];
-//			foreach ($order->lineItems as $lineItem)
-//			{
-//				$allOrders[$orderNumber]['items'][$lineItem->getProductId()] = ['count' => $lineItem->getQuantity(), 'id' => $lineItem->getProductId()];
-//				$productIds[$lineItem->getProductId()]                       = true;
-//			}
-//		}
-
 		$customernumber = $customer->getCustomerNumber();
-		$sqlQuery       = 'SELECT * FROM `hobait_order_history` as h WHERE (h.customer =' . $customernumber . ')';
-		$sqlResult      = $this->connection->executeQuery($sqlQuery);
-		foreach ($sqlResult->fetchAllAssociative() as $result)
-		{
-			$orderNumber                            = $result['documentnumber'];
-			$allOrders[$orderNumber]['orderNumber'] = $orderNumber;
-			$allOrders[$orderNumber]['date']        = $result['date'];
-			$allOrders[$orderNumber]['items']       = [];
-			$products                               = json_decode($result['products']);
 
-			foreach ($products as $product)
-			{
-				if (empty($product->id))
-				{
-					$notInShop[$product->n] = $product;
-				}
-				else
-				{
-					$allOrders[$orderNumber]['items'][$product->id] = ['count' => $product->q, 'id' => $product->id, 'price' => $product->p, 'unit' => $product->u, 'discount1' => $product->d, 'discoount2' => $product->d1, 'name' => $product->t];
-					$productIds[$product->id]                       = true;
-				}
+		// Fetch all orders for the customer to flatten products and paginate them
+		$sqlQuery = 'SELECT * FROM `hobait_order_history` WHERE customer = :customer ORDER BY date DESC';
+		$sqlResult = $this->connection->executeQuery($sqlQuery, [
+			'customer' => $customernumber
+		]);
+
+		$allFlattenedProducts = [];
+		while ($result = $sqlResult->fetchAssociative())
+		{
+			$products = json_decode($result['products']);
+			if (!is_array($products)) {
+				continue;
+			}
+
+			foreach ($products as $product) {
+				$allFlattenedProducts[] = [
+					'order' => [
+						'orderNumber' => $result['documentnumber'],
+						'date' => $result['date']
+					],
+					'product' => $product
+				];
 			}
 		}
+
+		// Persistent sorting
+		usort($allFlattenedProducts, function ($a, $b) use ($sort, $order) {
+			$valA = null;
+			$valB = null;
+
+			switch ($sort) {
+				case 'orderNumber':
+					$valA = $a['order']['orderNumber'];
+					$valB = $b['order']['orderNumber'];
+					break;
+				case 'date':
+					$valA = $a['order']['date'];
+					$valB = $b['order']['date'];
+					break;
+				case 'productNumber':
+					$valA = $a['product']->n ?? '';
+					$valB = $b['product']->n ?? '';
+					break;
+				case 'name':
+					$valA = $a['product']->t ?? '';
+					$valB = $b['product']->t ?? '';
+					break;
+				case 'count':
+					$valA = (float)($a['product']->q ?? 0);
+					$valB = (float)($b['product']->q ?? 0);
+					break;
+				case 'price':
+					$valA = (float)($a['product']->p ?? 0);
+					$valB = (float)($b['product']->p ?? 0);
+					break;
+				default:
+					$valA = $a['order']['date'];
+					$valB = $b['order']['date'];
+			}
+
+			if ($valA == $valB) {
+				return 0;
+			}
+
+			if ($order === 'asc') {
+				return ($valA < $valB) ? -1 : 1;
+			} else {
+				return ($valA > $valB) ? -1 : 1;
+			}
+		});
+
+		$total = count($allFlattenedProducts);
+		$paginatedProducts = array_slice($allFlattenedProducts, $offset, $limit);
+
+		$finalOrders = [];
+		$productIds = [];
+
+		foreach ($paginatedProducts as $item) {
+			$orderNumber = $item['order']['orderNumber'];
+			if (!isset($finalOrders[$orderNumber])) {
+				$finalOrders[$orderNumber] = [
+					'orderNumber' => $orderNumber,
+					'date' => $item['order']['date'],
+					'items' => []
+				];
+			}
+
+			$product = $item['product'];
+			if (empty($product->id)) {
+				$notInShop[$product->n] = $product;
+			} else {
+				$finalOrders[$orderNumber]['items'][$product->id] = [
+					'count' => $product->q,
+					'id' => $product->id,
+					'price' => $product->p,
+					'unit' => $product->u,
+					'discount1' => $product->d,
+					'discoount2' => $product->d1,
+					'name' => $product->t
+				];
+				$productIds[$product->id] = true;
+			}
+		}
+
 		//@todo later -- products not in shop cant be displayed correctly, due to hazards etc.
 		$products      = $this->getFullProductsByIds(array_keys($productIds));
 		$productsTable = [];
 		foreach ($products as $p)
 		{
-			$p          = (object) $p;
 			$p->hazards = 'keine';
 			if (!empty($p->customFields['custom_product_hazards']))
 			{
-				$p->hazards = json_decode($p->customFields['custom_product_hazards']);
-				if (is_array($p->hazards))
+				$hazards = json_decode($p->customFields['custom_product_hazards']);
+				if (is_array($hazards))
 				{
-					$p->hazards = implode(', ', $p->hazards);
+					$p->hazards = implode(', ', $hazards);
 				}
 				else
 				{
@@ -559,9 +669,8 @@ class QuickOrderController extends StorefrontController
 			}
 			$productsTable[$p->getId()] = $p;
 		}
-		ksort($allOrders);
 
-		return ['orders' => $allOrders, 'products' => $productsTable];
+		return ['orders' => $finalOrders, 'products' => $productsTable, 'total' => $total];
 	}
 
 	/**
@@ -576,8 +685,8 @@ class QuickOrderController extends StorefrontController
 		$productIds = [];
 
 		$customernumber = $customer->getCustomerNumber();
-		$sqlQuery       = 'SELECT *, (SELECT lower(hex(id)) FROM product WHERE product_number = h.ARTIKELNR) as id FROM `hobait_pleasant_deliveries` as h WHERE (h.CLIENTNUMBER =' . $customernumber . ')';
-		$sqlResult      = $this->connection->executeQuery($sqlQuery);
+		$sqlQuery       = 'SELECT *, (SELECT lower(hex(id)) FROM product WHERE product_number = h.ARTIKELNR LIMIT 1) as id FROM `hobait_pleasant_deliveries` as h WHERE (h.CLIENTNUMBER = :customerNumber)';
+		$sqlResult      = $this->connection->executeQuery($sqlQuery, ['customerNumber' => $customernumber]);
 		$addresslist    = [];
 		$undeliverable  = [];
 		foreach ($sqlResult->fetchAllAssociative() as $result)

@@ -5,7 +5,7 @@ if (isset($_REQUEST['orderId']))
 {
 	$id = $_REQUEST['orderId'];
 
-	require_once('../pleasant/api/pleasantClient.php');
+	require_once(__DIR__ . '/../../pleasant/api/pleasantClient.php');
 	$client = new \hobaIT\pleasantClient();
 
 	if ($client->isValidUUID($id))

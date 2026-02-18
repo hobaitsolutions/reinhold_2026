@@ -105,11 +105,14 @@ jQuery(document).ready(function () {
                     },
                 ],
                 dom: 'lfrtipB',
+                paging: false,
+                searching: false,
+                info: false,
                 language: {
                     "url": "/datatables_german.json"
                 },
-                pageLength: 25,
-                order: [[1, "desc"]],
+                order: [],
+                ordering: false,
                 initComplete: function (settings, json) {
                     jQuery('.table-loading').remove();
                     jQuery('.table-wrap').show();
@@ -171,38 +174,35 @@ jQuery(document).ready(function () {
 
     jQuery('.lightbox').topbox();
 
-    const cardBodies = document.querySelectorAll('.card-body[data-url]');
+    // Event delegation for clickable card bodies
+    document.addEventListener('click', function (event) {
+        const cardBody = event.target.closest('.card-body[data-url]');
+        if (!cardBody) return;
 
-    cardBodies.forEach(cardBody => {
-        // Make the card body clickable
-        cardBody.style.cursor = 'pointer';
-
-        cardBody.addEventListener('click', function (event) {
-            // Get the URL from the data-url attribute
-            const url = this.getAttribute('data-url');
-
-            // Check if the click was on or inside a form or a link (buy button or other links)
-            // We don't want to navigate away if user is clicking on a form or link
-            let targetElement = event.target;
-
-            // Traverse up the DOM to check if the click was inside a form or a link
-            while (targetElement !== this) {
-                if (
-                    targetElement.tagName === 'FORM' ||
-                    targetElement.tagName === 'A' ||
-                    targetElement.tagName === 'BUTTON' ||
-                    targetElement.closest('.product-action') !== null
-                ) {
-                    // If clicked on a form, link, button or within product-action div, don't navigate
-                    return;
-                }
-                targetElement = targetElement.parentElement;
+        // Check if the click was on or inside a form, link, button or product-action
+        let targetElement = event.target;
+        while (targetElement !== cardBody) {
+            if (
+                targetElement.tagName === 'FORM' ||
+                targetElement.tagName === 'A' ||
+                targetElement.tagName === 'BUTTON' ||
+                targetElement.closest('.product-action') !== null
+            ) {
+                return;
             }
+            targetElement = targetElement.parentElement;
+        }
 
-            // Navigate to the product detail page
+        const url = cardBody.getAttribute('data-url');
+        if (url) {
             window.location.href = url;
-        });
+        }
     });
+
+    // Add pointer cursor to card bodies with data-url (including those added dynamically)
+    const stylePointer = document.createElement('style');
+    stylePointer.textContent = '.card-body[data-url] { cursor: pointer; }';
+    document.head.appendChild(stylePointer);
 });
 
 
@@ -381,7 +381,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (data.data.length > 5) {
                         searchSpinner.classList.add('d-none');
                         viewAllContainer.classList.remove('d-none');
-                        resultsCount.textContent = `${data.data.length} Ergebnisse gefunden`;
+                        let results = data.data.length >= 50 ? data.data.length + "+" : data.data.length;
+                        resultsCount.textContent = `${results} Ergebnisse gefunden`;
                     } else {
                         viewAllContainer.classList.add('d-none');
                     }

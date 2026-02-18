@@ -4,7 +4,7 @@
  {% block component_product_box_price %}
      {{ parent() }}
      <div class="unit-wrap">
-         {% if page.product.customFields.custom_product_pack_unit_quantity is not empty %}{{ page.product.customFields.custom_product_pack_unit_quantity }} {% else %} 1 {% endif %} {{ product.packUnit }}
+         {% if product.customFields.custom_product_pack_unit_quantity is not empty %}{{ product.customFields.custom_product_pack_unit_quantity }} {% elseif page.product.customFields.custom_product_pack_unit_quantity is not empty %}{{ page.product.customFields.custom_product_pack_unit_quantity }} {% else %} 1 {% endif %} {{ product.packUnit }}
      </div>
  {% endblock %}
 {# {% block component_product_box_price_info %} #}

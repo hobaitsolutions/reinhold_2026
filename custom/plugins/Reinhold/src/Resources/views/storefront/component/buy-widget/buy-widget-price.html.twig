@@ -31,18 +31,28 @@
 
 {% block buy_widget_price_content %}
     {{ parent() }}
-    {% set packUnit = page.product.packUnit %}
+    {% set packUnit = product.packUnit %}
+    {% if packUnit is empty %}
+        {% set packUnit = page.product.packUnit %}
+    {% endif %}
+    {% if packUnit is empty %}
+        {% set packUnit = product.unit.translated.name %}
+    {% endif %}
     {% if packUnit is empty %}
         {% set packUnit = page.product.unit.translated.name %}
     {% endif %}
     {% if packUnit is not empty %}
         <span class="packunit">
-            &nbsp;|&nbsp; {% if page.product.customFields.custom_product_pack_unit_quantity is not empty %}{{ page.product.customFields.custom_product_pack_unit_quantity }} {% else %} 1 {% endif %}{{ packUnit }}
+            &nbsp;|&nbsp; {% if product.customFields.custom_product_pack_unit_quantity is not empty %}{{ product.customFields.custom_product_pack_unit_quantity }} {% elseif page.product.customFields.custom_product_pack_unit_quantity is not empty %}{{ page.product.customFields.custom_product_pack_unit_quantity }} {% else %} 1 {% endif %}{{ packUnit }}
         </span>
     {% endif %}
     {% if page.product.calculatedPrices|length >= 1 %}
-        {% set stdprice = page.product.price|first.net %}
-        {% set savings = (( 1-(page.product.calculatedPrices.elements|first.unitprice/stdprice))*100)|round %}
+        {% set prod = product %}
+        {% if prod is empty %}
+            {% set prod = page.product %}
+        {% endif %}
+        {% set stdprice = prod.price|first.net %}
+        {% set savings = (( 1-(prod.calculatedPrices.elements|first.unitprice/stdprice))*100)|round %}
 
         <span class="std-price">(Standardpreis: {{ (stdprice|currency) }})</span>
         {% if savings > 1 %}

@@ -11,7 +11,7 @@
 
     <div class="filter-container mb-3 flex text-white" style="justify-content: space-between">
         <div class="serachresults">
-            {{ products.count }} Resultate gefunden.
+            {{ total }} Resultate gefunden.
         </div>
         <div class="form-check">
             <input type="checkbox" class="form-check-input" id="toggle-available">
@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="row cms-listing-row js-listing-wrapper"
-         data-aria-live-text="{{ ariaLiveText }}"{% if searchResult.total > 0 %} role="list"{% endif %}>
+         data-aria-live-text="{{ ariaLiveText }}"{% if total > 0 %} role="list"{% endif %}>
         {% for product in products %}
             <div class="cms-listing-col {{ listingColumns }} mb-4" role="listitem">
                 {% block element_product_listing_box %}
@@ -31,6 +31,53 @@
             </div>
         {% endfor %}
     </div>
+
+    {# Pagination #}
+    {% set totalPages = (total / limit)|round(0, 'ceil') %}
+    {% if totalPages > 1 %}
+        <nav aria-label="Suchergebnis Paginierung" class="mt-3">
+            <ul class="pagination">
+                {% set prevPage = p - 1 %}
+                <li class="page-item {% if p <= 1 %}disabled{% endif %}">
+                    <a class="page-link text-white" href="{{ path('frontend.quickorder.search', {'query': query, 'p': prevPage, 'limit': limit}) }}" tabindex="-1">&laquo;</a>
+                </li>
+
+                {% set range = 2 %}
+                {% if totalPages > 1 %}
+                    <li class="page-item {% if p == 1 %}active{% endif %}">
+                        <a class="page-link text-white" href="{{ path('frontend.quickorder.search', {'query': query, 'p': 1, 'limit': limit}) }}">1</a>
+                    </li>
+
+                    {% if p > range + 2 %}
+                        <li class="page-item disabled"><span class="page-link text-white">...</span></li>
+                    {% endif %}
+
+                    {% set start = max(2, p - range) %}
+                    {% set end = min(totalPages - 1, p + range) %}
+                    {% if start <= end %}
+                        {% for i in start..end %}
+                            <li class="page-item {% if i == p %}active{% endif %}">
+                                <a class="page-link text-white" href="{{ path('frontend.quickorder.search', {'query': query, 'p': i, 'limit': limit}) }}">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if p < totalPages - range - 1 %}
+                        <li class="page-item disabled"><span class="page-link text-white">...</span></li>
+                    {% endif %}
+
+                    <li class="page-item {% if p == totalPages %}active{% endif %}">
+                        <a class="page-link text-white" href="{{ path('frontend.quickorder.search', {'query': query, 'p': totalPages, 'limit': limit}) }}">{{ totalPages }}</a>
+                    </li>
+                {% endif %}
+
+                {% set nextPage = p + 1 %}
+                <li class="page-item {% if p >= totalPages %}disabled{% endif %}">
+                    <a class="page-link text-white" href="{{ path('frontend.quickorder.search', {'query': query, 'p': nextPage, 'limit': limit}) }}">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
+    {% endif %}
     <table class="text-white">
         <thead>
         <tr>
@@ -84,8 +131,8 @@
                     ? `Nur verfügbare Produkte anzeigen (${availableProductCount})`
                     : `Nur verfügbare Produkte anzeigen (${availableProductCount} / ${totalProductCount})`;
 
-                // Update search results count
-                searchResultsCount.textContent = `${visibleProductCount} Resultate gefunden.`;
+                // Update search results count (client-side filtered count)
+                searchResultsCount.textContent = `${visibleProductCount} von {{ total }} Resultaten angezeigt.`;
             }
 
             // Add event listener for toggle checkbox

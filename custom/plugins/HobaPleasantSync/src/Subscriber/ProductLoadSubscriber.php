@@ -82,7 +82,7 @@ class ProductLoadSubscriber implements EventSubscriberInterface
 	public function onAddressWrittten(EntityWrittenEvent $event)
 	{
 		//@todo mail changed address to support
-		file_put_contents("/var/www/vhosts/reinhold-sohn-hygiene.de/httpdocs/customer_details.txt", json_encode($event));
+		file_put_contents($_ENV['REINHOLD_BASE_DIR'] . "customer_details.txt", json_encode($event));
 	}
 
 }

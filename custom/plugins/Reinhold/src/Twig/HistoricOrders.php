@@ -77,12 +77,11 @@ class HistoricOrders extends AbstractExtension
 	{
 //		return '';
 
-		require_once getcwd() . '/pleasant/mysql/dbHandler.php';
+		require_once $_ENV['REINHOLD_BASE_DIR'].'/pleasant/mysql/dbHandler.php';
 
 		$db             = new \MySQLDBInterface();
 
 		$allorders = ($db->getHistoricDeliveriesByCustomerId($filters['customer']));
-
 		$groups = [];
 
 		$offset =  $filters['offset'] ?? 0;
