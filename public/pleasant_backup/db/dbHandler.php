@@ -571,14 +571,14 @@ class DBInterface extends DB
 		$avail  = true;
 //		var_dump($names);
 
+		// Check for availability in the entire string first
+		if (str_contains($names, '>>'))
+		{
+			$avail = false;
+		}
+
 		for ($i = 0; $i < sizeof($titles); $i++)
 		{
-			//if product starts with '>>', it's not available
-			if (($i >= 1))
-			{
-				$avail = false;
-			}
-
 			$start = substr($titles[$i], 0, 2);
 			if ($start != '>>' && $start != '++')
 			{
@@ -1490,7 +1490,7 @@ SQL;
 	{
 		self::setCategoriesArray();
 		self::setBasePriceArray();
-
+		
 		$sql = "SELECT * FROM V\$hobaIT_webartikel WHERE ARTIKELNR IN ('" . implode("','", $products) . "')";
 
 		$webProducts = self::query($sql);

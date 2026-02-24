@@ -21,6 +21,11 @@
     {% endif %}
     <div class="buy-container">
         {{ parent() }}
+        {% if page.product.isCloseout %}
+            <div class="product-detail-delivery-information product-detail-stock">
+                Nur noch <strong class="highlight">{{ page.product.availableStock }}</strong> verfügbar
+            </div>
+        {% endif %}
     </div>
     <p></p>
     <div class="hazard-container">
