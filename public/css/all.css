@@ -108,10 +108,9 @@
   margin-top: 1rem;
 }
 
-div.hazard-text {
-  width: 100%;
-  margin-top: 1rem;
-  font-weight: 600;
+span.hazard-text {
+  display: inline-block;
+  padding-right: 0.25rem;
 }
 
 .your-savings {
@@ -412,6 +411,10 @@ body {
 .contact-form {
   background: #fff;
   padding: 2rem;
+}
+
+.highlight {
+  color: #0060aa;
 }
 
 .dataTable {
@@ -2567,10 +2570,11 @@ html.dark table.dataTable input.dt-select-checkbox:indeterminate:after, html[dat
   border-radius: 3px;
 }
 .product-box.box-standard .card-body, .product-box.box-minimal .card-body {
-  padding-bottom: 10rem;
+  padding-bottom: 14rem;
   position: relative;
 }
 .product-box.box-standard .bottom, .product-box.box-minimal .bottom {
+  padding-top: 2rem;
   position: absolute;
   bottom: 0;
   left: 5%;
@@ -2695,6 +2699,10 @@ ul.category-navigation {
 .filter-panel.is--sidebar {
   background: #f9f9f9;
   padding: 1rem;
+}
+
+.your-savings strong {
+  color: mediumseagreen;
 }
 
 /*

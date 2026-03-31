@@ -54,8 +54,9 @@
                             <a href="{{ seoUrl('frontend.detail.page', {'productId': product.id}) }}">{{ product.name }}</a>
                         </td>
                         <td class="col-1">
-                            {% set calc = product.calculatedPrices|first.unitprice %}
-                            {% set price = product.price|first.net %}
+                            {% set calc = (product.calculatedPrices is defined and product.calculatedPrices|length > 0) ? product.calculatedPrices|first.unitPrice : 0 %}
+                            {% set price = (product.price is defined and product.price|length > 0) ? product.price|first.net : 0 %}
+
                             {% if ((calc > 0) and (calc < price)) %}
                             <strong>{{ calc|currency }}</strong>
                             <div>

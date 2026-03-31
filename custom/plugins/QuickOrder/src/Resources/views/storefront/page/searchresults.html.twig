@@ -78,23 +78,23 @@
             </ul>
         </nav>
     {% endif %}
-    <table class="text-white">
-        <thead>
-        <tr>
-            <th>pnr</th>
-            <th>id</th>
-            <th>name</th>
-            <th>weight</th>
-        </tr>
-        </thead>
-        {% for row in queryResults %}
-            <tr>
-                {% for col in row %}
-                    <td style="border:1px #ccc solid; padding: .333rem">{{ col }}</td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-    </table>
+{#    <table class="text-white">#}
+{#        <thead>#}
+{#        <tr>#}
+{#            <th>pnr</th>#}
+{#            <th>id</th>#}
+{#            <th>name</th>#}
+{#            <th>weight</th>#}
+{#        </tr>#}
+{#        </thead>#}
+{#        {% for row in queryResults %}#}
+{#            <tr>#}
+{#                {% for col in row %}#}
+{#                    <td style="border:1px #ccc solid; padding: .333rem">{{ col }}</td>#}
+{#                {% endfor %}#}
+{#            </tr>#}
+{#        {% endfor %}#}
+{#    </table>#}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             let showOnlyAvailable = false;

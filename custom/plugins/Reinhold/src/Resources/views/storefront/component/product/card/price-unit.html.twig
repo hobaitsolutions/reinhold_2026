@@ -2,10 +2,13 @@
 {% block component_product_box_price_unit %}
 {% endblock %}
  {% block component_product_box_price %}
+     {% set isAvailable = not product.isCloseout or (product.availableStock >= product.minPurchase) %}
+     {% if isAvailable %}
      {{ parent() }}
      <div class="unit-wrap">
          {% if product.customFields.custom_product_pack_unit_quantity is not empty %}{{ product.customFields.custom_product_pack_unit_quantity }} {% elseif page.product.customFields.custom_product_pack_unit_quantity is not empty %}{{ page.product.customFields.custom_product_pack_unit_quantity }} {% else %} 1 {% endif %} {{ product.packUnit }}
      </div>
+     {% endif %}
  {% endblock %}
 {# {% block component_product_box_price_info %} #}
 {#    {% set cheapest = product.calculatedCheapestPrice %} #}

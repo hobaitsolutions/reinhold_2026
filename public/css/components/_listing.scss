@@ -7,11 +7,12 @@
 
         .card-body
         {
-            padding-bottom: 10rem;
+            padding-bottom: 14rem;
             position: relative;
         }
 
         .bottom{
+            padding-top: 2rem;
             position: absolute;
             bottom: 0;
             left: 5%;
@@ -205,4 +206,9 @@ ul.category-navigation
 .filter-panel.is--sidebar{
     background: #f9f9f9;
     padding: 1rem;
+}
+.your-savings{
+    strong{
+        color: mediumseagreen;
+    }
 }

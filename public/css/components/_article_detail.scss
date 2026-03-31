@@ -51,11 +51,10 @@
     margin-top: 1rem;
 }
 
-div.hazard-text
+span.hazard-text
 {
-    width: 100%;
-    margin-top: 1rem;
-    font-weight: 600;
+    display: inline-block;
+    padding-right: .25rem;
 }
 
 .your-savings

@@ -1,6 +1,6 @@
 {% block customerinfo %}
     <div class="customer-info">
-        angemeldet als: {{ context.customer.firstName }}  {{ context.customer.lastName }} |
+        angemeldet als: {{ (context.customer.firstName is not empty and context.customer.firstName|lower != 'unbekannt') ? context.customer.firstName : context.customer.salutation.translated.displayName }}  {{ context.customer.lastName }} |
         Kd.-Nr.: {{ context.customer.customerNumber }} {% if context.customer.company is not empty %} | {{ context.customer.company }} {% endif %}
 
         <span class="links">

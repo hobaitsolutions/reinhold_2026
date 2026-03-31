@@ -1,64 +1,138 @@
 {% sw_extends '@Storefront/storefront/component/buy-widget/buy-widget-price.html.twig' %}
 
-{% block buy_widget_price_unit_content %}
-{#    <span class="price-unit-content">#}
-{#        {% set unit =  price.referencePrice.unitName %}#}
-{#        {% if (unit == '1 l') %}#}
-{#            {% set unit =  '1 Liter' %}#}
-{#        {% endif %}#}
-{#        {% if (unit == 'l') %}#}
-{#            {% set unit =  'Liter' %}#}
-{#        {% endif %}#}
-{#        ({{ price.referencePrice.price|currency }}{{ "general.star"|trans|sw_sanitize }} / {% if price.referncePrice.referenceUnit != 1 %}{{ price.referncePrice.referenceUnit }}{% endif %} {{ unit }})#}
-{#    </span>#}
-{% endblock %}
-
-{% block buy_widget_price_unit_reference_content %}
-    <span class="price-unit-reference-content">
-        {% set unit =  price.referencePrice.unitName %}
-        {% if (unit == '1 l') %}
-            {% set unit =  '1 Liter' %}
+{% block buy_widget_price_inner %}
+    {% set isAvailable = not product.isCloseout or (product.availableStock >= product.minPurchase) %}
+    <div class="position-relative" style="padding-bottom: 2rem">
+        {% if isAvailable %}
+        {% set savings = 0 %}
+        {% set price = product.calculatedPrice %}
+        {% if product.calculatedPrices|length == 1 %}
+            {% set price = product.calculatedPrices.first %}
         {% endif %}
-        {% if (unit == 'l') %}
-            {% set unit =  'Liter' %}
-        {% endif %}
-        ({{ price.referencePrice.price|currency }}{{ "general.star"|trans|sw_sanitize }} / {% if referncePrice.referenceUnit != 1 %}{{ referncePrice.referenceUnit }}{% endif %} {{ unit }})
-    </span>
-{% endblock %}
 
-{% block buy_widget_price_unit_label %}
-{% endblock %}
+        <meta itemprop="price" content="{{ price.unitPrice }}">
+        {% block buy_widget_price_content %}
+            {% set listPrice = price.listPrice %}
+            {% set isListPrice = price.listPrice.percentage > 0 %}
+            {% set isRegulationPrice = price.regulationPrice != null %}
 
-{% block buy_widget_price_content %}
-    {{ parent() }}
-    {% set packUnit = product.packUnit %}
-    {% if packUnit is empty %}
-        {% set packUnit = page.product.packUnit %}
-    {% endif %}
-    {% if packUnit is empty %}
-        {% set packUnit = product.unit.translated.name %}
-    {% endif %}
-    {% if packUnit is empty %}
-        {% set packUnit = page.product.unit.translated.name %}
-    {% endif %}
-    {% if packUnit is not empty %}
-        <span class="packunit">
-            &nbsp;|&nbsp; {% if product.customFields.custom_product_pack_unit_quantity is not empty %}{{ product.customFields.custom_product_pack_unit_quantity }} {% elseif page.product.customFields.custom_product_pack_unit_quantity is not empty %}{{ page.product.customFields.custom_product_pack_unit_quantity }} {% else %} 1 {% endif %}{{ packUnit }}
-        </span>
-    {% endif %}
-    {% if page.product.calculatedPrices|length >= 1 %}
-        {% set prod = product %}
-        {% if prod is empty %}
-            {% set prod = page.product %}
-        {% endif %}
-        {% set stdprice = prod.price|first.net %}
-        {% set savings = (( 1-(prod.calculatedPrices.elements|first.unitprice/stdprice))*100)|round %}
 
-        <span class="std-price">(Standardpreis: {{ (stdprice|currency) }})</span>
-        {% if savings > 1 %}
-            <div class="your-savings">
-                <strong>Sie sparen: {{ savings }}%</strong>
-            </div>
+            {% if product.calculatedPrices|length > 1 %}
+                {% set stdprice = product.calculatedPrice.unitPrice %}
+                {% set savings = (( 1-(product.calculatedPrices.elements|first.unitPrice/stdprice))*100)|round %}
+                {% if savings > 1 %}
+                    <p class="product-detail-price position-relative {% if isListPrice %} with-list-price{% endif %}{% if isRegulationPrice %} with-regulation-price{% endif %}">
+                        {{ product.calculatedPrices.elements|first.unitPrice|currency }}{{ 'general.star'|trans|sw_sanitize }}
+                    </p>
+                    <div class="your-savings position-absolute" style="bottom: -1rem;">
+                        <s class="std-price ">(Standardpreis: {{ (stdprice|currency) }})</s>
+                        <strong>Sie sparen: {{ savings }}%</strong>
+                    </div>
+                {% endif %}
+            {% else %}
+                <p class="product-detail-price{% if isListPrice %} with-list-price{% endif %}{% if isRegulationPrice %} with-regulation-price{% endif %}">
+                    {{ price.unitPrice|currency }}{{ 'general.star'|trans|sw_sanitize }}
+                </p>
+            {% endif %}
+            {% if isListPrice %}
+                {% block buy_widget_was_price %}
+                    {% block buy_widget_was_price_badge %}
+                        <span class="list-price-badge">&#37;</span>
+                    {% endblock %}
+
+                    {% set afterListPriceSnippetExists = 'listing.afterListPrice'|trans|length > 0 %}
+                    {% set beforeListPriceSnippetExists = 'listing.beforeListPrice'|trans|length > 0 %}
+
+                    {% block buy_widget_was_price_wrapper %}
+                        <span class="product-detail-list-price-wrapper">
+                        {% if beforeListPriceSnippetExists %}{{ 'listing.beforeListPrice'|trans|trim }}{% endif %}
+                        <span{% if not (afterListPriceSnippetExists or beforeListPriceSnippetExists) %} class="list-price-price"{% endif %}>{{ listPrice.price|currency }}{{ 'general.star'|trans|sw_sanitize }}</span>
+                        {% if afterListPriceSnippetExists %}
+                            {{ 'listing.afterListPrice'|trans|trim }}
+                        {% endif %}
+                        <span class="list-price-percentage">{{ 'detail.listPricePercentage'|trans({'%price%': listPrice.percentage })|sw_sanitize }}</span>
+                    </span>
+                    {% endblock %}
+                {% endblock %}
+            {% endif %}
+
+            {% if isRegulationPrice %}
+                <span class="product-detail-list-price-wrapper">
+                <span class="regulation-price">{{ 'general.listPricePreviously'|trans({'%price%': price.regulationPrice.price|currency }) }}{{ 'general.star'|trans|sw_sanitize }}</span>
+            </span>
+            {% endif %}
+
+            {% set packUnit = product.packUnit %}
+            {% if packUnit is empty %}
+                {% set packUnit = page.product.packUnit %}
+            {% endif %}
+            {% if packUnit is empty %}
+                {% set packUnit = product.unit.translated.name %}
+            {% endif %}
+            {% if packUnit is empty %}
+                {% set packUnit = page.product.unit.translated.name %}
+            {% endif %}
+            {% if packUnit is not empty %}
+                <span class="packunit">
+                &nbsp;|&nbsp; {% if product.customFields.custom_product_pack_unit_quantity is not empty %}{{ product.customFields.custom_product_pack_unit_quantity }} {% elseif page.product.customFields.custom_product_pack_unit_quantity is not empty %}{{ page.product.customFields.custom_product_pack_unit_quantity }} {% else %} 1 {% endif %}{{ packUnit }}
+            </span>
+            {% endif %}
+
+            {% if not context.customer %}
+                {% set prod = product %}
+                {% if prod is empty %}
+                    {% set prod = page.product %}
+                {% endif %}
+                {% if prod.price|length > 0 %}
+                    {% set stdprice = prod.price|first.net %}
+                    {% set savings = (( 1-(price.unitPrice/stdprice))*100)|round %}
+                    {% if savings > 1 %}
+                        <span class="std-price">(Standardpreis: {{ (stdprice|currency) }})</span>
+                        <div class="your-savings">
+                            <strong>Sie sparen: {{ savings }}%</strong>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endblock %}
+
+        {% if isAvailable and product.purchaseUnit %}
+            {% block buy_widget_price_unit %}
+                <div class="product-detail-price-unit">
+                    {% block buy_widget_price_unit_label %}
+                        <span class="price-unit-label">
+                        {{ 'detail.priceUnitName'|trans|sw_sanitize }}
+                    </span>
+                    {% endblock %}
+
+                    {% block buy_widget_price_unit_content %}
+                        <span class="price-unit-content">
+                        {{ product.purchaseUnit }} {{ product.unit.translated.name|stripPrefixNumbers }}
+                    </span>
+                    {% endblock %}
+
+                    {% if price.referencePrice is not null %}
+                        {% block buy_widget_price_unit_reference_content %}
+                            <span class="price-unit-reference-content">
+                            {% set unit =  price.referencePrice.unitName %}
+                                {% if (unit == '1 l') %}
+                                    {% set unit =  '1 Liter' %}
+                                {% endif %}
+                                {% if (unit == 'l') %}
+                                    {% set unit =  'Liter' %}
+                                {% endif %}
+                            ({{ price.referencePrice.price|currency }}{{ "general.star"|trans|sw_sanitize }} / {% if price.referencePrice.referenceUnit != 1 %}{{ price.referencePrice.referenceUnit }}{% endif %} {{ unit }})
+                        </span>
+                        {% endblock %}
+                    {% endif %}
+                </div>
+            {% endblock %}
         {% endif %}
-    {% endif %}
+        {% block custom_savings %}
+            {% if savings > 1 %}
+
+            {% endif %}
+        {% endblock %}
+        {% endif %}
+    </div>
 {% endblock %}

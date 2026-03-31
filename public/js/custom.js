@@ -35,7 +35,13 @@ jQuery(document).ready(function () {
         //         '<div class="custom-alert alert-danger">' + warning + '</div>'+str.substring(endwarning +3));
         // }
         let x = jQuery('.product-detail-description').html();
-        jQuery('.product-detail-description').html( x.replace(/\+\+\+(.*?)\+\+\+/g, '<div class="custom-alert alert-danger">$1</div>'));
+
+        let replaced = x.replace(
+            /\s*\+\s*\+\s*\+\s*(.*?)\s*\+\s*\+\s*\+\s*/gs,
+            '<div class="custom-alert alert-danger">$1</div>'
+        );
+        jQuery('.product-detail-description').html(replaced);
+
     }
     jQuery('.datasheet-btn').on('click touch', function (e){
         e.preventDefault();
@@ -68,43 +74,7 @@ jQuery(document).ready(function () {
             {
                 responsive: false,
                 autoWidth: true,
-                buttons: [
-                    {
-                        extend: 'copy',
-                    },
-                    {
-                        extend: 'excel',
-                        title: null
-                    },
-                    {
-                        extend: 'csv',
-                    },
-                    {
-                        text: 'JSON',
-                        action: function (e, dt, button, config) {
-                            var data = dt.buttons.exportData();
-
-                            jQuery.fn.dataTable.fileSave(
-                                new Blob([JSON.stringify(data)]),
-                                'Export.json'
-                            );
-                        }
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        exportOptions: {
-                            columns: ':visible'
-                        },
-                        orientation: 'landscape'
-                    },
-                    {
-                        extend: 'print',
-                        exportOptions: {
-                            columns: ':visible'
-                        },
-                    },
-                ],
-                dom: 'lfrtipB',
+                dom: 'lfrtip',
                 paging: false,
                 searching: false,
                 info: false,
@@ -120,10 +90,12 @@ jQuery(document).ready(function () {
             }
         );
         table.column(7).visible(false)
+        table.column(8).visible(false)
         table.column(9).visible(false)
         table.column(10).visible(false)
         table.column(11).visible(false)
         table.column(12).visible(false)
+        table.column(13).visible(false)
     }
 
 

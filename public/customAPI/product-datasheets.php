@@ -6,6 +6,7 @@ if (isset($_REQUEST['id']))
 {
 	$id = $_REQUEST['id'];
 
+	require_once(__DIR__ . '/../../pleasant/api/vendor/autoload.php');
 	require_once(__DIR__ . '/../../pleasant/api/pleasantClient.php');
 	$client = new \hobaIT\pleasantClient();
 

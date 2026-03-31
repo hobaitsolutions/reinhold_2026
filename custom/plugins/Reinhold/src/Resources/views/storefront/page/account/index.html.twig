@@ -6,7 +6,12 @@
             {% block page_account_overview_welcome %}
                 <div class="account-welcome">
                     <h1>{{ "account.overviewTitle"|trans|sw_sanitize }}</h1>
-                    {% block page_account_overview_welcome_intro %}{% endblock %}
+                    {% block page_account_overview_welcome_intro %}
+                        {{ "account.overviewWelcome"|trans({
+                            '%firstName%': (context.customer.firstName is not empty and context.customer.firstName|lower != 'unbekannt') ? context.customer.firstName : context.customer.salutation.translated.displayName,
+                            '%lastName%': context.customer.lastName
+                        })|sw_sanitize }}
+                    {% endblock %}
                     <p>
                         {{ context.customer.company }}<br>
                         Ihre Kundennummer: {{ context.customer.customerNumber }}

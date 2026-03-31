@@ -7,7 +7,7 @@
         {% set cover = product.cover.media %}
         {% set variation = product.variation %}
         {% set displayParent = product.variantListingConfig.displayParent and product.parentId === null %}
-        {% set isAvailable = not product.isCloseout or (product.stock >= product.minPurchase) %}
+        {% set isAvailable = not product.isCloseout or (product.availableStock >= product.minPurchase) %}
         {% set url = seoUrl('frontend.detail.page', { productId: id }) %}
 
 
@@ -156,14 +156,27 @@
                                 </div>
                             {% endblock %}
                             <div class="bottom">
+                                {% block custom_savings %}
+                                    {% set stdprice = product.calculatedPrice.unitPrice %}
+                                    {% set customPrice = product.calculatedCheapestPrice.unitPrice %}
+                                    {% set savings = (( 1-(customPrice / stdprice))*100)|round %}
+                                    {% if savings > 1 and customPrice > 0 %}
+                                        <div class="your-savings text-center">
+                                            <s class="std-price d-block">(Standardpreis: {{ (stdprice|currency) }})</s>
+                                            <strong>Sie sparen: {{ savings }}%</strong>
+                                        </div>
+                                    {% endif %}
+                                {% endblock %}
+
                                 {% block component_product_box_price %}
                                     {% sw_include '@Storefront/storefront/component/product/card/price-unit.html.twig' %}
                                 {% endblock %}
 
                                 {% block component_product_box_action %}
-                                    {% sw_include '@Storefront/storefront/component/product/card/action.html.twig' %}
+                                    {% sw_include '@Storefront/storefront/component/product/card/action.html.twig'  %}
                                 {% endblock %}
                             </div>
+
                         </div>
                     {% endblock %}
                 </div>

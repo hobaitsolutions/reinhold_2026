@@ -119,6 +119,10 @@ class HistoricOrders extends AbstractExtension
 	 */
 	public function getProductsByIds(array $productIds): object
 	{
+		if (empty($productIds))
+		{
+			return new EntityCollection();
+		}
 		return $this->productRepo->search((new Criteria($productIds))->addAssociation('cover')->addAssociation('media')->addAssociation('thumbnails'), Context::createDefaultContext())->getEntities();
 	}
 

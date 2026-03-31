@@ -62,6 +62,10 @@ class Common extends AbstractExtension
 			new TwigFilter('hazardDescription', [$this, 'hazardDescription']),
 			new TwigFilter('getDSArticleMatch', [$this, 'getDSArticleMatch']),
 			new TwigFilter('printManufacturerData', [$this, 'printManufacturerData']),
+			new TwigFilter('termsOfPayment', [$this, 'termsOfPayment']),
+			new TwigFilter('topnr', [$this, 'topnr']),
+			new TwigFilter('stripPrefixNumbers', [$this, 'stripPrefixNumbers']),
+
 		];
 	}
 
@@ -76,16 +80,36 @@ class Common extends AbstractExtension
 	public function hazards(?string $hazards, ?bool $hover = true): string
 	{
 		if (empty($hazards)) return '';
-		$string  = '';
-		$hazards = json_decode($hazards);
+		$string      = '';
+		$hazardTexts = '';
+		$hazards     = json_decode($hazards);
 
 		if (!empty($hazards))
 		{
 			$string .= '<div class="product-hazards"><h4>Gefahrenhinweise</h4><div class="hazards">';
 			foreach ($hazards as $hazard)
 			{
-				$string .= self::getHazardSymbol(hazard: $hazard, hover: $hover); //attention, named arguments
+				$res = self::getHazardSymbol(hazard: $hazard, hover: $hover); //attention, named arguments
+				if (str_contains($res, 'hazard-text'))
+				{
+					$hazardTexts .= $res;
+				}
+				else
+				{
+					if (!empty($hazardTexts))
+					{
+						$string      .= '<div class="hazard-texts">' . $hazardTexts . '</div>';
+						$hazardTexts = '';
+					}
+					$string .= $res;
+				}
 			}
+
+			if (!empty($hazardTexts))
+			{
+				$string .= '<div class="hazard-texts">' . $hazardTexts . '</div>';
+			}
+
 			$string .= '</div></div>';
 		}
 
@@ -215,48 +239,171 @@ class Common extends AbstractExtension
 		return str_replace('  ', ' ', $all . ' ' . $unit);
 	}
 
-	public function pictograms(/**
+	/**
+	 * Entfernt RTF-Steuerzeichen und ersetzt Platzhalter wie "[#3R0D]" anhand übergebener Parameter.
 	 *
-	 */ /**
-	 */ /**
-	 **/ /**
-	 * @*/ /**
-	 * @var
-	 */ /**
-	 * @var string
-	 */ /**
-	 * @var string $
-	 */ /**
-	 * @var string $p
-	 */ /**
-	 * @var string $pict
-	 */ /**
-	 * @var string $pictos
-	 */ /**
-	 * @var string $pictos A
-	 */ /**
-	 * @var string $pictos A variable
-	 */ /**
-	 * @var string $pictos A variable to
-	 */ /**
-	 * @var string $pictos A variable to store
-	 */ /**
-	 * @var string $pictos A variable to store pict
-	 */ /**
-	 * @var string $pictos A variable to store pictographic
-	 */ /**
-	 * @var string $pictos A variable to store pictographic representation
-	 */ /**
-	 * @var string $pictos A variable to store pictographic representation or
-	 */ /**
-	 * @var string $pictos A variable to store pictographic representation or related
-	 */ /**
-	 * @var string $pictos A variable to store pictographic representation or related data
-	 */ /**
-	 * @var string $pictos A variable to store pictographic representation or related data.
-	 */ /**
-	 * @var string $pictos A variable to store pictographic representation or related data.
-	 */ string $pictos)
+	 * Beispielaufruf in Twig:
+	 *   {{ termsText | termsOfPayment({ '3R0D': value1, '2R0D': value2, '6R0': zahlbetrag, '59L0S': iban }) }}
+	 *
+	 * @param string|null $input  Rohtext, ggf. im RTF-Format
+	 * @param array       $params Assoziatives Array: Schlüssel = Code ohne Klammern/Hash (z.B. "3R0D")
+	 * @param float|null  $totalPrice Optionaler Gesamtpreis zur Berechnung von Skonto-Beträgen
+	 *
+	 * @return string gereinigter Text mit ersetzten Variablen
+	 */
+	public function termsOfPayment(?string $input, string|array $params = [], ?float $totalPrice = null): string
+	{
+		if (empty($input)) return '';
+
+		if (is_string($params)) {
+			$params = [$params];
+		}
+
+		// Falls params das strukturierte Format von topnr enthält (direkt oder als JSON-String im params array)
+		$termsSource = null;
+		if (isset($params['condition']) && $params['condition'] === 'transfer' && isset($params['terms'])) {
+			$termsSource = $params['terms'];
+		} elseif (count($params) === 1 && is_string(reset($params))) {
+			// Falls topnr direkt als JSON string im ersten Array-Slot übergeben wurde
+			$json = json_decode(reset($params), true);
+			if (is_array($json) && isset($json['condition']) && $json['condition'] === 'transfer') {
+				$termsSource = $json['terms'];
+			}
+		}
+
+		if ($termsSource) {
+			$skontoDays = $termsSource['skontoDays'] ?? [];
+			$skontoPercent = $termsSource['skontoPercent'] ?? [];
+
+			// Mapping der Skonto-Daten auf die bekannten Platzhalter
+			// #36R0D = Skonto Tage 1
+			// #38R0D = Skonto Prozent 1
+			// #37R0D = Skonto Tage 2
+			// #39R0D = Skonto Prozent 2
+			// #35R0D = Netto Tage (letzter Eintrag in skontoDays, falls skontoPercent 0 oder nicht vorhanden)
+
+			if (isset($skontoDays[0])) $params['36R0D'] = $skontoDays[0];
+			if (isset($skontoPercent[0])) $params['38R0D'] = $skontoPercent[0];
+
+			if ($totalPrice !== null) {
+				if (isset($skontoPercent[0])) {
+					$skontoAmount = round($totalPrice * ($skontoPercent[0] / 100), 2);
+					$params['4R0'] = number_format($skontoAmount, 2, ',', '.') . ' €';
+					$params['6R0'] = number_format($totalPrice - $skontoAmount, 2, ',', '.') . ' €';
+				}
+
+				if (isset($skontoPercent[1]) && $skontoPercent[1] > 0) {
+					$skontoAmount2 = round($totalPrice * ($skontoPercent[1] / 100), 2);
+					$params['5R0'] = number_format($skontoAmount2, 2, ',', '.') . ' €';
+					$params['7R0'] = number_format($totalPrice - $skontoAmount2, 2, ',', '.') . ' €';
+				}
+			}
+
+			if (count($skontoDays) > 1) {
+
+				if (isset($skontoPercent[1]) && $skontoPercent[1] > 0) {
+					$params['37R0D'] = $skontoDays[1];
+					$params['39R0D'] = $skontoPercent[1];
+					// Wenn ein dritter da ist, ist das meist Netto
+					if (isset($skontoDays[2])) $params['35R0D'] = $skontoDays[2];
+				} else {
+					// Der zweite Eintrag hat 0% Skonto -> Netto Ziel
+					$params['35R0D'] = $skontoDays[1];
+				}
+			}
+		}
+
+		$text = $input;
+
+		// RTF zu Text vereinfachen, falls vorhanden
+		if (preg_match('/^{\\\\rtf/i', ltrim($text)))
+		{
+			// Hex-Escapes \'hh in UTF-8 umwandeln (ausgehend von Windows-1252 Kodierung)
+			$text = preg_replace_callback("/\\\\'([0-9a-fA-F]{2})/", function ($m) {
+				$bin = pack('H*', $m[1]);
+				return @mb_convert_encoding($bin, 'UTF-8', 'Windows-1252');
+			}, $text);
+
+			// Absatzmarken
+			$text = preg_replace('/\\\\par[d]?/i', "\n", $text);
+			// Steuerwörter entfernen (\b, \fs20, \f0, \cf1, etc.)
+			$text = preg_replace('/\\\\[a-zA-Z]+-?\d* ?/', '', $text);
+			// Klammern entfernen
+			$text = str_replace(['{', '}'], '', $text);
+		}
+
+		// Zeilenumbrüche in Leerzeichen überführen und Whitespace normalisieren
+		$text = preg_replace('/\s*\n\s*/', ' ', $text);
+		$text = preg_replace('/[\t ]+/', ' ', $text);
+		$text = trim($text);
+
+		// Spezifische Boilerplate entfernen
+		$text = str_replace('Auftragswert nicht skontofähig: [#3R0D] | Auftragswert skontofähig: [#2R0D]', '', $text);
+		$text = trim($text);
+
+		// Platzhalter ersetzen: [#CODE]
+		$text = preg_replace_callback('/\[#([^\]]+)\]/', function ($m) use ($params) {
+			$key = $m[1];
+			return array_key_exists($key, $params) ? (string) $params[$key] : '';
+		}, $text);
+
+		return $text;
+	}
+
+	/**
+	 * Extrahiert Zahlungsbedingungen nach dem Muster xT=y%.
+	 *
+	 * Wenn das Muster erkannt wurde, wird ein Array zurückgegeben:
+	 * {
+	 *  "condition": "transfer",
+	 *  "terms": {
+	 *    "skontoDays": [x, a, ...],
+	 *    "skontoPercent": [y, b, ...]
+	 *   }
+	 * }
+	 *
+	 * @param string|null $input
+	 *
+	 * @return array|string|null
+	 */
+	public function topnr(?string $input)
+	{
+		if (empty($input)) return $input;
+
+		// Muster xT=y% (y kann Dezimalzahlen mit Komma oder Punkt enthalten)
+		$pattern = '/(\d+)T\s*=\s*([\d,.]+)\s*%/';
+
+		if (preg_match_all($pattern, $input, $matches))
+		{
+			$skontoDays    = array_map('intval', $matches[1]);
+			$skontoPercent = array_map(function ($val) {
+				return (float)str_replace(',', '.', $val);
+			}, $matches[2]);
+
+			return [
+				"condition" => "transfer",
+				"terms"     => [
+					"skontoDays"    => $skontoDays,
+					"skontoPercent" => $skontoPercent
+				]
+			];
+		}
+
+		return $input;
+	}
+
+	/**
+	 * Processes a string of pictogram identifiers and generates their corresponding HTML representation.
+	 *
+	 * This method takes a string of comma-separated pictogram codes, processes each code, and generates
+	 * HTML content for each pictogram. If a code is followed by a short next segment, it is merged into
+	 * the current code for processing. The resulting pictogram images are concatenated into a single HTML string.
+	 *
+	 * @param string $pictos A comma-separated string of pictogram identifiers.
+	 *
+	 * @return \Twig\Markup The generated HTML containing the pictogram images.
+	 */
+	public function pictograms(string $pictos)
 	{
 		$string = '';
 		if (!empty($pictos))
@@ -606,7 +753,7 @@ class Common extends AbstractExtension
 		}
 		else
 		{
-			return "<a href=\"/search?search=" . explode('-', $productNumber[1])[0] . "\">" . $productNumber[1] . "</a>";
+			return "<a href=\"/customsearch/?query=" . explode('-', $productNumber[1])[0] . "\">" . $productNumber[1] . "</a>";
 		}
 
 		return $productNumber[1];
@@ -1094,5 +1241,8 @@ class Common extends AbstractExtension
 		}
 
 		return new \Twig\Markup(implode('<br>', $lines), 'UTF-8');
+	}
+	public function stripPrefixNumbers(string $input): string {
+		return preg_replace('/^\s*\d+\s*/', '', $input);
 	}
 }

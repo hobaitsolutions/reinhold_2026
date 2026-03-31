@@ -24,6 +24,8 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\System\SalesChannel\Entity\SalesChannelRepository;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * @RouteScope(scopes={"storefront"})
@@ -62,19 +64,21 @@ class QuickOrderController extends StorefrontController
 		$this->ruleConditionRepo  = $ruleConditionRepo;
 	}
 
+	/**
+	 * @LoginRequired()
+	 * @Route("/quickorder", name="frontend.quickorder.quickorder", methods={"GET"})
+	 */
 	#[Route(path: '/quickorder', name: 'frontend.quickorder.quickorder', defaults: ['_routeScope' => ['storefront'], '_loginRequired' => true], methods: ['GET'])]
 	public function showQuickorder(Request $request, SalesChannelContext $context, ?CustomerEntity $customer = null): Response
 	{
-//		$page = $this->overviewPageLoader->load($request, $context, $customer);
-//
-//		$products = $this->getOrderProducts($page->getCustomer(), $context);
-//
-//		return $this->renderStorefront('@QuickOrder/storefront/page/quickorder.html.twig', [
-//				'page' => $page, 'products' => $products
-//			]
-//		);
+		$page = $this->overviewPageLoader->load($request, $context, $customer);
 
-		return self::showQuickorderDeliveries($request, $context, $customer);
+		$products = $this->getProductsByOrders($customer, $context, 1000, 0, 'date', 'desc');
+
+		return $this->renderStorefront('@QuickOrder/storefront/page/quickorder.html.twig', [
+				'page' => $page, 'products' => $products['products']
+			]
+		);
 	}
 
 	/**
@@ -85,7 +89,7 @@ class QuickOrderController extends StorefrontController
 	public function showQuickorderDeliveries(Request $request, SalesChannelContext $context, ?CustomerEntity $customer = null): Response
 	{
 		$page = $this->overviewPageLoader->load($request, $context, $customer);
-		$res  = $this->getProductsByDelivery($customer);
+		$res  = $this->getProductsByDelivery($customer, $context);
 
 
 		return $this->renderStorefront('@QuickOrder/storefront/page/quickorder_deliveries.html.twig', [
@@ -146,6 +150,195 @@ class QuickOrderController extends StorefrontController
 				'order' => $order
 			]
 		);
+	}
+
+	/**
+	 * @LoginRequired()
+	 * @Route("/quickorder/export", name="frontend.quickorder.export", methods={"GET"})
+	 */
+	#[Route(path: '/quickorder/export', name: 'frontend.quickorder.export', methods: ['GET'], defaults: ['_routeScope' => ['storefront'], '_loginRequired' => true])]
+	public function exportQuickorderTable(Request $request, SalesChannelContext $context, ?CustomerEntity $customer = null): Response
+	{
+		if (!$customer) {
+			return $this->redirectToRoute('frontend.account.login.page');
+		}
+
+		$format = $request->query->get('format', 'csv');
+		$sort = $request->query->get('sort', 'date');
+		$order = $request->query->get('order', 'desc');
+
+		// Alle Daten abrufen (kein Limit)
+		$result = $this->getProductsByOrders($customer, $context, 1000000, 0, $sort, $order);
+
+		$data = [];
+		// Spaltenüberschriften
+		$headers = [
+			'Bestellnummer',
+			'Datum',
+			'Anzahl',
+			'Einheit',
+			'Artikelnummer',
+			'Produkt',
+			'Preis',
+			'Rabatt',
+			'Gefahr',
+			'H-Sätze',
+			'P-Sätze',
+			'ADR-Nummern',
+			'ADR-Spezifikationen',
+			'ADR-Text'
+		];
+
+		foreach ($result['orders'] as $orderData) {
+			foreach ($orderData['items'] as $productId => $item) {
+				$product = $result['products'][$productId] ?? null;
+				$price = $item['price'];
+				if (str_ends_with($orderData['orderNumber'], 'GS')) {
+					$price *= -1;
+				}
+
+				$data[] = [
+					$orderData['orderNumber'],
+					$orderData['date'],
+					$item['count'],
+					$item['unit'] ?: 'Stück',
+					$product ? $product->getProductNumber() : '',
+					$product ? $product->getName() : $item['name'],
+					number_format($price, 2, ',', ''),
+					$item['discount1'] ?: '0 %',
+					$product ? $product->hazards : '',
+					$product && isset($product->customFields['custom_product_HazardStatements']) ? $product->customFields['custom_product_HazardStatements'] : '',
+					$product && isset($product->customFields['custom_product_hazards_p']) ? $product->customFields['custom_product_hazards_p'] : '',
+					$product && isset($product->customFields['custom_product_AdrNumbers']) ? $product->customFields['custom_product_AdrNumbers'] : '',
+					$product && isset($product->customFields['custom_product_AdrSpecs']) ? $product->customFields['custom_product_AdrSpecs'] : '',
+					$product && isset($product->customFields['custom_product_AdrText']) ? $product->customFields['custom_product_AdrText'] : '',
+				];
+			}
+		}
+
+		switch ($format) {
+			case 'json':
+				return $this->json($data);
+			case 'pdf':
+				return $this->generatePdfExport($headers, $data);
+			case 'excel':
+				return $this->generateExcelExport($headers, $data);
+			case 'csv':
+			default:
+				return $this->generateCsvExport($headers, $data);
+		}
+	}
+
+	private function generateCsvExport(array $headers, array $data, string $delimiter = ','): Response
+	{
+		$callback = function () use ($headers, $data, $delimiter) {
+			$file = fopen('php://output', 'w');
+			// BOM für Excel (UTF-8 Unterstützung)
+			fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+			fputcsv($file, $headers, $delimiter);
+			foreach ($data as $row) {
+				fputcsv($file, $row, $delimiter);
+			}
+			fclose($file);
+		};
+
+		$response = new StreamedResponse($callback);
+		$response->headers->set('Content-Type', 'text/csv; charset=utf-8');
+		$disposition = HeaderUtils::makeDisposition(
+			HeaderUtils::DISPOSITION_ATTACHMENT,
+			'export.csv'
+		);
+		$response->headers->set('Content-Disposition', $disposition);
+
+		return $response;
+	}
+
+	private function generateExcelExport(array $headers, array $data): Response
+	{
+		$html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">';
+		$html .= '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><style>table, td, th { border: 0.5pt solid #000; }</style></head>';
+		$html .= '<body><table>';
+
+		// Header
+		$html .= '<thead><tr>';
+		foreach ($headers as $header) {
+			$html .= '<th style="background-color: #f2f2f2; font-weight: bold;">' . htmlspecialchars($header) . '</th>';
+		}
+		$html .= '</tr></thead>';
+
+		// Data
+		$html .= '<tbody>';
+		foreach ($data as $row) {
+			$html .= '<tr>';
+			foreach ($row as $cell) {
+				$html .= '<td>' . htmlspecialchars((string)$cell) . '</td>';
+			}
+			$html .= '</tr>';
+		}
+		$html .= '</tbody>';
+		$html .= '</table></body></html>';
+
+		$response = new Response($html);
+		$response->headers->set('Content-Type', 'application/vnd.ms-excel; charset=utf-8');
+		$disposition = HeaderUtils::makeDisposition(
+			HeaderUtils::DISPOSITION_ATTACHMENT,
+			'export.xls'
+		);
+		$response->headers->set('Content-Disposition', $disposition);
+
+		return $response;
+	}
+
+	private function generatePdfExport(array $headers, array $data): Response
+	{
+		if (!class_exists('\TCPDF')) {
+			require_once($this->getParameter('kernel.project_dir') . '/vendor/tecnickcom/tcpdf/tcpdf.php');
+		}
+
+		$pdf = new \TCPDF('L', 'mm', 'A4', true, 'UTF-8', false);
+		$pdf->SetCreator('QuickOrder');
+		$pdf->SetAuthor('Reinhold Sohn');
+		$pdf->SetTitle('Verkaufstagebuch Export');
+		$pdf->SetSubject('Verkaufstagebuch');
+
+		$pdf->setPrintHeader(false);
+		$pdf->setPrintFooter(true);
+
+		$pdf->SetDefaultMonospacedFont('courier');
+		$pdf->SetMargins(10, 10, 10);
+		$pdf->SetAutoPageBreak(TRUE, 15);
+		$pdf->SetFont('helvetica', '', 8);
+
+		$pdf->AddPage();
+
+		$html = '<h1>Verkaufstagebuch</h1>';
+		$html .= '<table border="1" cellpadding="2">';
+		$html .= '<tr style="background-color:#f2f2f2; font-weight:bold;">';
+		foreach ($headers as $header) {
+			$html .= '<th>' . htmlspecialchars($header) . '</th>';
+		}
+		$html .= '</tr>';
+
+		foreach ($data as $row) {
+			$html .= '<tr>';
+			foreach ($row as $cell) {
+				$html .= '<td>' . htmlspecialchars((string)$cell) . '</td>';
+			}
+			$html .= '</tr>';
+		}
+		$html .= '</table>';
+
+		$pdf->writeHTML($html, true, false, true, false, '');
+
+		$content = $pdf->Output('export.pdf', 'S');
+
+		return new Response($content, 200, [
+			'Content-Type' => 'application/pdf',
+			'Content-Disposition' => HeaderUtils::makeDisposition(
+				HeaderUtils::DISPOSITION_ATTACHMENT,
+				'export.pdf'
+			)
+		]);
 	}
 
 	/**
@@ -425,7 +618,7 @@ class QuickOrderController extends StorefrontController
 			$productIds[] = '00000000000000000000000000000000'; //just throw an empty id, null means all products!
 		}
 		$productsCriteria = (new Criteria($productIds))
-			->addAssociation('cover')
+			->addAssociation('cover.media')
 			->addAssociation('prices')
 			->addFilter(new EqualsAnyFilter('active', [true, false]))
 			->addSorting(new FieldSorting('product.name', FieldSorting::ASCENDING));
@@ -442,7 +635,7 @@ class QuickOrderController extends StorefrontController
 	 *
 	 * @return object|\Shopware\Core\Framework\DataAbstractionLayer\EntityCollection
 	 */
-	public function getFullProductsByIds(array $productIds): object
+	public function getFullProductsByIds(array $productIds, SalesChannelContext $context): object
 	{
 
 		if (empty($productIds))
@@ -450,10 +643,12 @@ class QuickOrderController extends StorefrontController
 			$productIds[] = '00000000000000000000000000000000'; //just throw an empty id, null means all products!
 		}
 		$productsCriteria = (new Criteria($productIds))
+			->addAssociation('cover.media')
 			->addAssociation('prices')
+			->addFilter(new EqualsAnyFilter('active', [true, false]))
 			->addSorting(new FieldSorting('product.name', FieldSorting::ASCENDING));
 
-		return $this->fullProductRepo->search($productsCriteria, Context::createDefaultContext())->getEntities();
+		return $this->productRepo->search($productsCriteria, $context)->getEntities();
 	}
 
 	/**
@@ -650,7 +845,7 @@ class QuickOrderController extends StorefrontController
 		}
 
 		//@todo later -- products not in shop cant be displayed correctly, due to hazards etc.
-		$products      = $this->getFullProductsByIds(array_keys($productIds));
+		$products      = $this->getFullProductsByIds(array_keys($productIds), $context);
 		$productsTable = [];
 		foreach ($products as $p)
 		{
@@ -674,13 +869,13 @@ class QuickOrderController extends StorefrontController
 	}
 
 	/**
-	 * @param CustomerEntity $customer
-	 * @param                $context
+	 * @param CustomerEntity      $customer
+	 * @param SalesChannelContext $context
 	 *
-	 * @return array|object
+	 * @return array
 	 * @throws \Doctrine\DBAL\DBALException
 	 */
-	private function getProductsByDelivery(CustomerEntity $customer): array
+	private function getProductsByDelivery(CustomerEntity $customer, SalesChannelContext $context): array
 	{
 		$productIds = [];
 
@@ -704,13 +899,13 @@ class QuickOrderController extends StorefrontController
 			else
 			{
 				$undeliverable[$result['ARTIKELNR']] = [
-					'title'          => explode("\n", $result['KURZTEXT'])[0],
+					'title'          => explode("\n", (string) $result['KURZTEXT'])[0],
 					'price'          => (float) $result['NETPRICEPERUNIT'],
 					'product_number' => $result['ARTIKELNR']
 				];
 			}
 		}
-		$products = $this->getFullProductsByIds(array_keys($productIds));
+		$products = $this->getFullProductsByIds(array_keys($productIds), $context);
 
 		return ['products' => $products, 'adresslist' => $addresslist, 'undeliverable' => $undeliverable];
 	}
@@ -718,7 +913,7 @@ class QuickOrderController extends StorefrontController
 
 	/**
 	 * @LoginRequired()
-	 * @Route("/pleasant/orders", name="frontend.quickorder.table", methods={"GET"})
+	 * @Route("/pleasant/orders", name="frontend.quickorder.pleasantorders", methods={"GET"})
 	 */
 	#[Route(path: '/pleasant/orders', name: 'frontend.quickorder.pleasantorders', methods: ['GET'], defaults: ['_routeScope' => ['storefront'], '_loginRequired' => true])]
 	public function pleasantOrdres(Request $request, SalesChannelContext $context, ?CustomerEntity $customer = null): Response
