@@ -159,12 +159,14 @@
                                 {% block custom_savings %}
                                     {% set stdprice = product.calculatedPrice.unitPrice %}
                                     {% set customPrice = product.calculatedCheapestPrice.unitPrice %}
-                                    {% set savings = (( 1-(customPrice / stdprice))*100)|round %}
-                                    {% if savings > 1 and customPrice > 0 %}
-                                        <div class="your-savings text-center">
-                                            <s class="std-price d-block">(Standardpreis: {{ (stdprice|currency) }})</s>
-                                            <strong>Sie sparen: {{ savings }}%</strong>
-                                        </div>
+                                    {% if stdprice > 0 %}
+                                        {% set savings = (( 1-(customPrice / stdprice))*100)|round %}
+                                        {% if savings > 1 and customPrice > 0 %}
+                                            <div class="your-savings text-center">
+                                                <s class="std-price d-block">(Standardpreis: {{ (stdprice|currency) }})</s>
+                                                <strong>Sie sparen: {{ savings }}%</strong>
+                                            </div>
+                                        {% endif %}
                                     {% endif %}
                                 {% endblock %}
 

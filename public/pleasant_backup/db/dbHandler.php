@@ -1490,7 +1490,7 @@ SQL;
 	{
 		self::setCategoriesArray();
 		self::setBasePriceArray();
-		
+
 		$sql = "SELECT * FROM V\$hobaIT_webartikel WHERE ARTIKELNR IN ('" . implode("','", $products) . "')";
 
 		$webProducts = self::query($sql);

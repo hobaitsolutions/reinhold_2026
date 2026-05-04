@@ -19,15 +19,17 @@
 
             {% if product.calculatedPrices|length > 1 %}
                 {% set stdprice = product.calculatedPrice.unitPrice %}
-                {% set savings = (( 1-(product.calculatedPrices.elements|first.unitPrice/stdprice))*100)|round %}
-                {% if savings > 1 %}
-                    <p class="product-detail-price position-relative {% if isListPrice %} with-list-price{% endif %}{% if isRegulationPrice %} with-regulation-price{% endif %}">
-                        {{ product.calculatedPrices.elements|first.unitPrice|currency }}{{ 'general.star'|trans|sw_sanitize }}
-                    </p>
-                    <div class="your-savings position-absolute" style="bottom: -1rem;">
-                        <s class="std-price ">(Standardpreis: {{ (stdprice|currency) }})</s>
-                        <strong>Sie sparen: {{ savings }}%</strong>
-                    </div>
+                {% if stdprice > 0 %}
+                    {% set savings = (( 1-(product.calculatedPrices.elements|first.unitPrice/stdprice))*100)|round %}
+                    {% if savings > 1 %}
+                        <p class="product-detail-price position-relative {% if isListPrice %} with-list-price{% endif %}{% if isRegulationPrice %} with-regulation-price{% endif %}">
+                            {{ product.calculatedPrices.elements|first.unitPrice|currency }}{{ 'general.star'|trans|sw_sanitize }}
+                        </p>
+                        <div class="your-savings position-absolute" style="bottom: -1rem;">
+                            <s class="std-price ">(Standardpreis: {{ (stdprice|currency) }})</s>
+                            <strong>Sie sparen: {{ savings }}%</strong>
+                        </div>
+                    {% endif %}
                 {% endif %}
             {% else %}
                 <p class="product-detail-price{% if isListPrice %} with-list-price{% endif %}{% if isRegulationPrice %} with-regulation-price{% endif %}">
@@ -85,12 +87,14 @@
                 {% endif %}
                 {% if prod.price|length > 0 %}
                     {% set stdprice = prod.price|first.net %}
-                    {% set savings = (( 1-(price.unitPrice/stdprice))*100)|round %}
-                    {% if savings > 1 %}
-                        <span class="std-price">(Standardpreis: {{ (stdprice|currency) }})</span>
-                        <div class="your-savings">
-                            <strong>Sie sparen: {{ savings }}%</strong>
-                        </div>
+                    {% if stdprice > 0 %}
+                        {% set savings = (( 1-(price.unitPrice/stdprice))*100)|round %}
+                        {% if savings > 1 %}
+                            <span class="std-price">(Standardpreis: {{ (stdprice|currency) }})</span>
+                            <div class="your-savings">
+                                <strong>Sie sparen: {{ savings }}%</strong>
+                            </div>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             {% endif %}

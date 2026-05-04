@@ -130,24 +130,24 @@ class QuickOrderController extends StorefrontController
 		$title = $page->getMetaInformation()->getMetaTitle();
 		$page->getMetaInformation()->setMetaTitle('Verkaufstagebuch - ' . $title);
 
-		$limit = (int) $request->query->get('limit', 50);
-		$p = (int) $request->query->get('p', 1);
+		$limit  = (int) $request->query->get('limit', 50);
+		$p      = (int) $request->query->get('p', 1);
 		$offset = ($p - 1) * $limit;
 
-		$sort = $request->query->get('sort', 'date');
+		$sort  = $request->query->get('sort', 'date');
 		$order = $request->query->get('order', 'desc');
 
 		$result = $this->getProductsByOrders($customer, $context, $limit, $offset, $sort, $order);
 
 		return $this->renderStorefront('@QuickOrder/storefront/page/quickorder_table.html.twig', [
-				'page' => $page,
-				'products' => $result['products'],
+				'page'      => $page,
+				'products'  => $result['products'],
 				'allorders' => $result['orders'],
-				'limit' => $limit,
-				'p' => $p,
-				'total' => $result['total'],
-				'sort' => $sort,
-				'order' => $order
+				'limit'     => $limit,
+				'p'         => $p,
+				'total'     => $result['total'],
+				'sort'      => $sort,
+				'order'     => $order
 			]
 		);
 	}
@@ -159,13 +159,14 @@ class QuickOrderController extends StorefrontController
 	#[Route(path: '/quickorder/export', name: 'frontend.quickorder.export', methods: ['GET'], defaults: ['_routeScope' => ['storefront'], '_loginRequired' => true])]
 	public function exportQuickorderTable(Request $request, SalesChannelContext $context, ?CustomerEntity $customer = null): Response
 	{
-		if (!$customer) {
+		if (!$customer)
+		{
 			return $this->redirectToRoute('frontend.account.login.page');
 		}
 
 		$format = $request->query->get('format', 'csv');
-		$sort = $request->query->get('sort', 'date');
-		$order = $request->query->get('order', 'desc');
+		$sort   = $request->query->get('sort', 'date');
+		$order  = $request->query->get('order', 'desc');
 
 		// Alle Daten abrufen (kein Limit)
 		$result = $this->getProductsByOrders($customer, $context, 1000000, 0, $sort, $order);
@@ -189,11 +190,14 @@ class QuickOrderController extends StorefrontController
 			'ADR-Text'
 		];
 
-		foreach ($result['orders'] as $orderData) {
-			foreach ($orderData['items'] as $productId => $item) {
+		foreach ($result['orders'] as $orderData)
+		{
+			foreach ($orderData['items'] as $productId => $item)
+			{
 				$product = $result['products'][$productId] ?? null;
-				$price = $item['price'];
-				if (str_ends_with($orderData['orderNumber'], 'GS')) {
+				$price   = $item['price'];
+				if (str_ends_with($orderData['orderNumber'], 'GS'))
+				{
 					$price *= -1;
 				}
 
@@ -216,7 +220,8 @@ class QuickOrderController extends StorefrontController
 			}
 		}
 
-		switch ($format) {
+		switch ($format)
+		{
 			case 'json':
 				return $this->json($data);
 			case 'pdf':
@@ -234,9 +239,10 @@ class QuickOrderController extends StorefrontController
 		$callback = function () use ($headers, $data, $delimiter) {
 			$file = fopen('php://output', 'w');
 			// BOM für Excel (UTF-8 Unterstützung)
-			fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+			fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
 			fputcsv($file, $headers, $delimiter);
-			foreach ($data as $row) {
+			foreach ($data as $row)
+			{
 				fputcsv($file, $row, $delimiter);
 			}
 			fclose($file);
@@ -261,17 +267,20 @@ class QuickOrderController extends StorefrontController
 
 		// Header
 		$html .= '<thead><tr>';
-		foreach ($headers as $header) {
+		foreach ($headers as $header)
+		{
 			$html .= '<th style="background-color: #f2f2f2; font-weight: bold;">' . htmlspecialchars($header) . '</th>';
 		}
 		$html .= '</tr></thead>';
 
 		// Data
 		$html .= '<tbody>';
-		foreach ($data as $row) {
+		foreach ($data as $row)
+		{
 			$html .= '<tr>';
-			foreach ($row as $cell) {
-				$html .= '<td>' . htmlspecialchars((string)$cell) . '</td>';
+			foreach ($row as $cell)
+			{
+				$html .= '<td>' . htmlspecialchars((string) $cell) . '</td>';
 			}
 			$html .= '</tr>';
 		}
@@ -291,7 +300,8 @@ class QuickOrderController extends StorefrontController
 
 	private function generatePdfExport(array $headers, array $data): Response
 	{
-		if (!class_exists('\TCPDF')) {
+		if (!class_exists('\TCPDF'))
+		{
 			require_once($this->getParameter('kernel.project_dir') . '/vendor/tecnickcom/tcpdf/tcpdf.php');
 		}
 
@@ -306,7 +316,7 @@ class QuickOrderController extends StorefrontController
 
 		$pdf->SetDefaultMonospacedFont('courier');
 		$pdf->SetMargins(10, 10, 10);
-		$pdf->SetAutoPageBreak(TRUE, 15);
+		$pdf->SetAutoPageBreak(true, 15);
 		$pdf->SetFont('helvetica', '', 8);
 
 		$pdf->AddPage();
@@ -314,15 +324,18 @@ class QuickOrderController extends StorefrontController
 		$html = '<h1>Verkaufstagebuch</h1>';
 		$html .= '<table border="1" cellpadding="2">';
 		$html .= '<tr style="background-color:#f2f2f2; font-weight:bold;">';
-		foreach ($headers as $header) {
+		foreach ($headers as $header)
+		{
 			$html .= '<th>' . htmlspecialchars($header) . '</th>';
 		}
 		$html .= '</tr>';
 
-		foreach ($data as $row) {
+		foreach ($data as $row)
+		{
 			$html .= '<tr>';
-			foreach ($row as $cell) {
-				$html .= '<td>' . htmlspecialchars((string)$cell) . '</td>';
+			foreach ($row as $cell)
+			{
+				$html .= '<td>' . htmlspecialchars((string) $cell) . '</td>';
 			}
 			$html .= '</tr>';
 		}
@@ -333,7 +346,7 @@ class QuickOrderController extends StorefrontController
 		$content = $pdf->Output('export.pdf', 'S');
 
 		return new Response($content, 200, [
-			'Content-Type' => 'application/pdf',
+			'Content-Type'        => 'application/pdf',
 			'Content-Disposition' => HeaderUtils::makeDisposition(
 				HeaderUtils::DISPOSITION_ATTACHMENT,
 				'export.pdf'
@@ -344,66 +357,69 @@ class QuickOrderController extends StorefrontController
 	/**
 	 * @Route("/customsearch", name="frontend.quickorder.table", methods={"GET"})
 	 */
- #[Route(path: '/customsearch', name: 'frontend.quickorder.search', methods: ['GET'], defaults: ['_routeScope' => ['storefront']])]
-    public function customsearch(Request $request, SalesChannelContext $context): Response
-    {
-        $page  = $this->pageLoader->load($request, $context);
-        $title = $page->getMetaInformation()->getMetaTitle();
-        $page->getMetaInformation()->setMetaTitle('Suche - ' . $title);
+	#[Route(path: '/customsearch', name: 'frontend.quickorder.search', methods: ['GET'], defaults: ['_routeScope' => ['storefront']])]
+	public function customsearch(Request $request, SalesChannelContext $context): Response
+	{
+		$page  = $this->pageLoader->load($request, $context);
+		$title = $page->getMetaInformation()->getMetaTitle();
+		$page->getMetaInformation()->setMetaTitle('Suche - ' . $title);
 
-        $query = $request->query->get('query', '');
-        $limit = 50;
-        $p = max(1, (int) $request->query->get('p', 1));
-        $offset = ($p - 1) * $limit;
+		$query  = $request->query->get('query', '');
+		$limit  = 50;
+		$p      = max(1, (int) $request->query->get('p', 1));
+		$offset = ($p - 1) * $limit;
 
-        $search = $this->getProductsByQuery($query, $limit, $offset, $context);
-        $queryResults = $search['rows'];
-        $total = (int) $search['total'];
+		$search       = $this->getProductsByQuery($query, $limit, $offset, $context);
+		$queryResults = $search['rows'];
+		$total        = (int) $search['total'];
 
-        // Extract IDs while preserving order
-        $orderedIds = [];
-        foreach ($queryResults as $item)
-        {
-            if (!in_array($item['id'], $orderedIds))
-            {
-                $orderedIds[] = $item['id'];
-            }
-        }
+		// Extract IDs while preserving order
+		$orderedIds = [];
+		foreach ($queryResults as $item)
+		{
+			if (!in_array($item['id'], $orderedIds))
+			{
+				$orderedIds[] = $item['id'];
+			}
+		}
 
-        // Get full product data
-        $products = $this->getProductsByIds($orderedIds, $context);
+		// Get full product data
+		$products = $this->getProductsByIds($orderedIds, $context);
 
-        // Reorder products to match the original query results order
-        $productsMap = [];
-        foreach ($products as $product) {
-            $productsMap[$product->getId()] = $product;
-        }
+		// Reorder products to match the original query results order
+		$productsMap = [];
+		foreach ($products as $product)
+		{
+			$productsMap[$product->getId()] = $product;
+		}
 
-        $orderedProducts = [];
-        foreach ($orderedIds as $id) {
-            if (isset($productsMap[$id])) {
-                $orderedProducts[] = $productsMap[$id];
-            }
-        }
+		$orderedProducts = [];
+		foreach ($orderedIds as $id)
+		{
+			if (isset($productsMap[$id]))
+			{
+				$orderedProducts[] = $productsMap[$id];
+			}
+		}
 
-        $result = $orderedProducts;
+		$result = $orderedProducts;
 
-        if ($request->query->get('json') === 'true')
-        {
-            return $this->json(array('success' => true, 'data' => $result, 'total' => $total, 'limit' => $limit, 'p' => $p));
-        }
+		if ($request->query->get('json') === 'true')
+		{
+			return $this->json(array('success' => true, 'data' => $result, 'total' => $total, 'limit' => $limit, 'p' => $p));
+		}
 
-        return $this->renderStorefront('@QuickOrder/storefront/page/searchresults.html.twig', [
-                'page' => $page,
-                'products' => $result,
-                'queryResults' => $queryResults,
-                'total' => $total,
-                'limit' => $limit,
-                'p' => $p,
-                'query' => $query
-            ]
-        );
-    }
+		return $this->renderStorefront('@QuickOrder/storefront/page/searchresults.html.twig', [
+				'page'         => $page,
+				'products'     => $result,
+				'queryResults' => $queryResults,
+				'total'        => $total,
+				'limit'        => $limit,
+				'p'            => $p,
+				'query'        => $query
+			]
+		);
+	}
 
 	protected static function interpolateQuery($query, $params)
 	{
@@ -417,38 +433,38 @@ class QuickOrderController extends StorefrontController
 	}
 
 
-    /**
-     * @param string $query
-     * @param int $limit
-     * @param int $offset
-     * @param SalesChannelContext $context
-     *
-     * @return array
-     * @throws \Doctrine\DBAL\Exception
-     */
-    protected function getProductsByQuery(string $query, int $limit = 50, int $offset = 0, ?SalesChannelContext $context = null): array
-    {
-        // Split the query by spaces to get individual words
-        $queryWords = explode(' ', $query);
+	/**
+	 * @param string              $query
+	 * @param int                 $limit
+	 * @param int                 $offset
+	 * @param SalesChannelContext $context
+	 *
+	 * @return array
+	 * @throws \Doctrine\DBAL\Exception
+	 */
+	protected function getProductsByQuery(string $query, int $limit = 50, int $offset = 0, ?SalesChannelContext $context = null): array
+	{
+		// Split the query by spaces to get individual words
+		$queryWords = explode(' ', $query);
 
 		// Filter out words that are less than 4 characters
 		$queryWords = array_filter($queryWords, function ($word) {
 			return strlen($word) >= 4;
 		});
 
-  // If no valid words remain, return an empty result set with zero total
-  if (empty($queryWords))
-  {
-      return ['rows' => [], 'total' => 0];
-  }
+		// If no valid words remain, return an empty result set with zero total
+		if (empty($queryWords))
+		{
+			return ['rows' => [], 'total' => 0];
+		}
 
 		// Pre-fetch ranking values to avoid N+1 subqueries in the SQL
 		$rankingSql = 'SELECT field, ranking FROM product_search_config_field WHERE product_search_config_id = 0x32e66a6b761f4781a6103fc9456457bc';
-		$rankings = $this->connection->fetchAllKeyValue($rankingSql);
+		$rankings   = $this->connection->fetchAllKeyValue($rankingSql);
 
-		$rankingDescription = (int) ($rankings['description'] ?? 0);
-		$rankingName = (int) ($rankings['name'] ?? 0);
-		$rankingCustomFields = (int) ($rankings['categories.customFields'] ?? 0);
+		$rankingDescription   = (int) ($rankings['description'] ?? 0);
+		$rankingName          = (int) ($rankings['name'] ?? 0);
+		$rankingCustomFields  = (int) ($rankings['categories.customFields'] ?? 0);
 		$rankingProductNumber = (int) ($rankings['productNumber'] ?? 0);
 
 		// Build the SQL query with weighted search
@@ -462,7 +478,8 @@ class QuickOrderController extends StorefrontController
 		$relevanceCalc = [];
 		$params        = [];
 
-		foreach ($queryWords as $word) {
+		foreach ($queryWords as $word)
+		{
 			$relevanceCalc[] = '(CASE 
 				WHEN pt.name LIKE CONCAT("%", ?, "%") THEN ' . $rankingName . '
 				WHEN p.product_number LIKE CONCAT("%", ?, "%") THEN ' . $rankingProductNumber . '
@@ -470,10 +487,10 @@ class QuickOrderController extends StorefrontController
 				WHEN pt.custom_fields LIKE CONCAT("%", ?, "%") THEN ' . $rankingCustomFields . '
 				ELSE 0 
 			END)';
-			$params[] = $word;
-			$params[] = $word;
-			$params[] = $word;
-			$params[] = $word;
+			$params[]        = $word;
+			$params[]        = $word;
+			$params[]        = $word;
+			$params[]        = $word;
 		}
 
 		$sql .= implode(' + ', $relevanceCalc);
@@ -487,44 +504,48 @@ class QuickOrderController extends StorefrontController
 
 		$conditions = [];
 
-		foreach ($queryWords as $word) {
+		foreach ($queryWords as $word)
+		{
 			$conditions[] = '(pt.name LIKE CONCAT("%", ?, "%")
 				        OR p.product_number LIKE CONCAT("%", ?, "%")
 				        OR pt.description LIKE CONCAT("%", ?, "%")
 				        OR pt.custom_fields LIKE CONCAT("%", ?, "%"))';
-			$params[] = $word;
-			$params[] = $word;
-			$params[] = $word;
-			$params[] = $word;
+			$params[]     = $word;
+			$params[]     = $word;
+			$params[]     = $word;
+			$params[]     = $word;
 		}
 
 		$sql .= implode(' AND ', $conditions);
 
-        $languageId = $context ? $context->getContext()->getLanguageId() : null;
-        if ($languageId) {
-            $sql .= ' AND pt.language_id = UNHEX(?)';
-            $params[] = $languageId;
-        } else {
-            $sql .= ' AND pt.language_id = (SELECT id FROM language WHERE name = "Deutsch" LIMIT 1)';
-        }
+		$languageId = $context ? $context->getContext()->getLanguageId() : null;
+		if ($languageId)
+		{
+			$sql      .= ' AND pt.language_id = UNHEX(?)';
+			$params[] = $languageId;
+		}
+		else
+		{
+			$sql .= ' AND pt.language_id = (SELECT id FROM language WHERE name = "Deutsch" LIMIT 1)';
+		}
 
-        $sql .= ')
+		$sql .= ')
                 AND p.product_number NOT LIKE "#%"
                 AND p.active = 1
                 GROUP BY p.id
                 HAVING relevance_score > 0';
 
-        // Build total count query
-        $countSql = 'SELECT COUNT(*) as cnt FROM (' . $sql . ') as subq';
-        $countResult = $this->connection->executeQuery($countSql, $params)->fetchAssociative();
-        $total = (int) ($countResult['cnt'] ?? 0);
+		// Build total count query
+		$countSql    = 'SELECT COUNT(*) as cnt FROM (' . $sql . ') as subq';
+		$countResult = $this->connection->executeQuery($countSql, $params)->fetchAssociative();
+		$total       = (int) ($countResult['cnt'] ?? 0);
 
-        // Apply ordering and pagination for rows
-        $pagedSql = $sql . ' ORDER BY relevance_score DESC LIMIT ' . (int) $limit . ' OFFSET ' . (int) $offset;
-        $sqlResult = $this->connection->executeQuery($pagedSql, $params);
+		// Apply ordering and pagination for rows
+		$pagedSql  = $sql . ' ORDER BY relevance_score DESC LIMIT ' . (int) $limit . ' OFFSET ' . (int) $offset;
+		$sqlResult = $this->connection->executeQuery($pagedSql, $params);
 
-        return ['rows' => $sqlResult->fetchAllAssociative(), 'total' => $total];
-    }
+		return ['rows' => $sqlResult->fetchAllAssociative(), 'total' => $total];
+	}
 
 	/**
 	 * Get product ids of historic orders
@@ -543,7 +564,7 @@ class QuickOrderController extends StorefrontController
 		$sqlQuery   = 'SELECT products FROM `hobait_order_history` WHERE customer = :customer AND date > :date';
 		$sqlResult  = $this->connection->executeQuery($sqlQuery, [
 			'customer' => $customernumber,
-			'date' => $date
+			'date'     => $date
 		]);
 		$productIds = [];
 
@@ -583,21 +604,24 @@ class QuickOrderController extends StorefrontController
 
 		foreach ($orders as $order)
 		{
-			if ($order->lineItems === null) {
+			if ($order->lineItems === null)
+			{
 				continue;
 			}
 
 			foreach ($order->lineItems as $lineItem)
 			{
 				$productId = $lineItem->getProductId();
-				if ($productId !== null) {
+				if ($productId !== null)
+				{
 					$productIds[$productId] = true;
 				}
 			}
 		}
 
 		$historicProductIds = $this->getHistoricOrderProductIds($customer->getCustomerNumber());
-		foreach ($historicProductIds as $id) {
+		foreach ($historicProductIds as $id)
+		{
 			$productIds[$id] = true;
 		}
 
@@ -608,6 +632,7 @@ class QuickOrderController extends StorefrontController
 	 * Get prduct entities by id
 	 *
 	 * @param array $productIds
+	 * @param       $context
 	 *
 	 * @return object
 	 */
@@ -690,15 +715,16 @@ class QuickOrderController extends StorefrontController
 
 		$ruleIds = $this->connection->fetchFirstColumn($sql, [
 			'customerNumber' => $customer->getCustomerNumber(),
-			'groupId' => $customer->getGroupId()
+			'groupId'        => $customer->getGroupId()
 		]);
 
-		if (empty($ruleIds)) {
+		if (empty($ruleIds))
+		{
 			return [];
 		}
 
 		// Convert binary IDs to hex strings for the PriceRepository
-		$hexRuleIds = array_map(function($id) {
+		$hexRuleIds = array_map(function ($id) {
 			return bin2hex($id);
 		}, $ruleIds);
 
@@ -737,11 +763,11 @@ class QuickOrderController extends StorefrontController
 	 */
 	private function getProductsByOrders(CustomerEntity $customer, $context, int $limit = 100, int $offset = 0, string $sort = 'date', string $order = 'desc'): array
 	{
-		$productIds = $allOrders = $notInShop = [];
+		$productIds     = $allOrders = $notInShop = [];
 		$customernumber = $customer->getCustomerNumber();
 
 		// Fetch all orders for the customer to flatten products and paginate them
-		$sqlQuery = 'SELECT * FROM `hobait_order_history` WHERE customer = :customer ORDER BY date DESC';
+		$sqlQuery  = 'SELECT * FROM `hobait_order_history` WHERE customer = :customer ORDER BY date DESC';
 		$sqlResult = $this->connection->executeQuery($sqlQuery, [
 			'customer' => $customernumber
 		]);
@@ -750,15 +776,17 @@ class QuickOrderController extends StorefrontController
 		while ($result = $sqlResult->fetchAssociative())
 		{
 			$products = json_decode($result['products']);
-			if (!is_array($products)) {
+			if (!is_array($products))
+			{
 				continue;
 			}
 
-			foreach ($products as $product) {
+			foreach ($products as $product)
+			{
 				$allFlattenedProducts[] = [
-					'order' => [
+					'order'   => [
 						'orderNumber' => $result['documentnumber'],
-						'date' => $result['date']
+						'date'        => $result['date']
 					],
 					'product' => $product
 				];
@@ -770,7 +798,8 @@ class QuickOrderController extends StorefrontController
 			$valA = null;
 			$valB = null;
 
-			switch ($sort) {
+			switch ($sort)
+			{
 				case 'orderNumber':
 					$valA = $a['order']['orderNumber'];
 					$valB = $b['order']['orderNumber'];
@@ -788,59 +817,68 @@ class QuickOrderController extends StorefrontController
 					$valB = $b['product']->t ?? '';
 					break;
 				case 'count':
-					$valA = (float)($a['product']->q ?? 0);
-					$valB = (float)($b['product']->q ?? 0);
+					$valA = (float) ($a['product']->q ?? 0);
+					$valB = (float) ($b['product']->q ?? 0);
 					break;
 				case 'price':
-					$valA = (float)($a['product']->p ?? 0);
-					$valB = (float)($b['product']->p ?? 0);
+					$valA = (float) ($a['product']->p ?? 0);
+					$valB = (float) ($b['product']->p ?? 0);
 					break;
 				default:
 					$valA = $a['order']['date'];
 					$valB = $b['order']['date'];
 			}
 
-			if ($valA == $valB) {
+			if ($valA == $valB)
+			{
 				return 0;
 			}
 
-			if ($order === 'asc') {
+			if ($order === 'asc')
+			{
 				return ($valA < $valB) ? -1 : 1;
-			} else {
+			}
+			else
+			{
 				return ($valA > $valB) ? -1 : 1;
 			}
 		});
 
-		$total = count($allFlattenedProducts);
+		$total             = count($allFlattenedProducts);
 		$paginatedProducts = array_slice($allFlattenedProducts, $offset, $limit);
 
 		$finalOrders = [];
-		$productIds = [];
+		$productIds  = [];
 
-		foreach ($paginatedProducts as $item) {
+		foreach ($paginatedProducts as $item)
+		{
 			$orderNumber = $item['order']['orderNumber'];
-			if (!isset($finalOrders[$orderNumber])) {
+			if (!isset($finalOrders[$orderNumber]))
+			{
 				$finalOrders[$orderNumber] = [
 					'orderNumber' => $orderNumber,
-					'date' => $item['order']['date'],
-					'items' => []
+					'date'        => $item['order']['date'],
+					'items'       => []
 				];
 			}
 
 			$product = $item['product'];
-			if (empty($product->id)) {
+			if (empty($product->id))
+			{
 				$notInShop[$product->n] = $product;
-			} else {
+			}
+			else
+			{
 				$finalOrders[$orderNumber]['items'][$product->id] = [
-					'count' => $product->q,
-					'id' => $product->id,
-					'price' => $product->p,
-					'unit' => $product->u,
-					'discount1' => $product->d,
+					'count'      => $product->q,
+					'id'         => $product->id,
+					'price'      => $product->p,
+					'unit'       => $product->u,
+					'discount1'  => $product->d,
 					'discoount2' => $product->d1,
-					'name' => $product->t
+					'name'       => $product->t
 				];
-				$productIds[$product->id] = true;
+				$productIds[$product->id]                         = true;
 			}
 		}
 
