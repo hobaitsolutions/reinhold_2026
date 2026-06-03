@@ -1,0 +1,9 @@
+monolog:
+  channels:
+    - 'deprecation'
+  handlers:
+    main:
+      type: stream
+      path: "%kernel.logs_dir%/%kernel.environment%.log"
+      level: debug
+      channels: ["!event", "!doctrine", "!deprecation"]

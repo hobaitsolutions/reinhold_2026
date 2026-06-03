@@ -5,8 +5,13 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="ReinholdPfand\Core\Content\Product\ProductExtension">
-            <tag name="shopware.entity.extension" entity="product"/>
+        <defaults autowire="true" autoconfigure="true" public="false"/>
+
+        <service id="ReinholdPfand\Core\Checkout\Cart\DepositCartProcessor">
+            <argument type="service" id="product.repository"/>
+            <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator"/>
+            <tag name="shopware.cart.collector" priority="4500"/>
+            <tag name="shopware.cart.processor" priority="4500"/>
         </service>
     </services>
-</container> 
+</container>

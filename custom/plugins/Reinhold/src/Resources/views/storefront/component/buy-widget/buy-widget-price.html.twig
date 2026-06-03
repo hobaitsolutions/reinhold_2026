@@ -36,6 +36,9 @@
                     {{ price.unitPrice|currency }}{{ 'general.star'|trans|sw_sanitize }}
                 </p>
             {% endif %}
+
+
+
             {% if isListPrice %}
                 {% block buy_widget_was_price %}
                     {% block buy_widget_was_price_badge %}
@@ -79,7 +82,12 @@
                 &nbsp;|&nbsp; {% if product.customFields.custom_product_pack_unit_quantity is not empty %}{{ product.customFields.custom_product_pack_unit_quantity }} {% elseif page.product.customFields.custom_product_pack_unit_quantity is not empty %}{{ page.product.customFields.custom_product_pack_unit_quantity }} {% else %} 1 {% endif %}{{ packUnit }}
             </span>
             {% endif %}
-
+            {% set deposit = product.customFields.custom_product_deposit ?? page.product.customFields.custom_product_deposit ?? null %}
+            {% if deposit is not null and deposit > 0 %}
+                <div class="product-detail-deposit-note">
+                    zzgl. {{ deposit|currency }} Pfand
+                </div>
+            {% endif %}
             {% if not context.customer %}
                 {% set prod = product %}
                 {% if prod is empty %}

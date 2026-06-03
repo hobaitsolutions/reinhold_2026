@@ -1,0 +1,9 @@
+{% sw_extends '@Storefront/storefront/layout/footer/footer-minimal.html.twig' %}
+
+{% block layout_footer %}
+    <footer class="footer-main text-white">
+        {% block base_footer_inner %}
+            {% sw_include '@Storefront/storefront/layout/footer/footer.html.twig' %}
+        {% endblock %}
+    </footer>
+{% endblock %}

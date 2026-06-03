@@ -1,0 +1,44 @@
+{% sw_extends '@Storefront/storefront/component/address/address-personal.html.twig' %}
+
+{% block component_address_personal_account_type %}
+    {% if (onlyCompanyRegistration or (config('core.loginRegistration.showAccountTypeSelection') and not hideCustomerTypeSelect)) and not hasSelectedBusiness %}
+        {% sw_include '@Storefront/storefront/utilities/alert.html.twig' with {
+            type: 'warning',
+            content: '<strong>Exklusiv für Geschäftskunden</strong>:<br>Mit der Registrierung bestätigen Sie Ihren gewerblichen Status und erklären sich mit einer Identitätsprüfung einverstanden.'
+        } %}
+    {% endif %}
+
+    {{ parent() }}
+    {% if (onlyCompanyRegistration or (config('core.loginRegistration.showAccountTypeSelection') and not hideCustomerTypeSelect)) and not hasSelectedBusiness %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var removePrivate = function(select) {
+                    var privateOption = select.querySelector('option[value="private"]');
+                    if (privateOption) {
+                        privateOption.remove();
+                    }
+                    // Wenn business vorhanden ist, auswählen und Change-Event triggern
+                    for (var i = 0; i < select.options.length; i++) {
+                        if (select.options[i].value === 'business') {
+                            select.selectedIndex = i;
+                            select.dispatchEvent(new Event('change'));
+                            break;
+                        }
+                    }
+                };
+
+                var handleSelects = function() {
+                    var selects = document.querySelectorAll('select[name="accountType"], select[name="register[accountType]"], select[name="billingAddress[accountType]"], select[name="shippingAddress[accountType]"]');
+                    selects.forEach(removePrivate);
+                };
+
+                handleSelects();
+                // Auch nach dynamischem Laden (z.B. bei Adressänderung im Checkout)
+                var observer = new MutationObserver(function() {
+                    handleSelects();
+                });
+                observer.observe(document.body, { childList: true, subtree: true });
+            });
+        </script>
+    {% endif %}
+{% endblock %}

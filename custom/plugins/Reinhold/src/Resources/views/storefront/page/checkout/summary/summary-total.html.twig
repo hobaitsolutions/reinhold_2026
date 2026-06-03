@@ -1,0 +1,15 @@
+{% sw_extends '@Storefront/storefront/page/checkout/summary/summary-total.html.twig' %}
+
+{% block page_checkout_summary_total %}
+    {{ parent() }}
+    {% if true or context.customer and context.customer.customFields %}
+        {% if context.customer.customFields.custom_customer_payment_terms_characterization %}
+            <h6 class="col-12 checkout-aside-summary-label">
+                Zahlungsbedingungen:
+            </h6>
+            <div class="col-12">
+                {{ context.customer.customFields.custom_customer_payment_terms_characterization|termsOfPayment(context.customer.customFields.custom_customer_topnr|topnr, summary.price.rawTotal) }}
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

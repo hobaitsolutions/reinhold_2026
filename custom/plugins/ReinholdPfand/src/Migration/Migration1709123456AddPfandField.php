@@ -14,6 +14,13 @@ class Migration1709123456AddPfandField extends MigrationStep
 
     public function update(Connection $connection): void
     {
+        $schemaManager = $connection->createSchemaManager();
+        $columns = $schemaManager->listTableColumns('product');
+
+        if (isset($columns['pfand_price'])) {
+            return;
+        }
+
         $connection->executeStatement('
             ALTER TABLE `product`
             ADD COLUMN `pfand_price` DECIMAL(10,2) NULL DEFAULT NULL;
@@ -22,6 +29,13 @@ class Migration1709123456AddPfandField extends MigrationStep
 
     public function updateDestructive(Connection $connection): void
     {
+        $schemaManager = $connection->createSchemaManager();
+        $columns = $schemaManager->listTableColumns('product');
+
+        if (!isset($columns['pfand_price'])) {
+            return;
+        }
+
         $connection->executeStatement('
             ALTER TABLE `product`
             DROP COLUMN `pfand_price`;
