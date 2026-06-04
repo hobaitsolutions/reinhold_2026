@@ -1242,7 +1242,12 @@ class Common extends AbstractExtension
 
 		return new \Twig\Markup(implode('<br>', $lines), 'UTF-8');
 	}
-	public function stripPrefixNumbers(string $input): string {
+	public function stripPrefixNumbers(?string $input): string {
+		if ($input === null)
+		{
+			return '';
+		}
+
 		return preg_replace('/^\s*\d+\s*/', '', $input);
 	}
 }
